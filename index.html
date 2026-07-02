@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carlos García-Arisco Vílchez — Data · IA · Growth Marketing</title>
+<meta name="description" content="Portfolio de proyectos de datos, IA aplicada y marketing de crecimiento.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1EFE9;
+    --paper-dim:#E7E4DB;
+    --ink:#1A1A18;
+    --ink-soft:#57544C;
+    --line:#D8D4C8;
+    --mustard:#C08A2E;
+    --sage:#4C7C6E;
+    --terracotta:#B5533C;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --display: 'Space Grotesk', ui-sans-serif, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--display);
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  ::selection{background:var(--mustard); color:var(--paper);}
+
+  .wrap{max-width:920px; margin:0 auto; padding:0 24px;}
+
+  /* header */
+  header{
+    padding:56px 0 40px;
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:14px;
+  }
+  h1{
+    font-size:clamp(30px,5vw,46px);
+    line-height:1.08;
+    margin:0 0 16px;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  h1 span{color:var(--mustard);}
+  .lede{
+    font-size:17px;
+    color:var(--ink-soft);
+    max-width:56ch;
+    line-height:1.55;
+    margin:0 0 24px;
+  }
+  .contact-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    font-family:var(--mono);
+    font-size:13px;
+  }
+  .contact-row a, .contact-row span{
+    border:1px solid var(--line);
+    padding:6px 12px;
+    border-radius:2px;
+    text-decoration:none;
+    background:var(--paper);
+    transition:border-color .15s, background .15s;
+  }
+  .contact-row a:hover{border-color:var(--ink); background:var(--paper-dim);}
+
+  /* legend */
+  .legend{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+    padding:22px 0;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-soft);
+    border-bottom:1px solid var(--line);
+  }
+  .legend .item{display:flex; align-items:center; gap:7px;}
+  .dot{width:8px; height:8px; border-radius:50%; display:inline-block;}
+  .dot.shipped{background:var(--sage);}
+  .dot.active{background:var(--mustard);}
+  .dot.study{background:var(--terracotta);}
+
+  section{padding:48px 0;}
+  .section-head{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:22px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .section-head::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+
+  /* project cards */
+  .project{
+    border:1px solid var(--line);
+    background:#fff;
+    border-radius:3px;
+    padding:26px 28px;
+    margin-bottom:18px;
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:16px;
+    align-items:start;
+  }
+  .project .status{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    padding:4px 9px;
+    border-radius:2px;
+    white-space:nowrap;
+    height:fit-content;
+  }
+  .status.shipped{background:rgba(76,124,110,.12); color:var(--sage);}
+  .status.active{background:rgba(192,138,46,.14); color:var(--mustard);}
+  .project h3{
+    margin:0 0 8px;
+    font-size:20px;
+    font-weight:600;
+  }
+  .project p{
+    margin:0 0 14px;
+    color:var(--ink-soft);
+    font-size:14.5px;
+    line-height:1.55;
+    max-width:60ch;
+  }
+  .tags{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;}
+  .tag{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--ink-soft);
+    border:1px solid var(--line);
+    padding:2px 8px;
+    border-radius:2px;
+  }
+  .project-links{display:flex; gap:14px; font-family:var(--mono); font-size:13px;}
+  .project-links a{
+    text-decoration:none;
+    border-bottom:1px solid var(--mustard);
+    padding-bottom:1px;
+  }
+  .project-links a:hover{color:var(--mustard);}
+
+  /* study list */
+  .study-list{display:flex; flex-direction:column; gap:0;}
+  .study-row{
+    display:grid;
+    grid-template-columns:120px 1fr;
+    gap:18px;
+    padding:16px 0;
+    border-bottom:1px solid var(--line);
+    align-items:baseline;
+  }
+  .study-row:last-child{border-bottom:none;}
+  .study-row .tag-study{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--terracotta);
+    text-transform:uppercase;
+    letter-spacing:.06em;
+  }
+  .study-row h4{margin:0 0 4px; font-size:15.5px; font-weight:600;}
+  .study-row p{margin:0; color:var(--ink-soft); font-size:14px; line-height:1.5;}
+
+  /* stack */
+  .stack-grid{display:flex; flex-wrap:wrap; gap:8px;}
+  .stack-grid .tag{font-size:12.5px; padding:5px 11px;}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:36px 0 56px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--ink-soft);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+
+  @media (max-width:600px){
+    .project{grid-template-columns:1fr;}
+    .study-row{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Barcelona · Data · IA aplicada · Growth Marketing</div>
+    <h1>Carlos García-Arisco Vílchez<br><span>convierte estrategia en productos que funcionan.</span></h1>
+    <p class="lede">Máster en Marketing Digital e IA en INESDI. Trabajo en la intersección entre analítica de datos, growth y product marketing — no me quedo en el plan, lo llevo hasta el prototipo funcional.</p>
+    <div class="contact-row">
+      <a href="mailto:cgarciaariscov@student.inesdi.com">cgarciaariscov@student.inesdi.com</a>
+      <a href="https://github.com/carlosarisco55-max" target="_blank" rel="noopener">github.com/carlosarisco55-max</a>
+      <span>LinkedIn — pendiente de enlazar</span>
+    </div>
+  </header>
+
+  <div class="legend">
+    <div class="item"><span class="dot shipped"></span> Shipped / público</div>
+    <div class="item"><span class="dot active"></span> En curso</div>
+    <div class="item"><span class="dot study"></span> Caso de estudio (sin producto público)</div>
+  </div>
+
+  <section id="proyectos">
+    <div class="section-head">Proyectos</div>
+
+    <div class="project">
+      <div>
+        <h3>ContentLoop AI</h3>
+        <p>Agente de IA que aprende la identidad de marca de una pyme en 15 minutos y genera automáticamente su calendario de contenido semanal para Instagram, TikTok y LinkedIn. TFM del máster.</p>
+        <div class="tags">
+          <span class="tag">Lovable</span>
+          <span class="tag">Prompt engineering</span>
+          <span class="tag">GitHub</span>
+          <span class="tag">Producto IA</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/carlosarisco55-max/contentloop-ai" target="_blank" rel="noopener">Repositorio →</a>
+          <a href="https://id-preview--961d93a1-3239-44d4-a68a-fa8def874178.lovable.app" target="_blank" rel="noopener">Demo en vivo →</a>
+        </div>
+      </div>
+      <span class="status active">En curso — TFM</span>
+    </div>
+
+    <div class="project">
+      <div>
+        <h3>ML Marketing Campaign — Retail</h3>
+        <p>Modelo de predicción de respuesta de clientes sobre datasets reales de campañas retail. Comparativa de Regresión Logística, Árbol de Decisión, KNN y Random Forest, con notebook completo y documentación reproducible.</p>
+        <div class="tags">
+          <span class="tag">Python</span>
+          <span class="tag">Scikit-learn</span>
+          <span class="tag">Google Colab</span>
+          <span class="tag">Machine Learning</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/carlosarisco55-max/ml-marketing-campaign-retail" target="_blank" rel="noopener">Repositorio →</a>
+          <a href="https://carlosarisco55-max.github.io/ml-marketing-campaign-retail/" target="_blank" rel="noopener">Ver proyecto →</a>
+        </div>
+      </div>
+      <span class="status shipped">Shipped</span>
+    </div>
+
+  </section>
+
+  <section id="casos">
+    <div class="section-head">Casos de estudio académicos</div>
+    <div class="study-list">
+
+      <div class="study-row">
+        <div class="tag-study">Sostac</div>
+        <div>
+          <h4>Plan de marketing digital — Idealista España</h4>
+          <p>Plan SOSTAC completo: PEST, 5 fuerzas de Porter, TAM/SAM/SOM, matriz competitiva y 6 objetivos SMART. Presupuesto de €14M, dos buyer personas, North Star Metric definida.</p>
+        </div>
+      </div>
+
+      <div class="study-row">
+        <div class="tag-study">Branding</div>
+        <div>
+          <h4>DRIP MUNDIAL</h4>
+          <p>Marca de streetwear para el Mundial 2026: identidad visual, presentación de 12 slides y landing interactiva con countdown en vivo y catálogo por selección nacional.</p>
+        </div>
+      </div>
+
+      <div class="study-row">
+        <div class="tag-study">Estrategia</div>
+        <div>
+          <h4>Strava — de descriptor a prescriptor</h4>
+          <p>Pitch de reposicionamiento estratégico construido sobre tres pilares: entrenamiento, nutrición y objetivos guiados por IA.</p>
+        </div>
+      </div>
+
+      <div class="study-row">
+        <div class="tag-study">Change mgmt</div>
+        <div>
+          <h4>Global Aid Network — adopción de IA</h4>
+          <p>Propuesta de adopción de IA para una ONG ficticia con presencia en 50+ oficinas de país, incluyendo marco ético y de mitigación de sesgos.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="stack">
+    <div class="section-head">Stack y marcos de trabajo</div>
+    <div class="stack-grid">
+      <span class="tag">Python</span>
+      <span class="tag">SQL</span>
+      <span class="tag">Power BI</span>
+      <span class="tag">SOSTAC</span>
+      <span class="tag">Porter</span>
+      <span class="tag">DAFO</span>
+      <span class="tag">ICE Scoring</span>
+      <span class="tag">North Star Metric</span>
+      <span class="tag">Notion</span>
+      <span class="tag">Google Colab</span>
+      <span class="tag">Lovable</span>
+      <span class="tag">Gamma</span>
+      <span class="tag">Claude / GenAI aplicada</span>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Carlos García-Arisco Vílchez</span>
+    <span>Barcelona, España — INESDI Business Techschool</span>
+  </footer>
+
+</div>
+
+</body>
+</html>
