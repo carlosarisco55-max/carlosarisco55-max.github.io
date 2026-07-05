@@ -4,7 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Carlos García-Arisco Vílchez — Data · IA · Growth Marketing</title>
-<meta name="description" content="Portfolio de proyectos de datos, IA aplicada y marketing de crecimiento.">
+<meta name="description" content="Portfolio de proyectos de marketing digital, analítica de datos, growth marketing e IA aplicada. CV descargable para posiciones junior.">
+
+<!-- Open Graph / previsualización al compartir el link -->
+<meta property="og:type" content="profile">
+<meta property="og:title" content="Carlos García-Arisco Vílchez — Data · IA · Growth Marketing">
+<meta property="og:description" content="Portfolio de proyectos de marketing digital, analítica de datos, growth marketing e IA aplicada. CV descargable para posiciones junior.">
+<meta property="og:url" content="https://carlosarisco55-max.github.io">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Carlos García-Arisco Vílchez — Data · IA · Growth Marketing">
+<meta name="twitter:description" content="Portfolio de proyectos de marketing digital, analítica de datos, growth marketing e IA aplicada.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231A1A18'/%3E%3Ctext x='50' y='68' font-size='54' font-family='Arial,sans-serif' font-weight='700' fill='%23C08A2E' text-anchor='middle'%3ECA%3C/text%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -78,6 +90,43 @@
     transition:border-color .15s, background .15s;
   }
   .contact-row a:hover{border-color:var(--ink); background:var(--paper-dim);}
+
+  .cv-download{margin-top:18px;}
+  .btn-cv{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:var(--mono);
+    font-size:13px;
+    font-weight:600;
+    color:var(--paper);
+    background:var(--mustard);
+    border:1px solid var(--mustard);
+    padding:10px 18px;
+    border-radius:2px;
+    text-decoration:none;
+    transition:background .15s, border-color .15s;
+  }
+  .btn-cv:hover{background:#a5751f; border-color:#a5751f;}
+
+  /* timeline */
+  .timeline-row{
+    display:grid;
+    grid-template-columns:150px 1fr;
+    gap:18px;
+    padding:16px 0;
+    border-bottom:1px solid var(--line);
+    align-items:baseline;
+  }
+  .timeline-row:last-child{border-bottom:none;}
+  .timeline-row .tl-date{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--sage);
+    font-weight:600;
+  }
+  .timeline-row h4{margin:0 0 4px; font-size:15.5px; font-weight:600;}
+  .timeline-row p{margin:0; color:var(--ink-soft); font-size:14px; line-height:1.5;}
 
   /* legend */
   .legend{
@@ -216,13 +265,16 @@
 <div class="wrap">
 
   <header>
-    <div class="eyebrow">Barcelona · Data · IA aplicada · Growth Marketing</div>
+    <div class="eyebrow">Barcelona · Data Analyst Junior · Growth Marketing · Marketing Digital · IA aplicada</div>
     <h1>Carlos García-Arisco Vílchez<br><span>convierte estrategia en productos que funcionan.</span></h1>
-    <p class="lede">Máster en Marketing Digital e IA en INESDI. Trabajo en la intersección entre analítica de datos, growth y product marketing — no me quedo en el plan, lo llevo hasta el prototipo funcional.</p>
+    <p class="lede">Máster en Marketing Digital e IA en INESDI. Trabajo en la intersección entre analítica de datos, growth marketing y product marketing — no me quedo en el plan, lo llevo hasta el prototipo funcional.</p>
     <div class="contact-row">
       <a href="mailto:carlosarisco55@gmail.com">carlosarisco55@gmail.com</a>
       <a href="https://github.com/carlosarisco55-max" target="_blank" rel="noopener">github.com/carlosarisco55-max</a>
       <a href="https://www.linkedin.com/in/carlos-garcia-arisco-vilchez-yourbestchoice" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="cv-download">
+      <a class="btn-cv" href="CV_Carlos_Garcia_Arisco.pdf" download>Descargar CV (PDF) ↓</a>
     </div>
   </header>
 
@@ -231,6 +283,37 @@
     <div class="item"><span class="dot active"></span> En curso</div>
     <div class="item"><span class="dot study"></span> Caso de estudio (sin producto público)</div>
   </div>
+
+  <section id="experiencia">
+    <div class="section-head">Experiencia y formación</div>
+    <div class="study-list">
+
+      <div class="timeline-row">
+        <div class="tl-date">2026 – Feb 2027<br>En curso</div>
+        <div>
+          <h4>Máster en Marketing Digital e Inteligencia Artificial</h4>
+          <p>INESDI Business Techschool, Barcelona · Estrategia digital · Analítica de datos · Machine Learning · IA generativa · Growth Hacking.</p>
+        </div>
+      </div>
+
+      <div class="timeline-row">
+        <div class="tl-date">Dic 2024 – Mar 2026</div>
+        <div>
+          <h4>Asesor Comercial B2C — Leroy Merlin</h4>
+          <p>NPS de 68 puntos sostenido en atención al cliente; ventas diarias superiores a 3.000 € asesorando a un alto volumen de clientes en un entorno B2C de ritmo elevado.</p>
+        </div>
+      </div>
+
+      <div class="timeline-row">
+        <div class="tl-date">Finalizado</div>
+        <div>
+          <h4>Grado en Administración y Dirección de Empresas (ADE)</h4>
+          <p>Base en gestión empresarial, economía y análisis financiero.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
 
   <section id="proyectos">
     <div class="section-head">Proyectos</div>
@@ -318,6 +401,10 @@
       <span class="tag">Python</span>
       <span class="tag">SQL</span>
       <span class="tag">Power BI</span>
+      <span class="tag">DAX</span>
+      <span class="tag">Google Analytics (GA4)</span>
+      <span class="tag">SEMrush</span>
+      <span class="tag">Meta Ads Manager</span>
       <span class="tag">SOSTAC</span>
       <span class="tag">Porter</span>
       <span class="tag">DAFO</span>
@@ -340,3 +427,4 @@
 
 </body>
 </html>
+
