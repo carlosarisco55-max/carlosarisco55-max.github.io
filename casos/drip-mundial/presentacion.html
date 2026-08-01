@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DRIP MUNDIAL — Data Driven Business · INESDI 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #E63030;
+    --red-dim: #a82020;
+    --black: #0a0a0a;
+    --card: #111111;
+    --card2: #181818;
+    --border: #2a2a2a;
+    --white: #f0f0f0;
+    --muted: #888888;
+    --mono: 'IBM Plex Mono', monospace;
+    --cond: 'Barlow Condensed', sans-serif;
+    --body: 'Barlow', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 52px;
+    background: rgba(10,10,10,0.92);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(8px);
+  }
+
+  .nav-logo {
+    font-family: var(--cond);
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: var(--white);
+  }
+  .nav-logo span { color: var(--red); }
+
+  .nav-slides {
+    display: flex;
+    gap: 6px;
+    list-style: none;
+  }
+  .nav-slides a {
+    display: block;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 10px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+  .nav-slides a:hover { background: var(--red); border-color: var(--red); color: #fff; }
+
+  /* SLIDES */
+  .slide {
+    min-height: 100vh;
+    padding: 80px 60px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .slide-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--red);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  /* SLIDE 1 — PORTADA */
+  #s1 {
+    background: var(--black);
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    gap: 0;
+  }
+
+  #s1::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(230,48,48,0.08) 0%, transparent 70%),
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.02) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.02) 40px);
+    pointer-events: none;
+  }
+
+  .logo-wrap {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 48px;
+  }
+
+  .logo-corner {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-color: var(--red);
+    border-style: solid;
+  }
+  .logo-corner.tl { top: -8px; left: -8px; border-width: 2px 0 0 2px; }
+  .logo-corner.tr { top: -8px; right: -8px; border-width: 2px 2px 0 0; }
+  .logo-corner.bl { bottom: -8px; left: -8px; border-width: 0 0 2px 2px; }
+  .logo-corner.br { bottom: -8px; right: -8px; border-width: 0 2px 2px 0; }
+
+  .logo-inner {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 36px 64px 28px;
+  }
+
+  .logo-drip {
+    font-family: var(--cond);
+    font-weight: 900;
+    font-size: 96px;
+    line-height: 1;
+    letter-spacing: -2px;
+    color: var(--white);
+    display: block;
+  }
+
+  .logo-bar {
+    width: 100%;
+    height: 3px;
+    background: var(--red);
+    margin: 8px 0;
+  }
+
+  .logo-mundial {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 12px;
+    color: var(--white);
+    display: block;
+    text-align: center;
+  }
+
+  .logo-pills {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .pill {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    text-transform: uppercase;
+  }
+  .pill-red { background: var(--red); color: #fff; }
+  .pill-dark { background: #1e1e1e; border: 1px solid #333; color: var(--muted); }
+
+  .cover-tagline {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: 0.5px;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+
+  .cover-sub {
+    font-family: var(--body);
+    font-size: 15px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-bottom: 40px;
+  }
+
+  .cover-footer {
+    position: absolute;
+    bottom: 28px;
+    left: 0; right: 0;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: #444;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* SLIDE HEADERS */
+  .slide-title {
+    font-family: var(--cond);
+    font-weight: 900;
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: -1px;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .slide-title span { color: var(--red); }
+
+  .slide-intro {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 640px;
+    margin-bottom: 40px;
+    line-height: 1.7;
+  }
+
+  /* PROBLEM CARDS */
+  .prob-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .prob-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--red);
+    padding: 28px 24px;
+    position: relative;
+  }
+
+  .prob-card-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--red);
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .prob-card h3 {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--white);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .prob-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* SOLUTION CARDS */
+  .sol-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .sol-card {
+    background: var(--card2);
+    border: 1px solid var(--border);
+    padding: 28px 24px;
+  }
+
+  .sol-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--red);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: #fff;
+    font-weight: 500;
+  }
+
+  .sol-card h3 {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--white);
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .sol-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* STATS GRID */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 32px 24px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: var(--cond);
+    font-weight: 900;
+    font-size: 64px;
+    line-height: 1;
+    color: var(--red);
+    display: block;
+  }
+
+  .stat-label {
+    font-family: var(--body);
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .opp-banner {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--red);
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .opp-banner .big { font-family: var(--cond); font-weight: 900; font-size: 40px; color: var(--red); }
+  .opp-banner p { font-size: 15px; color: var(--muted); }
+  .opp-banner strong { color: var(--white); }
+
+  /* SEGMENTOS */
+  .seg-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .seg-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .seg-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 80px; height: 80px;
+    background: var(--red);
+    opacity: 0.04;
+    border-radius: 50%;
+    transform: translate(30px, 30px);
+  }
+
+  .seg-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--red);
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+    display: block;
+    text-transform: uppercase;
+  }
+
+  .seg-card h3 {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .seg-age {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--red);
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  .seg-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* SPOT PERSONAJES */
+  .spot-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .spot-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 24px 20px;
+    border-top: 4px solid;
+  }
+
+  .spot-card.es { border-top-color: #E63030; }
+  .spot-card.mx { border-top-color: #2D9E2D; }
+  .spot-card.br { border-top-color: #E8C020; }
+  .spot-card.ma { border-top-color: #C03020; }
+
+  .spot-flag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .spot-card h3 {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .spot-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .spot-product {
+    display: inline-block;
+    margin-top: 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    background: #1e1e1e;
+    border: 1px solid #333;
+    color: var(--muted);
+    padding: 3px 8px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+  }
+
+  /* CALENDARIO */
+  .cal-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .cal-table th {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cal-table td {
+    padding: 18px 16px;
+    font-size: 14px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.6;
+  }
+
+  .cal-table tr:hover td { background: var(--card2); }
+
+  .cal-table td:first-child {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--white);
+    white-space: nowrap;
+  }
+
+  .cal-period {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--red);
+    letter-spacing: 1px;
+    display: block;
+    margin-top: 4px;
+  }
+
+  .data-tag {
+    display: inline-block;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    color: #666;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 2px;
+    margin: 2px 2px 0 0;
+  }
+
+  /* KPIs */
+  .kpi-hero {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .kpi-hero-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-bottom: 3px solid var(--red);
+    padding: 24px 20px;
+    text-align: center;
+  }
+
+  .kpi-big {
+    font-family: var(--cond);
+    font-weight: 900;
+    font-size: 48px;
+    color: var(--red);
+    line-height: 1;
+    display: block;
+  }
+
+  .kpi-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  .kpi-table-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .kpi-section h4 {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--red);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .kpi-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+
+  .kpi-row span:first-child { color: var(--muted); }
+  .kpi-row span:last-child { font-family: var(--mono); color: var(--white); font-size: 13px; }
+
+  /* FLUJO */
+  .flujo-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  .flujo-step {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 24px;
+    align-items: stretch;
+    position: relative;
+  }
+
+  .step-num-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .step-num {
+    width: 40px;
+    height: 40px;
+    background: var(--red);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: #fff;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .step-line {
+    width: 1px;
+    flex: 1;
+    background: var(--border);
+    margin-top: 6px;
+  }
+
+  .flujo-step:last-child .step-line { display: none; }
+
+  .step-content {
+    padding-bottom: 24px;
+  }
+
+  .step-content h3 {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--white);
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+
+  .step-timing {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--red);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .step-content p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+  /* GOBERNANZA */
+  .gov-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .gov-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 24px 20px;
+  }
+
+  .gov-card h3 {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--white);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .gov-card p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+  .gov-badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--red);
+    background: rgba(230,48,48,0.1);
+    border: 1px solid rgba(230,48,48,0.2);
+    padding: 2px 6px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  /* STACK */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .stack-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 20px 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .stack-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--red);
+    border-radius: 50%;
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  .stack-card h3 {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--white);
+    margin-bottom: 2px;
+  }
+
+  .stack-cat {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--red);
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .stack-card p { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* CIERRE */
+  #s12 {
+    background: var(--black);
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+  }
+
+  #s12::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 50%, rgba(230,48,48,0.06) 0%, transparent 70%),
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.015) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.015) 40px);
+    pointer-events: none;
+  }
+
+  .close-tagline {
+    font-family: var(--cond);
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+
+  .close-tagline em { color: var(--white); font-style: normal; }
+
+  .close-footer {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: #444;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 48px;
+    line-height: 2;
+  }
+
+  /* DIVIDER */
+  .h-rule {
+    width: 40px;
+    height: 2px;
+    background: var(--red);
+    margin-bottom: 32px;
+  }
+
+  /* SOURCES strip */
+  .data-strip {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 32px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .prob-grid, .sol-grid, .seg-grid, .spot-grid,
+    .kpi-hero, .stack-grid, .gov-grid { grid-template-columns: 1fr 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .kpi-table-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .slide { padding: 72px 24px 48px; }
+    .prob-grid, .sol-grid, .seg-grid, .spot-grid,
+    .kpi-hero, .stack-grid, .gov-grid, .stats-grid { grid-template-columns: 1fr; }
+    .slide-title { font-size: 38px; }
+    .logo-drip { font-size: 64px; }
+  }
+
+  @media print {
+    nav { display: none; }
+    .slide { page-break-after: always; min-height: 100vh; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">DRIP<span>·</span>MUNDIAL</div>
+  <ul class="nav-slides">
+    <li><a href="#s1">01</a></li>
+    <li><a href="#s2">02</a></li>
+    <li><a href="#s3">03</a></li>
+    <li><a href="#s4">04</a></li>
+    <li><a href="#s5">05</a></li>
+    <li><a href="#s6">06</a></li>
+    <li><a href="#s7">07</a></li>
+    <li><a href="#s8">08</a></li>
+    <li><a href="#s9">09</a></li>
+    <li><a href="#s10">10</a></li>
+    <li><a href="#s11">11</a></li>
+    <li><a href="#s12">12</a></li>
+  </ul>
+</nav>
+
+<!-- S1 PORTADA -->
+<section class="slide" id="s1">
+  <div class="logo-wrap">
+    <div class="logo-corner tl"></div>
+    <div class="logo-corner tr"></div>
+    <div class="logo-corner bl"></div>
+    <div class="logo-corner br"></div>
+    <div class="logo-inner">
+      <span class="logo-drip">DRIP</span>
+      <div class="logo-bar"></div>
+      <span class="logo-mundial">MUNDIAL</span>
+      <div class="logo-pills">
+        <span class="pill pill-red">2026</span>
+        <span class="pill pill-dark">DATA</span>
+        <span class="pill pill-dark">STREETWEAR</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="cover-tagline">De cada gol a tu armario en menos de 2 horas</p>
+  <p class="cover-sub">Streetwear Data Driven · Mundial 2026</p>
+
+  <div class="cover-footer">
+    Proyecto Data Driven Business &nbsp;·&nbsp; INESDI Master Marketing Digital e IA &nbsp;·&nbsp; Barcelona 2026
+  </div>
+</section>
+
+<!-- S2 EL PROBLEMA -->
+<section class="slide" id="s2">
+  <div class="slide-num">02 · El Problema</div>
+  <h2 class="slide-title">Las marcas de<br>streetwear van <span>lentas.</span></h2>
+  <div class="h-rule"></div>
+  <p class="slide-intro">El Mundial es el mayor pico de demanda en moda deportiva. Las marcas llegan tarde, hablan a todos igual y producen de más. Tres problemas concretos que DRIP resuelve con datos.</p>
+
+  <div class="prob-grid">
+    <div class="prob-card">
+      <span class="prob-card-num">PROBLEMA 01</span>
+      <h3>Ciclo lento vs. euforia instantánea</h3>
+      <p>Las marcas lanzan colecciones meses antes. Cuando España llega a semifinales, nadie tiene stock del momento viral. El fan quiere la ropa ahora, no en la próxima temporada.</p>
+    </div>
+    <div class="prob-card">
+      <span class="prob-card-num">PROBLEMA 02</span>
+      <h3>Comunicación genérica para un evento hiperpersonalizado</h3>
+      <p>El fan de Argentina no recibe lo mismo que el de Marruecos. Las marcas tratan a todos igual, ignorando la identidad de selección y el comportamiento real de cada aficionado.</p>
+    </div>
+    <div class="prob-card">
+      <span class="prob-card-num">PROBLEMA 03</span>
+      <h3>Sobrestock post-torneo sin salida</h3>
+      <p>Sin predicción de demanda se produce masivamente. Tras la eliminación del equipo queda inventario sin salida. Pérdidas de margen completamente evitables con datos.</p>
+    </div>
+  </div>
+</section>
+
+<!-- S3 PROPUESTA DE VALOR -->
+<section class="slide" id="s3">
+  <div class="slide-num">03 · Propuesta de Valor Data-Driven</div>
+  <h2 class="slide-title">Tres soluciones.<br>Un principio: <span>el dato primero.</span></h2>
+  <div class="h-rule"></div>
+  <p class="slide-intro">DRIP responde a cada problema con una solución que solo es posible si los datos están en el centro de todas las decisiones de negocio.</p>
+
+  <div class="sol-grid">
+    <div class="sol-card">
+      <div class="sol-icon">01</div>
+      <h3>Drops en tiempo real post-partido</h3>
+      <p>Motor de datos que detecta en menos de 2 horas qué momento del partido se ha vuelto viral y activa automáticamente un drop de producto limitado en la tienda online.</p>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon">02</div>
+      <h3>Catálogo personalizado por selección + perfil</h3>
+      <p>Cada usuario ve productos adaptados a su selección favorita, historial de compra y fase del torneo. La web cambia de look según avanza España, Argentina o Brasil.</p>
+    </div>
+    <div class="sol-card">
+      <div class="sol-icon">03</div>
+      <h3>Producción bajo demanda predictiva</h3>
+      <p>Modelo ML que predice demanda por selección según resultados. Si España gana octavos, el sistema ya habrá pedido el stock de cuartos tres días antes del partido.</p>
+    </div>
+  </div>
+</section>
+
+<!-- S4 OPORTUNIDAD -->
+<section class="slide" id="s4">
+  <div class="slide-num">04 · Oportunidad del Mundial 2026</div>
+  <h2 class="slide-title">El evento más grande<br>del planeta. <span>En datos.</span></h2>
+  <div class="h-rule"></div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-num">48</span>
+      <span class="stat-label">Equipos participantes</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num">104</span>
+      <span class="stat-label">Partidos en el torneo</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num">3</span>
+      <span class="stat-label">Países sede<br>EEUU · México · Canadá</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-num">5B</span>
+      <span class="stat-label">Espectadores globales</span>
+    </div>
+  </div>
+
+  <div class="opp-banner">
+    <span class="big">×12</span>
+    <div>
+      <p><strong>Pico de búsqueda de moda deportiva</strong> durante el torneo vs. cualquier otro periodo del año.</p>
+      <p style="margin-top:6px;">48 selecciones = <strong>48 segmentos activables con datos en tiempo real.</strong> Ninguna otra categoría alcanza estos volúmenes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- S5 SEGMENTOS -->
+<section class="slide" id="s5">
+  <div class="slide-num">05 · Segmentos de Cliente</div>
+  <h2 class="slide-title">Tres arquetipos.<br>Un mismo <span>momento viral.</span></h2>
+  <div class="h-rule"></div>
+  <p class="slide-intro">No todos los fans compran igual. DRIP identifica tres perfiles con comportamientos de compra distintos y activa estrategias diferenciadas para cada uno.</p>
+
+  <div class="seg-grid">
+    <div class="seg-card">
+      <span class="seg-tag">Segmento 01</span>
+      <h3>El Fan del Corazón</h3>
+      <span class="seg-age">18 – 35 años</span>
+      <p>Compra en picos de euforia. Necesita el producto el día después del partido. Alta impulsividad. Muy activo en redes sociales. Trigger principal: el gol y el momento viral.</p>
+    </div>
+    <div class="seg-card">
+      <span class="seg-tag">Segmento 02</span>
+      <h3>El Coleccionista</h3>
+      <span class="seg-age">25 – 45 años</span>
+      <p>Busca ediciones limitadas y drops numerados. Dispuesto a pagar premium. Alta fidelidad de marca. Prescriptor activo en su comunidad. Trigger: la escasez y la exclusividad.</p>
+    </div>
+    <div class="seg-card">
+      <span class="seg-tag">Segmento 03</span>
+      <h3>El Casual Fashionista</h3>
+      <span class="seg-age">20 – 40 años</span>
+      <p>Le gusta la moda urbana con contexto cultural. El Mundial es una excusa para renovar el armario con algo que tiene historia. Trigger: el estilo y la identidad cultural.</p>
+    </div>
+  </div>
+</section>
+
+<!-- S6 PERSONAJES -->
+<section class="slide" id="s6">
+  <div class="slide-num">06 · Los 4 Personajes del Spot</div>
+  <h2 class="slide-title">Fans reales.<br>4 selecciones. <span>1 gol.</span></h2>
+  <div class="h-rule"></div>
+  <p class="slide-intro">El spot de DRIP Mundial captura el momento más emocional del fútbol: la celebración del gol. Cuatro personajes, cuatro identidades, una misma marca.</p>
+
+  <div class="spot-grid">
+    <div class="spot-card es">
+      <span class="spot-flag">ES · ESPAÑA</span>
+      <h3>Explosión pura</h3>
+      <p>Salta y grita. La euforia descontrolada del fan que lo da todo. Clip 1 — escena del gol.</p>
+      <span class="spot-product">Hoodie rojo DRIP</span>
+    </div>
+    <div class="spot-card mx">
+      <span class="spot-flag">MX · MÉXICO</span>
+      <h3>Orgullo colectivo</h3>
+      <p>Celebración en grupo, identidad nacional a flor de piel. Clip 1 — escena del gol.</p>
+      <span class="spot-product">Chaqueta verde DRIP</span>
+    </div>
+    <div class="spot-card br">
+      <span class="spot-flag">BR · BRASIL</span>
+      <h3>Alegría física</h3>
+      <p>Baile instintivo. El cuerpo que reacciona antes que la mente. Clip 1 — escena del gol.</p>
+      <span class="spot-product">Camiseta amarilla DRIP</span>
+    </div>
+    <div class="spot-card ma">
+      <span class="spot-flag">MA · MARRUECOS</span>
+      <h3>El gran reveal</h3>
+      <p>Llega solo desde el fondo. Cierra el círculo. El momento más poderoso del spot. Clip 2.</p>
+      <span class="spot-product">Hoodie rojo DRIP</span>
+    </div>
+  </div>
+</section>
+
+<!-- S7 CALENDARIO -->
+<section class="slide" id="s7">
+  <div class="slide-num">07 · Calendario de Activación Data-Driven</div>
+  <h2 class="slide-title">Cuatro fases.<br>Cero <span>improvisación.</span></h2>
+  <div class="h-rule"></div>
+  <p class="slide-intro">Cada fase del torneo tiene sus propias acciones data-driven y sus propias fuentes de datos. El sistema se activa antes de que empiece el primer partido.</p>
+
+  <table class="cal-table">
+    <thead>
+      <tr>
+        <th>Fase</th>
+        <th>Acciones data-driven</th>
+        <th>Datos utilizados</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Pre-torneo<span class="cal-period">Jun 2026</span></td>
+        <td>Segmentación de fans, producción predictiva inicial, setup de infraestructura de datos</td>
+        <td>
+          <span class="data-tag">Google Trends</span>
+          <span class="data-tag">RRSS</span>
+          <span class="data-tag">Histórico ventas</span>
+        </td>
+      </tr>
+      <tr>
+        <td>Fase de grupos<span class="cal-period">Sem 1–3</span></td>
+        <td>Drops post-partido automáticos, A/B testing creatividades, email segmentado por selección</td>
+        <td>
+          <span class="data-tag">API FIFA Live</span>
+          <span class="data-tag">Social listening 24/7</span>
+        </td>
+      </tr>
+      <tr>
+        <td>Eliminatorias<span class="cal-period">Sem 4–7</span></td>
+        <td>Producción dinámica por equipos supervivientes, retargeting fans eliminados: "El orgullo no muere"</td>
+        <td>
+          <span class="data-tag">CRM</span>
+          <span class="data-tag">Retargeting</span>
+          <span class="data-tag">Demanda predictiva</span>
+        </td>
+      </tr>
+      <tr>
+        <td>Final + Post<span class="cal-period">Jul 2026</span></td>
+        <td>Drop conmemorativo del campeón, liquidación inteligente de stock por mercado geográfico</td>
+        <td>
+          <span class="data-tag">Análisis resultados</span>
+          <span class="data-tag">Retención post-torneo</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- S8 KPIs -->
+<section class="slide" id="s8">
+  <div class="slide-num">08 · KPIs y Métricas de Éxito</div>
+  <h2 class="slide-title">Lo que no se mide<br><span>no existe.</span></h2>
+  <div class="h-rule"></div>
+
+  <div class="kpi-hero">
+    <div class="kpi-hero-card">
+      <span class="kpi-big">&lt;2h</span>
+      <p class="kpi-label">Tiempo drop post-partido<br>De gol a tienda online</p>
+    </div>
+    <div class="kpi-hero-card">
+      <span class="kpi-big">+40%</span>
+      <p class="kpi-label">Conversión personalizada vs. catálogo genérico</p>
+    </div>
+    <div class="kpi-hero-card">
+      <span class="kpi-big">-45%</span>
+      <p class="kpi-label">Reducción sobrestock con producción bajo demanda</p>
+    </div>
+    <div class="kpi-hero-card">
+      <span class="kpi-big">55%</span>
+      <p class="kpi-label">Retención post-mundial clientes activos año 2</p>
+    </div>
+  </div>
+
+  <div class="kpi-table-grid">
+    <div class="kpi-section">
+      <h4>KPIs estratégicos</h4>
+      <div class="kpi-row"><span>Margen bruto por drop</span><span>≥ 58%</span></div>
+      <div class="kpi-row"><span>Customer Lifetime Value</span><span>280 EUR</span></div>
+      <div class="kpi-row"><span>Precisión modelo predictivo</span><span>≥ 82%</span></div>
+    </div>
+    <div class="kpi-section">
+      <h4>KPIs operativos</h4>
+      <div class="kpi-row"><span>CTR email post-partido</span><span>&gt; 12%</span></div>
+      <div class="kpi-row"><span>Detección tendencia viral</span><span>&lt; 30 min</span></div>
+      <div class="kpi-row"><span>Tasa de devoluciones</span><span>&lt; 10%</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- S9 FLUJO -->
+<section class="slide" id="s9">
+  <div class="slide-num">09 · Flujo — De Gol a Producto en 5 Pasos</div>
+  <h2 class="slide-title">El dato es<br>el <span>activador.</span></h2>
+  <div class="h-rule"></div>
+  <p class="slide-intro">Cada señal del partido desencadena una cadena de decisiones automáticas que llevan el producto al cliente en menos de 2 horas.</p>
+
+  <div class="flujo-steps">
+    <div class="flujo-step">
+      <div class="step-num-col">
+        <div class="step-num">01</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content">
+        <span class="step-timing">T + 0:00 — &lt; 5 MINUTOS</span>
+        <h3>Señal del partido</h3>
+        <p>Un gol o momento viral explota en redes. La API del torneo y el escuchador social lo detectan en menos de 5 minutos.</p>
+      </div>
+    </div>
+    <div class="flujo-step">
+      <div class="step-num-col">
+        <div class="step-num">02</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content">
+        <span class="step-timing">T + 5:00 — PROCESAMIENTO</span>
+        <h3>Procesamiento e intención</h3>
+        <p>El modelo clasifica el momento, predice demanda por segmento y activa el brief de producto automáticamente.</p>
+      </div>
+    </div>
+    <div class="flujo-step">
+      <div class="step-num-col">
+        <div class="step-num">03</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content">
+        <span class="step-timing">T + 2:00h — DROP LIVE</span>
+        <h3>Drop activado en tienda</h3>
+        <p>El producto aparece en tienda online con copywriting generado por IA, segmentado por selección favorita del usuario.</p>
+      </div>
+    </div>
+    <div class="flujo-step">
+      <div class="step-num-col">
+        <div class="step-num">04</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content">
+        <span class="step-timing">T + 2:05h — COMUNICACIÓN</span>
+        <h3>Comunicación personalizada</h3>
+        <p>Email, push y stories activados para cada segmento. El fan de España no recibe lo mismo que el de Brasil.</p>
+      </div>
+    </div>
+    <div class="flujo-step">
+      <div class="step-num-col">
+        <div class="step-num">05</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-content">
+        <span class="step-timing">CONTINUO — APRENDIZAJE</span>
+        <h3>Aprendizaje y ajuste</h3>
+        <p>Cada drop retroalimenta el modelo: qué momentos convierten más, qué selecciones compran más rápido.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S10 GOBERNANZA -->
+<section class="slide" id="s10">
+  <div class="slide-num">10 · Gobernanza del Dato</div>
+  <h2 class="slide-title">Data Driven no es<br>solo tener datos. <span>Es gobernarlos.</span></h2>
+  <div class="h-rule"></div>
+  <p class="slide-intro">Una empresa data driven tiene reglas claras sobre cómo se usan los datos, quién es responsable y cómo se garantiza su calidad y legalidad.</p>
+
+  <div class="gov-grid">
+    <div class="gov-card">
+      <span class="gov-badge">LEGAL</span>
+      <h3>GDPR — Consentimiento explícito</h3>
+      <p>Onboarding con opt-in claro. El usuario sabe exactamente qué datos se recogen y para qué se usan.</p>
+    </div>
+    <div class="gov-card">
+      <span class="gov-badge">CALIDAD</span>
+      <h3>Calidad del dato validada</h3>
+      <p>Validación antes de cada drop. Dato sucio = decisión equivocada = producto sin ventas.</p>
+    </div>
+    <div class="gov-card">
+      <span class="gov-badge">PROPIEDAD</span>
+      <h3>Data Owner por dominio</h3>
+      <p>Responsable claro por área: producto, cliente y torneo. Sin propietario no hay accountability.</p>
+    </div>
+    <div class="gov-card">
+      <span class="gov-badge">ALINEACIÓN</span>
+      <h3>Glosario común de métricas</h3>
+      <p>Todos en la empresa entienden lo mismo por "conversión", "retención" o "drop exitoso".</p>
+    </div>
+    <div class="gov-card">
+      <span class="gov-badge">TRAZABILIDAD</span>
+      <h3>Decisiones auditables</h3>
+      <p>Todo cambio de producción o comunicación queda registrado con la señal de dato que lo provocó.</p>
+    </div>
+    <div class="gov-card" style="background: rgba(230,48,48,0.04); border-color: rgba(230,48,48,0.2);">
+      <span class="gov-badge">PRINCIPIO</span>
+      <h3>El dato, siempre al servicio del negocio</h3>
+      <p>Los datos no son un fin en sí mismos. Cada pipeline, cada modelo y cada dashboard sirve a una decisión de negocio concreta.</p>
+    </div>
+  </div>
+</section>
+
+<!-- S11 STACK -->
+<section class="slide" id="s11">
+  <div class="slide-num">11 · Stack Tecnológico</div>
+  <h2 class="slide-title">Las herramientas<br>que hacen posible <span>DRIP.</span></h2>
+  <div class="h-rule"></div>
+  <p class="slide-intro">Nueve herramientas integradas en un mismo flujo de datos. Desde la señal del partido hasta el email en el móvil del fan, todo conectado en tiempo real.</p>
+
+  <div class="stack-grid">
+    <div class="stack-card">
+      <div class="stack-dot"></div>
+      <div>
+        <span class="stack-cat">Visualización</span>
+        <h3>Power BI</h3>
+        <p>Dashboard de KPIs en tiempo real durante todo el torneo</p>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-dot"></div>
+      <div>
+        <span class="stack-cat">Data Warehouse</span>
+        <h3>BigQuery</h3>
+        <p>Centralización de datos del torneo y del cliente en un solo lugar</p>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-dot"></div>
+      <div>
+        <span class="stack-cat">Analítica avanzada</span>
+        <h3>Python / ML</h3>
+        <p>Modelos predictivos de demanda por selección y momento viral</p>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-dot"></div>
+      <div>
+        <span class="stack-cat">E-commerce</span>
+        <h3>Shopify Plus</h3>
+        <p>Tienda online con drops activados via API automáticamente</p>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-dot"></div>
+      <div>
+        <span class="stack-cat">Marketing automation</span>
+        <h3>Klaviyo</h3>
+        <p>Email y push segmentado post-partido por selección favorita</p>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-dot"></div>
+      <div>
+        <span class="stack-cat">Datos externos</span>
+        <h3>API FIFA Live</h3>
+        <p>Resultados, goles y eventos del torneo en tiempo real</p>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-dot"></div>
+      <div>
+        <span class="stack-cat">Monitorización</span>
+        <h3>Social Listening</h3>
+        <p>Detección de tendencias virales en TikTok, X e Instagram</p>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-dot"></div>
+      <div>
+        <span class="stack-cat">IA generativa</span>
+        <h3>ChatGPT API</h3>
+        <p>Copywriting automático para cada drop en segundos</p>
+      </div>
+    </div>
+    <div class="stack-card">
+      <div class="stack-dot"></div>
+      <div>
+        <span class="stack-cat">Web analytics</span>
+        <h3>Google Analytics 4</h3>
+        <p>Comportamiento de usuario y conversión en tienda durante el torneo</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S12 CIERRE -->
+<section class="slide" id="s12">
+  <div class="logo-wrap">
+    <div class="logo-corner tl"></div>
+    <div class="logo-corner tr"></div>
+    <div class="logo-corner bl"></div>
+    <div class="logo-corner br"></div>
+    <div class="logo-inner">
+      <span class="logo-drip">DRIP</span>
+      <div class="logo-bar"></div>
+      <span class="logo-mundial">MUNDIAL</span>
+      <div class="logo-pills">
+        <span class="pill pill-red">2026</span>
+        <span class="pill pill-dark">DATA</span>
+        <span class="pill pill-dark">STREETWEAR</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="close-tagline">De cada gol a tu armario<br><em>en menos de 2 horas.</em></p>
+
+  <p class="close-footer">
+    Proyecto Data Driven Business &nbsp;·&nbsp; INESDI Master Marketing Digital e IA<br>
+    Barcelona · 2026
+  </p>
+</section>
+
+</body>
+</html>

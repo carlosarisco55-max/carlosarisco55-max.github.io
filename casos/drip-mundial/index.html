@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DRIP MUNDIAL — Streetwear Data Driven</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Barlow:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --red: #E63030;
+  --black: #080808;
+  --ink: #0e0e0e;
+  --card: #131313;
+  --card2: #1a1a1a;
+  --border: #242424;
+  --white: #f2f2f2;
+  --muted: #777;
+  --green: #2D9E2D;
+  --yellow: #D4AC00;
+  --cond: 'Barlow Condensed', sans-serif;
+  --body: 'Barlow', sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--white); font-family: var(--body); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+/* ── TICKER ── */
+.ticker-wrap {
+  background: var(--red);
+  padding: 6px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ticker-inner {
+  display: inline-block;
+  animation: ticker 28s linear infinite;
+}
+.ticker-inner span {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #fff;
+  padding: 0 32px;
+  text-transform: uppercase;
+}
+.ticker-inner span::before { content: '⬤  '; font-size: 7px; vertical-align: middle; opacity: 0.7; }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ── NAV ── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 60px;
+  background: rgba(8,8,8,0.96);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 4px 12px 3px;
+  position: relative;
+}
+.logo-box::before, .logo-box::after {
+  content: '';
+  position: absolute;
+  width: 6px; height: 6px;
+  border-color: var(--red);
+  border-style: solid;
+}
+.logo-box::before { top: -3px; left: -3px; border-width: 1.5px 0 0 1.5px; }
+.logo-box::after  { bottom: -3px; right: -3px; border-width: 0 1.5px 1.5px 0; }
+
+.logo-drip-text {
+  font-family: var(--cond);
+  font-weight: 900;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--white);
+  letter-spacing: -0.5px;
+  display: block;
+}
+.logo-bar-small { width: 100%; height: 2px; background: var(--red); margin: 2px 0; }
+.logo-mundial-text {
+  font-family: var(--cond);
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 5px;
+  color: var(--white);
+  display: block;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.nav-links a:hover { color: var(--white); }
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-live {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--red);
+  text-transform: uppercase;
+}
+.live-dot {
+  width: 7px; height: 7px;
+  background: var(--red);
+  border-radius: 50%;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+
+.btn-cart {
+  background: var(--red);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn-cart:hover { opacity: 0.85; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 92vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-left {
+  background: var(--ink);
+  padding: 80px 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-eyebrow::after { content: ''; flex: 1; max-width: 40px; height: 1px; background: var(--red); }
+
+.hero-title {
+  font-family: var(--cond);
+  font-weight: 900;
+  font-size: 88px;
+  line-height: 0.92;
+  letter-spacing: -2px;
+  color: var(--white);
+  margin-bottom: 24px;
+}
+.hero-title em { color: var(--red); font-style: normal; display: block; }
+
+.hero-sub {
+  font-size: 16px;
+  color: var(--muted);
+  max-width: 380px;
+  margin-bottom: 48px;
+  line-height: 1.7;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: var(--red);
+  color: #fff;
+  font-family: var(--cond);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 1px;
+  padding: 14px 36px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn-primary:hover { opacity: 0.85; }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--white);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.btn-secondary:hover { border-color: var(--white); }
+
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  margin-top: 56px;
+  padding-top: 36px;
+  border-top: 1px solid var(--border);
+}
+.hstat-num {
+  font-family: var(--cond);
+  font-weight: 900;
+  font-size: 36px;
+  color: var(--red);
+  display: block;
+  line-height: 1;
+}
+.hstat-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* HERO RIGHT — drop activo */
+.hero-right {
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 64px 48px;
+  position: relative;
+}
+
+.drop-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(230,48,48,0.12);
+  border: 1px solid rgba(230,48,48,0.3);
+  padding: 6px 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  width: fit-content;
+}
+
+.product-visual {
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* SVG hoodie illustration */
+.product-visual svg { width: 60%; height: 60%; }
+
+.product-tag {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: var(--red);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  padding: 4px 8px;
+  text-transform: uppercase;
+}
+
+.product-grid-lines {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.025) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.025) 40px);
+}
+
+.drop-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.drop-name {
+  font-family: var(--cond);
+  font-weight: 700;
+  font-size: 28px;
+  color: var(--white);
+  line-height: 1.1;
+}
+.drop-edition {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+.drop-price {
+  font-family: var(--cond);
+  font-weight: 900;
+  font-size: 36px;
+  color: var(--white);
+  line-height: 1;
+}
+.drop-price-sub {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-align: right;
+  margin-top: 4px;
+}
+
+/* countdown */
+.countdown-wrap {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--red);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+.countdown-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.countdown-digits {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+}
+.cdig {
+  text-align: center;
+}
+.cdig-num {
+  font-family: var(--cond);
+  font-weight: 900;
+  font-size: 40px;
+  color: var(--white);
+  line-height: 1;
+  display: block;
+  min-width: 48px;
+}
+.cdig-unit {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.csep {
+  font-family: var(--cond);
+  font-weight: 900;
+  font-size: 32px;
+  color: var(--red);
+  line-height: 1;
+  opacity: 0.6;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 0%,100%{opacity:0.6} 50%{opacity:0.1} }
+
+.stock-bar {
+  margin-bottom: 20px;
+}
+.stock-label {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.stock-track {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.stock-fill {
+  height: 100%;
+  background: var(--red);
+  border-radius: 2px;
+  width: 73%;
+  transition: width 2s ease;
+}
+
+.btn-drop {
+  width: 100%;
+  background: var(--red);
+  color: #fff;
+  font-family: var(--cond);
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: 1px;
+  padding: 16px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  text-transform: uppercase;
+}
+.btn-drop:hover { opacity: 0.85; }
+
+/* ── HOW IT WORKS ── */
+.how {
+  padding: 100px 64px;
+  border-top: 1px solid var(--border);
+}
+
+.section-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: var(--cond);
+  font-weight: 900;
+  font-size: 56px;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: var(--white);
+  margin-bottom: 64px;
+}
+.section-title span { color: var(--red); }
+
+.how-steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  position: relative;
+}
+
+.how-steps::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: var(--border);
+}
+
+.how-step {
+  text-align: center;
+  padding: 0 16px;
+  position: relative;
+}
+
+.how-step-num {
+  width: 56px;
+  height: 56px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--red);
+  margin: 0 auto 20px;
+  position: relative;
+  z-index: 1;
+}
+.how-step.active .how-step-num {
+  background: var(--red);
+  color: #fff;
+  border-color: var(--red);
+}
+
+.how-step-icon {
+  font-size: 22px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.how-step h3 {
+  font-family: var(--cond);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--white);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+.how-step p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.how-step-time {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--red);
+  letter-spacing: 2px;
+  background: rgba(230,48,48,0.08);
+  border: 1px solid rgba(230,48,48,0.2);
+  padding: 2px 8px;
+  text-transform: uppercase;
+}
+
+/* ── DROPS GRID ── */
+.drops-section {
+  padding: 100px 64px;
+  border-top: 1px solid var(--border);
+  background: var(--ink);
+}
+
+.drops-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 48px;
+}
+
+.filter-tabs {
+  display: flex;
+  gap: 4px;
+}
+.filter-tab {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 7px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-tab.active, .filter-tab:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.drops-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.drop-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+  position: relative;
+}
+.drop-card:hover { border-color: #444; transform: translateY(-2px); }
+
+.drop-card-img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: var(--card2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.drop-card-img svg { width: 65%; height: 65%; }
+
+.drop-card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+}
+.badge-new { background: var(--red); color: #fff; }
+.badge-sold { background: #222; border: 1px solid #333; color: var(--muted); }
+.badge-last { background: var(--yellow); color: #000; }
+.badge-es { background: rgba(230,48,48,0.15); border: 1px solid rgba(230,48,48,0.3); color: var(--red); }
+.badge-mx { background: rgba(45,158,45,0.15); border: 1px solid rgba(45,158,45,0.3); color: var(--green); }
+.badge-br { background: rgba(212,172,0,0.15); border: 1px solid rgba(212,172,0,0.3); color: var(--yellow); }
+.badge-ma { background: rgba(230,48,48,0.1); border: 1px solid rgba(230,48,48,0.2); color: #c04040; }
+
+.drop-card-body {
+  padding: 16px;
+}
+.drop-card-sel {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.drop-card-name {
+  font-family: var(--cond);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--white);
+  margin-bottom: 4px;
+  line-height: 1.1;
+}
+.drop-card-edition {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.drop-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.drop-card-price {
+  font-family: var(--cond);
+  font-weight: 900;
+  font-size: 24px;
+  color: var(--white);
+}
+.drop-card-stock {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--red);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ── DATA SIGNAL ── */
+.signal-section {
+  padding: 100px 64px;
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.signal-left h2 {
+  font-family: var(--cond);
+  font-weight: 900;
+  font-size: 52px;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: var(--white);
+  margin-bottom: 20px;
+}
+.signal-left h2 span { color: var(--red); }
+.signal-left p {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+.signal-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.smetric {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--red);
+  padding: 16px 18px;
+}
+.smetric-val {
+  font-family: var(--cond);
+  font-weight: 900;
+  font-size: 32px;
+  color: var(--white);
+  line-height: 1;
+  display: block;
+}
+.smetric-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+/* live feed */
+.signal-right {
+  background: var(--card);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.feed-header {
+  background: var(--card2);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.feed-title {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--white);
+  text-transform: uppercase;
+}
+.feed-live {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--red);
+  letter-spacing: 2px;
+}
+
+.feed-items {
+  padding: 0;
+}
+
+.feed-item {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  animation: feedIn 0.4s ease;
+}
+.feed-item:last-child { border-bottom: none; }
+@keyframes feedIn { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: none; } }
+
+.feed-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--card2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+.feed-text {
+  font-family: var(--body);
+  font-size: 13px;
+  color: var(--white);
+  line-height: 1.4;
+}
+.feed-text small {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+
+.feed-val {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--red);
+  white-space: nowrap;
+}
+
+/* ── SELECCIONES ── */
+.sel-section {
+  padding: 100px 64px;
+  border-top: 1px solid var(--border);
+  background: var(--ink);
+}
+
+.sel-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-top: 48px;
+}
+
+.sel-card {
+  background: var(--card);
+  padding: 40px 28px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-top: 4px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+.sel-card:hover { background: var(--card2); }
+.sel-card.es { border-top-color: var(--red); }
+.sel-card.mx { border-top-color: var(--green); }
+.sel-card.br { border-top-color: var(--yellow); }
+.sel-card.ma { border-top-color: #c04040; }
+
+.sel-flag-code {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--muted);
+  margin-bottom: 16px;
+  display: block;
+  text-transform: uppercase;
+}
+
+.sel-name {
+  font-family: var(--cond);
+  font-weight: 900;
+  font-size: 48px;
+  line-height: 0.95;
+  letter-spacing: -1px;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+
+.sel-status {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  display: inline-block;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+.sel-status.active { background: rgba(230,48,48,0.15); border: 1px solid rgba(230,48,48,0.3); color: var(--red); }
+.sel-status.available { background: rgba(45,158,45,0.12); border: 1px solid rgba(45,158,45,0.25); color: var(--green); }
+
+.sel-drops {
+  font-family: var(--cond);
+  font-weight: 700;
+  font-size: 32px;
+  color: var(--white);
+  display: block;
+}
+.sel-drops-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.sel-watermark {
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  font-family: var(--cond);
+  font-weight: 900;
+  font-size: 100px;
+  line-height: 1;
+  color: #fff;
+  opacity: 0.025;
+  pointer-events: none;
+  letter-spacing: -3px;
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 48px 64px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+}
+
+.footer-brand p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 16px;
+  max-width: 280px;
+}
+
+.footer-col h4 {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--white);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.footer-col ul { list-style: none; }
+.footer-col ul li {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.footer-col ul li:hover { color: var(--white); }
+
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding: 20px 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-bottom p {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: #444;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ── NOTIFICATION TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--red);
+  padding: 16px 20px;
+  z-index: 999;
+  max-width: 300px;
+  animation: toastIn 0.3s ease;
+  display: none;
+}
+.toast.show { display: block; }
+@keyframes toastIn { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform:none; } }
+.toast-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.toast-text {
+  font-family: var(--cond);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.toast-sub {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-title { font-size: 64px; }
+  .drops-grid { grid-template-columns: repeat(2, 1fr); }
+  .signal-section { grid-template-columns: 1fr; }
+  .sel-grid { grid-template-columns: repeat(2, 1fr); }
+  footer { grid-template-columns: 1fr 1fr; }
+  .how-steps { grid-template-columns: 1fr; }
+  .how-steps::before { display: none; }
+}
+
+@media (max-width: 640px) {
+  nav { padding: 0 20px; }
+  .nav-links, .nav-actions { display: none; }
+  .hero-left { padding: 48px 24px; }
+  .hero-right { padding: 40px 24px; }
+  .hero-title { font-size: 52px; }
+  .drops-grid, .sel-grid { grid-template-columns: 1fr; }
+  .drops-section, .how, .signal-section, .sel-section { padding: 60px 24px; }
+  footer { grid-template-columns: 1fr; padding: 40px 24px; }
+  .footer-bottom { padding: 20px 24px; flex-direction: column; gap: 8px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span>Drop activo — España Gol Minuto 87</span>
+    <span>Nuevo drop en 1h 42min</span>
+    <span>73% vendido — Hoodie Rojo ES #047</span>
+    <span>Drop activo — España Gol Minuto 87</span>
+    <span>Nuevo drop en 1h 42min</span>
+    <span>73% vendido — Hoodie Rojo ES #047</span>
+    <span>Drop activo — España Gol Minuto 87</span>
+    <span>Nuevo drop en 1h 42min</span>
+    <span>73% vendido — Hoodie Rojo ES #047</span>
+    <span>Drop activo — España Gol Minuto 87</span>
+    <span>Nuevo drop en 1h 42min</span>
+    <span>73% vendido — Hoodie Rojo ES #047</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="logo-box">
+      <span class="logo-drip-text">DRIP</span>
+      <div class="logo-bar-small"></div>
+      <span class="logo-mundial-text">MUNDIAL</span>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#drops">Drops</a></li>
+    <li><a href="#selecciones">Selecciones</a></li>
+    <li><a href="#how">Cómo funciona</a></li>
+    <li><a href="#data">Data Live</a></li>
+  </ul>
+  <div class="nav-actions">
+    <div class="nav-live"><div class="live-dot"></div>Drop live</div>
+    <button class="btn-cart">Carrito (0)</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Drop #047 · España · Cuartos de Final</div>
+    <h1 class="hero-title">
+      Tu<br>selección.<br>
+      <em>Ahora.</em>
+    </h1>
+    <p class="hero-sub">Detectamos el gol en menos de 5 minutos. El producto llega a tu armario en menos de 2 horas. Streetwear que reacciona tan rápido como tú.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary" onclick="showToast()">Ver drop activo</button>
+      <button class="btn-secondary">Ver todas las selecciones</button>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <span class="hstat-num">&lt;2h</span>
+        <div class="hstat-label">De gol a entrega</div>
+      </div>
+      <div>
+        <span class="hstat-num">48</span>
+        <div class="hstat-label">Selecciones activas</div>
+      </div>
+      <div>
+        <span class="hstat-num">×12</span>
+        <div class="hstat-label">Pico demanda torneo</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="drop-badge">
+      <div class="live-dot"></div>
+      Drop activo ahora · #ES-047
+    </div>
+
+    <div class="product-visual">
+      <div class="product-grid-lines"></div>
+      <span class="product-tag">Ed. limitada · 120 uds</span>
+      <!-- SVG hoodie illustration -->
+      <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M60 40 L20 70 L35 80 L30 160 L170 160 L165 80 L180 70 L140 40 L120 55 C110 65 90 65 80 55 Z" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1.5"/>
+        <path d="M60 40 L20 70 L35 80" stroke="#333" stroke-width="1" fill="none"/>
+        <path d="M140 40 L180 70 L165 80" stroke="#333" stroke-width="1" fill="none"/>
+        <path d="M80 55 Q100 50 120 55 L115 90 Q100 95 85 90 Z" fill="#E63030" opacity="0.9"/>
+        <text x="100" y="82" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-weight="900" font-size="14" fill="#fff" letter-spacing="1">DRIP</text>
+        <path d="M30 160 L30 170 L170 170 L170 160" fill="#161616" stroke="#2a2a2a" stroke-width="1"/>
+        <line x1="100" y1="80" x2="100" y2="155" stroke="#222" stroke-width="0.5" stroke-dasharray="4,4"/>
+        <rect x="88" y="38" width="24" height="8" rx="4" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+      </svg>
+    </div>
+
+    <div class="drop-info">
+      <div>
+        <div class="drop-name">Hoodie Rojo ES<br>Cuartos #047</div>
+        <div class="drop-edition">Edición limitada · 120 unidades · Gol min. 87'</div>
+      </div>
+      <div>
+        <div class="drop-price">89€</div>
+        <div class="drop-price-sub">Envío 24h</div>
+      </div>
+    </div>
+
+    <div class="countdown-wrap">
+      <div class="countdown-label">Tiempo restante para este drop</div>
+      <div class="countdown-digits">
+        <div class="cdig"><span class="cdig-num" id="cd-h">01</span><span class="cdig-unit">horas</span></div>
+        <span class="csep">:</span>
+        <div class="cdig"><span class="cdig-num" id="cd-m">42</span><span class="cdig-unit">min</span></div>
+        <span class="csep">:</span>
+        <div class="cdig"><span class="cdig-num" id="cd-s">18</span><span class="cdig-unit">seg</span></div>
+      </div>
+    </div>
+
+    <div class="stock-bar">
+      <div class="stock-label">
+        <span>Stock disponible</span>
+        <span style="color:var(--red)">27 unidades restantes</span>
+      </div>
+      <div class="stock-track"><div class="stock-fill" id="stock-fill"></div></div>
+    </div>
+
+    <button class="btn-drop" onclick="showToast()">Añadir al carrito — 89€</button>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="section-eyebrow">Cómo funciona</div>
+  <h2 class="section-title">De gol a producto<br>en <span>5 pasos.</span></h2>
+
+  <div class="how-steps">
+    <div class="how-step active">
+      <div class="how-step-num">01</div>
+      <span class="how-step-icon">📡</span>
+      <h3>Señal del partido</h3>
+      <p>La API FIFA detecta el gol. Social listening confirma el momento viral.</p>
+      <span class="how-step-time">&lt; 5 min</span>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">02</div>
+      <span class="how-step-icon">🧠</span>
+      <h3>Modelo ML activa</h3>
+      <p>Predice demanda por selección y segmento de cliente automáticamente.</p>
+      <span class="how-step-time">T + 5 min</span>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">03</div>
+      <span class="how-step-icon">🛍️</span>
+      <h3>Drop en tienda</h3>
+      <p>Producto publicado con copy generado por IA. Personalizado por selección.</p>
+      <span class="how-step-time">T + 2h</span>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">04</div>
+      <span class="how-step-icon">📲</span>
+      <h3>Tú recibes el push</h3>
+      <p>Email, push y stories activados solo para fans de tu selección.</p>
+      <span class="how-step-time">T + 2h 5min</span>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">05</div>
+      <span class="how-step-icon">📦</span>
+      <h3>Entrega 24h</h3>
+      <p>El modelo aprende: cada drop mejora el siguiente. Tu armario gana.</p>
+      <span class="how-step-time">+24h</span>
+    </div>
+  </div>
+</section>
+
+<!-- DROPS GRID -->
+<section class="drops-section" id="drops">
+  <div class="drops-header">
+    <div>
+      <div class="section-eyebrow">Colección activa</div>
+      <h2 class="section-title" style="margin-bottom:0">Drops del<br><span>torneo.</span></h2>
+    </div>
+    <div class="filter-tabs">
+      <button class="filter-tab active">Todos</button>
+      <button class="filter-tab">España</button>
+      <button class="filter-tab">México</button>
+      <button class="filter-tab">Brasil</button>
+      <button class="filter-tab">Marruecos</button>
+    </div>
+  </div>
+
+  <div class="drops-grid">
+    <!-- Card 1 -->
+    <div class="drop-card" onclick="showToast()">
+      <div class="drop-card-img" style="background:#161010">
+        <div class="product-grid-lines"></div>
+        <span class="drop-card-badge badge-new">Drop activo</span>
+        <svg viewBox="0 0 200 200" fill="none">
+          <path d="M60 40 L20 70 L35 80 L30 160 L170 160 L165 80 L180 70 L140 40 L120 55 C110 65 90 65 80 55 Z" fill="#1c1010" stroke="#2a1a1a" stroke-width="1.5"/>
+          <path d="M80 55 Q100 50 120 55 L115 90 Q100 95 85 90 Z" fill="#E63030"/>
+          <text x="100" y="82" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-weight="900" font-size="14" fill="#fff" letter-spacing="1">DRIP</text>
+        </svg>
+      </div>
+      <div class="drop-card-body">
+        <div class="drop-card-sel">🇪🇸 España · Cuartos</div>
+        <div class="drop-card-name">Hoodie Rojo ES</div>
+        <div class="drop-card-edition">Ed. #047 · Gol min. 87' · 120 uds</div>
+        <div class="drop-card-footer">
+          <span class="drop-card-price">89€</span>
+          <span class="drop-card-stock">27 uds</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="drop-card" onclick="showToast()">
+      <div class="drop-card-img" style="background:#0e160e">
+        <div class="product-grid-lines"></div>
+        <span class="drop-card-badge badge-mx">México</span>
+        <svg viewBox="0 0 200 200" fill="none">
+          <path d="M60 40 L20 70 L35 80 L30 160 L170 160 L165 80 L180 70 L140 40 L120 55 C110 65 90 65 80 55 Z" fill="#0e1a0e" stroke="#1a2a1a" stroke-width="1.5"/>
+          <path d="M80 55 Q100 50 120 55 L115 90 Q100 95 85 90 Z" fill="#2D9E2D"/>
+          <text x="100" y="82" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-weight="900" font-size="14" fill="#fff" letter-spacing="1">DRIP</text>
+        </svg>
+      </div>
+      <div class="drop-card-body">
+        <div class="drop-card-sel">🇲🇽 México · Octavos</div>
+        <div class="drop-card-name">Chaqueta Verde MX</div>
+        <div class="drop-card-edition">Ed. #031 · Clasificación · 80 uds</div>
+        <div class="drop-card-footer">
+          <span class="drop-card-price">119€</span>
+          <span class="drop-card-stock">12 uds</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="drop-card" onclick="showToast()">
+      <div class="drop-card-img" style="background:#16140a">
+        <div class="product-grid-lines"></div>
+        <span class="drop-card-badge badge-last">Últimas uds</span>
+        <svg viewBox="0 0 200 200" fill="none">
+          <path d="M60 40 L20 70 L35 80 L30 160 L170 160 L165 80 L180 70 L140 40 L120 55 C110 65 90 65 80 55 Z" fill="#1a180a" stroke="#2a2510" stroke-width="1.5"/>
+          <path d="M80 55 Q100 50 120 55 L115 90 Q100 95 85 90 Z" fill="#D4AC00"/>
+          <text x="100" y="82" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-weight="900" font-size="14" fill="#000" letter-spacing="1">DRIP</text>
+        </svg>
+      </div>
+      <div class="drop-card-body">
+        <div class="drop-card-sel">🇧🇷 Brasil · Grupos</div>
+        <div class="drop-card-name">Camiseta Amarilla BR</div>
+        <div class="drop-card-edition">Ed. #022 · Hat trick Vinicius · 200 uds</div>
+        <div class="drop-card-footer">
+          <span class="drop-card-price">69€</span>
+          <span class="drop-card-stock" style="color:var(--yellow)">4 uds</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="drop-card" onclick="showToast()">
+      <div class="drop-card-img" style="background:#120e0e">
+        <div class="product-grid-lines"></div>
+        <span class="drop-card-badge badge-ma">Marruecos</span>
+        <svg viewBox="0 0 200 200" fill="none">
+          <path d="M60 40 L20 70 L35 80 L30 160 L170 160 L165 80 L180 70 L140 40 L120 55 C110 65 90 65 80 55 Z" fill="#160f0f" stroke="#261818" stroke-width="1.5"/>
+          <path d="M80 55 Q100 50 120 55 L115 90 Q100 95 85 90 Z" fill="#c04040"/>
+          <text x="100" y="82" text-anchor="middle" font-family="'Barlow Condensed', sans-serif" font-weight="900" font-size="14" fill="#fff" letter-spacing="1">DRIP</text>
+        </svg>
+      </div>
+      <div class="drop-card-body">
+        <div class="drop-card-sel">🇲🇦 Marruecos · Octavos</div>
+        <div class="drop-card-name">Hoodie Rojo MA</div>
+        <div class="drop-card-edition">Ed. #038 · El gran reveal · 60 uds</div>
+        <div class="drop-card-footer">
+          <span class="drop-card-price">89€</span>
+          <span class="drop-card-stock">19 uds</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA SIGNAL LIVE -->
+<section class="signal-section" id="data">
+  <div class="signal-left">
+    <div class="section-eyebrow">Data en tiempo real</div>
+    <h2>El dato<br>activa el <span>drop.</span></h2>
+    <p>Cada gol, cada momento viral, cada trending topic activa nuestro motor de datos. En menos de 2 horas tienes el producto en tu carrito. No hay colección planificada — hay señales en tiempo real.</p>
+    <div class="signal-metrics">
+      <div class="smetric">
+        <span class="smetric-val">&lt;30min</span>
+        <div class="smetric-label">Detección tendencia viral</div>
+      </div>
+      <div class="smetric">
+        <span class="smetric-val">+40%</span>
+        <div class="smetric-label">Conversión vs. genérico</div>
+      </div>
+      <div class="smetric">
+        <span class="smetric-val">≥82%</span>
+        <div class="smetric-label">Precisión modelo ML</div>
+      </div>
+      <div class="smetric">
+        <span class="smetric-val">-45%</span>
+        <div class="smetric-label">Reducción sobrestock</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="signal-right">
+    <div class="feed-header">
+      <span class="feed-title">Señales activas — API live</span>
+      <div class="feed-live"><div class="live-dot"></div>Live</div>
+    </div>
+    <div class="feed-items" id="feed-items">
+      <div class="feed-item">
+        <div class="feed-icon">⚽</div>
+        <div class="feed-text">
+          Gol detectado · España vs. Francia min. 87'<br>
+          <small>API FIFA · hace 12 min</small>
+        </div>
+        <div class="feed-val">+12K búsq.</div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-icon">📈</div>
+        <div class="feed-text">
+          Trending #VamosEspaña · TikTok &amp; X<br>
+          <small>Social Listening · hace 14 min</small>
+        </div>
+        <div class="feed-val">340K posts</div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-icon">🤖</div>
+        <div class="feed-text">
+          Modelo activado · Segmento ES Fan Corazón<br>
+          <small>ML Engine · hace 15 min</small>
+        </div>
+        <div class="feed-val">Demanda: Alta</div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-icon">🛍️</div>
+        <div class="feed-text">
+          Drop #047 publicado · Hoodie Rojo ES<br>
+          <small>Shopify Plus · hace 1h 48min</small>
+        </div>
+        <div class="feed-val">Drop live</div>
+      </div>
+      <div class="feed-item">
+        <div class="feed-icon">📧</div>
+        <div class="feed-text">
+          Email enviado · 8.432 fans España<br>
+          <small>Klaviyo · hace 1h 50min</small>
+        </div>
+        <div class="feed-val">CTR 14.2%</div>
+      </div>
+      <div class="feed-item" style="background:rgba(230,48,48,0.04)">
+        <div class="feed-icon">📊</div>
+        <div class="feed-text">
+          73 unidades vendidas · 47 en proceso<br>
+          <small>GA4 · actualizado hace 2 min</small>
+        </div>
+        <div class="feed-val" style="color:var(--yellow)">73/120</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SELECCIONES -->
+<section class="sel-section" id="selecciones">
+  <div class="section-eyebrow">Selecciones activas</div>
+  <h2 class="section-title">Tu equipo.<br><span>Tu drop.</span></h2>
+
+  <div class="sel-grid">
+    <div class="sel-card es" onclick="showToast()">
+      <span class="sel-flag-code">ES · Cuartos</span>
+      <div class="sel-name">España</div>
+      <div class="sel-status active">Drop activo</div>
+      <span class="sel-drops">5</span>
+      <span class="sel-drops-label">drops activos</span>
+      <div class="sel-watermark">ES</div>
+    </div>
+    <div class="sel-card mx" onclick="showToast()">
+      <span class="sel-flag-code">MX · Octavos</span>
+      <div class="sel-name">México</div>
+      <div class="sel-status available">Disponible</div>
+      <span class="sel-drops">3</span>
+      <span class="sel-drops-label">drops activos</span>
+      <div class="sel-watermark">MX</div>
+    </div>
+    <div class="sel-card br" onclick="showToast()">
+      <span class="sel-flag-code">BR · Grupos</span>
+      <div class="sel-name">Brasil</div>
+      <div class="sel-status available">Disponible</div>
+      <span class="sel-drops">4</span>
+      <span class="sel-drops-label">drops activos</span>
+      <div class="sel-watermark">BR</div>
+    </div>
+    <div class="sel-card ma" onclick="showToast()">
+      <span class="sel-flag-code">MA · Octavos</span>
+      <div class="sel-name">Marruecos</div>
+      <div class="sel-status available">Disponible</div>
+      <span class="sel-drops">2</span>
+      <span class="sel-drops-label">drops activos</span>
+      <div class="sel-watermark">MA</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="logo-box" style="display:inline-block">
+      <span class="logo-drip-text">DRIP</span>
+      <div class="logo-bar-small"></div>
+      <span class="logo-mundial-text">MUNDIAL</span>
+    </div>
+    <p>Streetwear que reacciona en tiempo real al Mundial 2026. De cada gol a tu armario en menos de 2 horas.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Drops</h4>
+    <ul>
+      <li>España</li>
+      <li>México</li>
+      <li>Brasil</li>
+      <li>Marruecos</li>
+      <li>Ver todas</li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Info</h4>
+    <ul>
+      <li>Cómo funciona</li>
+      <li>Envíos</li>
+      <li>Devoluciones</li>
+      <li>Privacidad</li>
+      <li>GDPR</li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Proyecto</h4>
+    <ul>
+      <li>Data Driven Business</li>
+      <li>INESDI 2026</li>
+      <li>Master Marketing Digital e IA</li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>© 2026 DRIP MUNDIAL · Proyecto académico INESDI · Barcelona</p>
+  <p>Powered by BigQuery · Shopify Plus · Klaviyo · API FIFA Live</p>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <div class="toast-label">⚽ Drop activado</div>
+  <div class="toast-text">Hoodie Rojo ES #047 añadido</div>
+  <div class="toast-sub">Envío confirmado en 24h · 26 uds restantes</div>
+</div>
+
+<script>
+// Countdown
+(function() {
+  let h = 1, m = 42, s = 18;
+  const H = document.getElementById('cd-h');
+  const M = document.getElementById('cd-m');
+  const S = document.getElementById('cd-s');
+  function pad(n) { return String(n).padStart(2, '0'); }
+  setInterval(() => {
+    if (s > 0) s--;
+    else if (m > 0) { m--; s = 59; }
+    else if (h > 0) { h--; m = 59; s = 59; }
+    H.textContent = pad(h);
+    M.textContent = pad(m);
+    S.textContent = pad(s);
+  }, 1000);
+})();
+
+// Filter tabs
+document.querySelectorAll('.filter-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+// Toast
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// Live feed rotation
+const feedMessages = [
+  ['⚽', 'Gol detectado · España vs. Francia min. 87\'', 'API FIFA · hace 12 min', '+12K búsq.'],
+  ['📈', 'Trending #VamosEspaña · TikTok &amp; X', 'Social Listening · hace 14 min', '340K posts'],
+  ['🤖', 'Modelo activado · Segmento ES Fan Corazón', 'ML Engine · hace 15 min', 'Demanda: Alta'],
+  ['🛍️', 'Drop #047 publicado · Hoodie Rojo ES', 'Shopify Plus · hace 1h 48min', 'Drop live'],
+  ['📧', 'Email enviado · 8.432 fans España', 'Klaviyo · hace 1h 50min', 'CTR 14.2%'],
+  ['📊', '73 unidades vendidas · 47 en proceso', 'GA4 · actualizado hace 2 min', '73/120'],
+];
+
+// Auto-show toast after 4s
+setTimeout(() => {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}, 4000);
+</script>
+
+</body>
+</html>

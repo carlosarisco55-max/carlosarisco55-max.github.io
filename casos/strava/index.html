@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strava · Nueva Propuesta de Valor</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Barlow+Condensed:wght@700;800;900&display=swap');
+
+  :root {
+    --orange: #FC4C02;
+    --orange-light: #FF6B35;
+    --orange-dim: rgba(252, 76, 2, 0.15);
+    --black: #0A0A0A;
+    --dark: #111111;
+    --card: #1A1A1A;
+    --card2: #222222;
+    --border: rgba(255,255,255,0.08);
+    --white: #FFFFFF;
+    --grey: #999999;
+    --grey-light: #CCCCCC;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: var(--black);
+    font-family: 'Inter', sans-serif;
+    color: var(--white);
+    overflow: hidden;
+  }
+
+  /* ── PROGRESS BAR (Strava Segment) ── */
+  #segment-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--orange);
+    z-index: 100;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 12px var(--orange);
+  }
+
+  /* ── NAV ── */
+  #nav {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 100;
+    background: rgba(20,20,20,0.9);
+    border: 1px solid var(--border);
+    padding: 0.6rem 1.2rem;
+    border-radius: 100px;
+    backdrop-filter: blur(12px);
+  }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--grey);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .dot.active { background: var(--orange); width: 24px; border-radius: 3px; }
+  .dot:hover { background: var(--grey-light); }
+
+  #nav-btn-prev, #nav-btn-next {
+    background: none; border: none; color: var(--grey);
+    font-size: 1.1rem; cursor: pointer; padding: 0.2rem;
+    transition: color 0.2s;
+    line-height: 1;
+  }
+  #nav-btn-prev:hover, #nav-btn-next:hover { color: var(--orange); }
+
+  #slide-counter {
+    font-size: 0.7rem;
+    color: var(--grey);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    min-width: 3rem;
+    text-align: center;
+  }
+
+  /* ── SLIDES CONTAINER ── */
+  #deck {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5rem 7rem 6rem;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(60px);
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .slide.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateX(0);
+  }
+
+  .slide.exit {
+    opacity: 0;
+    transform: translateX(-60px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  /* ── EYEBROW LABEL ── */
+  .eyebrow {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 20px; height: 2px;
+    background: var(--orange);
+  }
+
+  /* ── SLIDE 1: HERO ── */
+  #s1 {
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+  }
+  #s1 .bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(252,76,2,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(252,76,2,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+  #s1 .orange-glow {
+    position: absolute;
+    bottom: -200px; right: -100px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(252,76,2,0.25) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  #s1 .hero-tag {
+    display: inline-block;
+    background: var(--orange-dim);
+    border: 1px solid rgba(252,76,2,0.3);
+    color: var(--orange);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.9rem;
+    border-radius: 4px;
+    margin-bottom: 2rem;
+  }
+  #s1 h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    font-weight: 900;
+    line-height: 0.95;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  #s1 h1 span { color: var(--orange); }
+  #s1 .subtitle {
+    font-size: 1.1rem;
+    color: var(--grey-light);
+    max-width: 560px;
+    line-height: 1.6;
+    margin-bottom: 3rem;
+  }
+  .strava-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .strava-logo .chevron {
+    display: flex; gap: 2px;
+  }
+  .strava-logo .chevron span {
+    display: block;
+    width: 0; height: 0;
+    border-style: solid;
+  }
+  .strava-chevron {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--orange);
+    line-height: 1;
+  }
+  .metric-row {
+    display: flex;
+    gap: 2.5rem;
+  }
+  .metric {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .metric-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1;
+  }
+  .metric-val span { color: var(--orange); }
+  .metric-label {
+    font-size: 0.65rem;
+    color: var(--grey);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── SLIDE 2: PROBLEMA ── */
+  #s2 { background: var(--black); }
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    margin-top: 2rem;
+  }
+  .problem-left { }
+  .problem-desc {
+    color: var(--grey-light);
+    line-height: 1.7;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+  .alert-box {
+    background: rgba(252,76,2,0.08);
+    border: 1px solid rgba(252,76,2,0.3);
+    border-left: 3px solid var(--orange);
+    padding: 1rem 1.2rem;
+    border-radius: 6px;
+  }
+  .alert-box p {
+    font-size: 0.85rem;
+    color: var(--grey-light);
+    line-height: 1.6;
+  }
+  .alert-box strong { color: var(--white); }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 1.2rem;
+    border-radius: 8px;
+  }
+  .stat-card h4 {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.4rem;
+  }
+  .stat-card p {
+    font-size: 0.75rem;
+    color: var(--grey);
+    line-height: 1.5;
+  }
+  .stat-card.highlight { border-color: rgba(252,76,2,0.4); background: rgba(252,76,2,0.06); }
+  .stat-card.highlight h4 { color: var(--orange); }
+
+  /* ── SLIDE 3: NUEVA PV ── */
+  #s3 { background: var(--black); }
+  .quote-block {
+    border-left: 3px solid var(--orange);
+    padding: 1.2rem 1.5rem;
+    background: var(--card);
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 2rem;
+  }
+  .quote-block p {
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--grey-light);
+    line-height: 1.7;
+  }
+  .three-pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .pillar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .pillar:hover { border-color: rgba(252,76,2,0.5); }
+  .pillar::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--orange);
+  }
+  .pillar-icon { font-size: 1.5rem; margin-bottom: 0.8rem; }
+  .pillar h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 0.4rem;
+    letter-spacing: 0.03em;
+  }
+  .pillar .badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    margin-bottom: 0.6rem;
+  }
+  .badge.new { background: rgba(252,76,2,0.2); color: var(--orange); }
+  .badge.enhanced { background: rgba(255,255,255,0.1); color: var(--grey-light); }
+  .pillar p { font-size: 0.78rem; color: var(--grey); line-height: 1.5; }
+  .cambio-label {
+    font-size: 0.85rem;
+    color: var(--grey-light);
+    line-height: 1.7;
+    max-width: 480px;
+    margin-bottom: 1.5rem;
+  }
+  .cambio-label strong { color: var(--white); }
+
+  /* ── SLIDE 4: DATOS ── */
+  #s4 { background: var(--black); }
+  .data-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .data-panel {
+    border-radius: 10px;
+    padding: 1.5rem;
+  }
+  .data-panel.internal {
+    background: var(--orange);
+  }
+  .data-panel.external {
+    background: var(--card);
+    border: 1px solid var(--border);
+  }
+  .data-panel h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+  }
+  .data-panel.internal h3 { color: var(--black); }
+  .data-panel.external h3 { color: var(--white); }
+  .data-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+  .data-panel.internal .data-item { color: rgba(0,0,0,0.85); }
+  .data-panel.external .data-item { color: var(--grey-light); }
+  .data-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 0.45rem;
+  }
+  .data-panel.internal .data-dot { background: rgba(0,0,0,0.5); }
+  .data-panel.external .data-dot { background: var(--orange); }
+  .data-insight {
+    background: rgba(252,76,2,0.1);
+    border: 1px solid rgba(252,76,2,0.3);
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    font-size: 0.82rem;
+    color: var(--grey-light);
+    line-height: 1.6;
+  }
+  .data-insight strong { color: var(--orange); }
+
+  /* ── SLIDE 5: TRES DIMENSIONES ── */
+  #s5 { background: var(--black); }
+  .dimensions-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    align-items: start;
+  }
+  .dim-list { display: flex; flex-direction: column; gap: 1rem; }
+  .dim-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1.2rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .dim-item:hover { border-color: rgba(252,76,2,0.4); transform: translateX(4px); }
+  .dim-number {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: rgba(252,76,2,0.3);
+    line-height: 1;
+    min-width: 2rem;
+  }
+  .dim-content h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 0.2rem;
+    letter-spacing: 0.03em;
+  }
+  .dim-content .status {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--orange);
+    margin-bottom: 0.4rem;
+  }
+  .dim-content p { font-size: 0.78rem; color: var(--grey); line-height: 1.5; }
+  .dim-visual {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    min-height: 300px;
+  }
+  .triangle-icon {
+    width: 80px; height: 80px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .triangle-icon svg { width: 100%; height: 100%; }
+  .dim-circle-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    width: 100%;
+  }
+  .dim-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .dim-bar-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--grey);
+    min-width: 80px;
+  }
+  .dim-bar-track {
+    flex: 1;
+    height: 6px;
+    background: var(--card2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .dim-bar-fill {
+    height: 100%;
+    background: var(--orange);
+    border-radius: 3px;
+    transition: width 1s ease 0.3s;
+  }
+  .dim-bar-val {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--orange);
+    min-width: 2rem;
+    text-align: right;
+  }
+
+  /* ── SLIDE 6: IA ── */
+  #s6 { background: var(--black); }
+  .ia-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1.5rem;
+  }
+  .ia-radar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ia-radar svg { width: 100%; max-width: 320px; height: auto; }
+  .ia-caps { display: flex; flex-direction: column; gap: 0.8rem; }
+  .ia-cap {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: border-color 0.3s;
+  }
+  .ia-cap:hover { border-color: rgba(252,76,2,0.4); }
+  .ia-num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--orange);
+    line-height: 1;
+    min-width: 1.5rem;
+  }
+  .ia-cap h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.3rem;
+  }
+  .ia-cap p { font-size: 0.75rem; color: var(--grey); line-height: 1.5; }
+
+  /* ── SLIDE 7: STAKEHOLDERS ── */
+  #s7 { background: var(--black); }
+  .stakeholder-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .sh-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .sh-card:hover { border-color: rgba(252,76,2,0.4); transform: translateY(-4px); }
+  .sh-icon {
+    width: 36px; height: 36px;
+    background: rgba(252,76,2,0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+  }
+  .sh-card h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.03em;
+  }
+  .sh-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    margin-bottom: 0.4rem;
+    font-size: 0.7rem;
+    color: var(--grey);
+    line-height: 1.4;
+  }
+  .sh-dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--orange);
+    flex-shrink: 0;
+    margin-top: 0.45rem;
+  }
+
+  /* ── SLIDE 8: SEGMENTACIÓN ── */
+  #s8 { background: var(--black); }
+  .seg-intro {
+    font-size: 0.85rem;
+    color: var(--grey);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+  .seg-list { display: flex; flex-direction: column; gap: 0.8rem; }
+  .seg-item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    align-items: stretch;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .seg-item:hover { border-color: rgba(252,76,2,0.4); }
+  .seg-label {
+    background: rgba(252,76,2,0.08);
+    border-right: 2px solid rgba(252,76,2,0.3);
+    padding: 1.1rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .seg-icon { font-size: 1.1rem; }
+  .seg-label h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--orange);
+    letter-spacing: 0.03em;
+    line-height: 1.2;
+  }
+  .seg-body {
+    padding: 1.1rem 1.2rem;
+    font-size: 0.8rem;
+    color: var(--grey-light);
+    line-height: 1.6;
+    display: flex;
+    align-items: center;
+  }
+
+  /* ── SLIDE 9: EFECTO MULTIPLICADOR ── */
+  #s9 { background: var(--black); }
+  .multiplier-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    margin-top: 1.5rem;
+    align-items: center;
+  }
+  .multiplier-text { }
+  .multiplier-text p {
+    font-size: 0.9rem;
+    color: var(--grey-light);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+  .multiplier-insight {
+    background: rgba(252,76,2,0.08);
+    border: 1px solid rgba(252,76,2,0.3);
+    border-left: 3px solid var(--orange);
+    padding: 1rem 1.2rem;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.82rem;
+    color: var(--grey-light);
+    line-height: 1.6;
+  }
+  .multiplier-insight strong { color: var(--orange); }
+  .hub-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hub-visual svg { width: 100%; max-width: 480px; height: auto; }
+
+  /* ── SLIDE 10: CONCLUSIÓN ── */
+  #s10 {
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+    padding-top: 3.5rem;
+    padding-bottom: 5rem;
+  }
+  #s10 .glow-top {
+    position: absolute;
+    top: -150px; left: 50%;
+    transform: translateX(-50%);
+    width: 500px; height: 400px;
+    background: radial-gradient(circle, rgba(252,76,2,0.18) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .conclusion-intro {
+    font-size: 0.82rem;
+    color: var(--grey-light);
+    max-width: 680px;
+    line-height: 1.65;
+    margin-bottom: 1.2rem;
+    font-style: italic;
+  }
+  .conclusion-grid {
+    display: grid;
+    grid-template-columns: 1fr 3px 1fr;
+    gap: 1.2rem;
+    align-items: start;
+  }
+  .vs-line {
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(252,76,2,0.5), transparent);
+    align-self: stretch;
+    margin: 0 auto;
+  }
+  .col-header {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .today-col .col-header { color: var(--grey); }
+  .tomorrow-col .col-header { color: var(--orange); }
+  .col-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.3;
+  }
+  .today-col .tagline {
+    font-size: 0.88rem;
+    color: var(--grey);
+    font-style: italic;
+    margin-bottom: 0.8rem;
+    padding-left: 0.8rem;
+    border-left: 2px solid rgba(255,255,255,0.1);
+  }
+  .tomorrow-col .tagline {
+    font-size: 0.88rem;
+    color: var(--white);
+    font-style: italic;
+    margin-bottom: 0.8rem;
+    padding-left: 0.8rem;
+    border-left: 2px solid var(--orange);
+  }
+  .compare-item {
+    padding: 0.7rem 0.9rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+  }
+  .today-col .compare-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+  }
+  .tomorrow-col .compare-item {
+    background: rgba(252,76,2,0.1);
+    border: 1px solid rgba(252,76,2,0.3);
+  }
+  .compare-item h5 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+  }
+  .today-col .compare-item h5 { color: var(--grey-light); }
+  .tomorrow-col .compare-item h5 { color: var(--orange); }
+  .compare-item p {
+    font-size: 0.7rem;
+    line-height: 1.4;
+  }
+  .today-col .compare-item p { color: var(--grey); }
+  .tomorrow-col .compare-item p { color: var(--grey-light); }
+  .final-strip {
+    margin-top: 1.2rem;
+    padding: 0.9rem 1.2rem;
+    background: linear-gradient(135deg, rgba(252,76,2,0.12), rgba(252,76,2,0.04));
+    border: 1px solid rgba(252,76,2,0.35);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .final-strip .strip-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .final-strip p {
+    font-size: 0.78rem;
+    color: var(--grey-light);
+    line-height: 1.5;
+  }
+  .final-strip strong { color: var(--orange); }
+
+  /* Big heading shared */
+  .slide-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 0.3rem;
+  }
+  .slide-title span { color: var(--orange); }
+</style>
+</head>
+<body>
+
+<div id="segment-bar"></div>
+
+<!-- ─────────────────────────── SLIDE 1 ─────────────────────────── -->
+<div id="deck">
+<div class="slide active" id="s1">
+  <div class="bg-grid"></div>
+  <div class="orange-glow"></div>
+
+  <div style="position:relative; z-index:1;">
+    <div class="hero-tag">Presentación para el Comité — Equipo de Marketing</div>
+
+    <h1>Strava<br><span>Nueva</span><br>Propuesta<br>de Valor</h1>
+
+    <p class="subtitle">De plataforma de registro a sistema completo de rendimiento personal. Una nueva visión para los 150M+ atletas de Strava.</p>
+
+    <div class="metric-row">
+      <div class="metric">
+        <div class="metric-val">150<span>M+</span></div>
+        <div class="metric-label">Usuarios activos</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">3</div>
+        <div class="metric-label">Nuevas dimensiones</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">1</div>
+        <div class="metric-label">Sistema único</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────── SLIDE 2 ─────────────────────────── -->
+<div class="slide" id="s2">
+  <div class="eyebrow">Diagnóstico actual</div>
+  <div class="slide-title">¿Qué es Strava <span>hoy?</span></div>
+
+  <div class="problem-grid">
+    <div class="problem-left">
+      <p class="problem-desc">Strava es la plataforma de tracking de actividad física más grande del mundo, con más de 150 millones de usuarios y un modelo freemium con suscripción premium. Sin embargo, su propuesta de valor actual tiene un problema estructural: <strong style="color:var(--white)">solo registra lo que ya hiciste.</strong></p>
+      <p class="problem-desc">La plataforma infrautiliza masivamente sus datos. La propuesta de valor es débil y reemplazable por cualquier competidor con un buen GPS tracker.</p>
+      <div class="alert-box">
+        <p><strong>El problema central:</strong> Strava es un descriptor, no un prescriptor. Registra el pasado, no construye el futuro.</p>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h4>150M+ usuarios</h4>
+        <p>Base de usuarios global activa y en crecimiento</p>
+      </div>
+      <div class="stat-card">
+        <h4>Modelo freemium</h4>
+        <p>Suscripción premium con conversión limitada</p>
+      </div>
+      <div class="stat-card highlight">
+        <h4>Datos infrautilizados</h4>
+        <p>La mayor base de datos atlética del mundo sin explotar</p>
+      </div>
+      <div class="stat-card highlight">
+        <h4>Propuesta reemplazable</h4>
+        <p>Cualquier app de GPS puede sustituirla hoy</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────── SLIDE 3 ─────────────────────────── -->
+<div class="slide" id="s3">
+  <div class="eyebrow">Repositioning</div>
+  <div class="slide-title">La Nueva <span>Propuesta</span> de Valor</div>
+
+  <div class="quote-block">
+    <p>"Strava es la primera plataforma que integra entrenamiento, nutrición y objetivos personales en un único sistema inteligente para llevar al atleta de donde está a donde quiere llegar."</p>
+  </div>
+
+  <p class="cambio-label">Strava pasa de ser un <strong>descriptor</strong> a convertirse en un <strong>prescriptor</strong>. De app de registro a sistema completo de rendimiento personal. Este cambio reposiciona la plataforma en una categoría donde <strong>ningún competidor tiene las tres patas juntas.</strong></p>
+
+  <div class="three-pillars">
+    <div class="pillar">
+      <div class="pillar-icon">🏃</div>
+      <div class="badge enhanced">Ya existe → Potenciado</div>
+      <h4>Entrenamiento</h4>
+      <p>Análisis avanzado con IA sobre el historial completo del atleta.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">🥗</div>
+      <div class="badge new">Nuevo → Integrado</div>
+      <h4>Nutrición</h4>
+      <p>Sistema propio de nutrición integrado en la plataforma con recomendaciones personalizadas.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-icon">🎯</div>
+      <div class="badge new">Nuevo → Motor central</div>
+      <h4>Objetivos</h4>
+      <p>Planificación personalizada hacia una meta futura concreta. El objetivo define el plan.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────── SLIDE 4 ─────────────────────────── -->
+<div class="slide" id="s4">
+  <div class="eyebrow">Data strategy</div>
+  <div class="slide-title">Los Datos: Internos <span>&</span> Externos</div>
+
+  <div class="data-grid">
+    <div class="data-panel internal">
+      <h3>Datos Internos</h3>
+      <div class="data-item"><div class="data-dot"></div><span>GPS tracks, altimetría, velocidad, distancias</span></div>
+      <div class="data-item"><div class="data-dot"></div><span>Frecuencia cardíaca, potencia, cadencia</span></div>
+      <div class="data-item"><div class="data-dot"></div><span>Historial completo de entrenamientos</span></div>
+      <div class="data-item"><div class="data-dot"></div><span>Datos sociales: kudos, clubs, seguidores</span></div>
+      <div class="data-item"><div class="data-dot"></div><span>Comportamiento en app y dispositivos conectados</span></div>
+    </div>
+    <div class="data-panel external">
+      <h3>Datos Externos</h3>
+      <div class="data-item"><div class="data-dot"></div><span>Meteorología por zona y fecha</span></div>
+      <div class="data-item"><div class="data-dot"></div><span>Calendarios de eventos deportivos</span></div>
+      <div class="data-item"><div class="data-dot"></div><span>Infraestructura urbana y movilidad</span></div>
+      <div class="data-item"><div class="data-dot"></div><span>Datos de salud pública y poder adquisitivo por zona</span></div>
+    </div>
+  </div>
+  <div class="data-insight">
+    <strong>La combinación de datos internos y externos</strong> crea una inteligencia deportiva que ningún competidor puede replicar.
+  </div>
+</div>
+
+<!-- ─────────────────────────── SLIDE 5 ─────────────────────────── -->
+<div class="slide" id="s5">
+  <div class="eyebrow">Product vision</div>
+  <div class="slide-title">Las Tres Nuevas <span>Dimensiones</span></div>
+
+  <div class="dimensions-layout">
+    <div class="dim-list">
+      <div class="dim-item">
+        <div class="dim-number">01</div>
+        <div class="dim-content">
+          <div class="status">Ya existe → Potenciado</div>
+          <h4>Entrenamiento</h4>
+          <p>Análisis avanzado con IA sobre el historial completo del atleta. Prescripción de cargas, recuperación y progresión.</p>
+        </div>
+      </div>
+      <div class="dim-item">
+        <div class="dim-number">02</div>
+        <div class="dim-content">
+          <div class="status">Nuevo → Integrado</div>
+          <h4>Nutrición</h4>
+          <p>Sistema propio de nutrición integrado en la plataforma. Recomendaciones personalizadas según carga de entrenamiento.</p>
+        </div>
+      </div>
+      <div class="dim-item">
+        <div class="dim-number">03</div>
+        <div class="dim-content">
+          <div class="status">Nuevo → Motor central</div>
+          <h4>Objetivos</h4>
+          <p>Planificación personalizada hacia una meta futura concreta. El objetivo define el plan, no al revés.</p>
+        </div>
+      </div>
+    </div>
+    <div class="dim-visual">
+      <p style="font-size:0.65rem;color:var(--grey);text-transform:uppercase;letter-spacing:0.1em;font-weight:700;margin-bottom:0.5rem;">Integración del sistema</p>
+      <div class="dim-circle-wrap">
+        <div class="dim-bar">
+          <div class="dim-bar-label">Entrenamiento</div>
+          <div class="dim-bar-track"><div class="dim-bar-fill" style="width:85%"></div></div>
+          <div class="dim-bar-val">Activo</div>
+        </div>
+        <div class="dim-bar">
+          <div class="dim-bar-label">Nutrición</div>
+          <div class="dim-bar-track"><div class="dim-bar-fill" style="width:100%"></div></div>
+          <div class="dim-bar-val">Nuevo</div>
+        </div>
+        <div class="dim-bar">
+          <div class="dim-bar-label">Objetivos</div>
+          <div class="dim-bar-track"><div class="dim-bar-fill" style="width:100%"></div></div>
+          <div class="dim-bar-val">Nuevo</div>
+        </div>
+        <div class="dim-bar">
+          <div class="dim-bar-label">IA Engine</div>
+          <div class="dim-bar-track"><div class="dim-bar-fill" style="width:90%"></div></div>
+          <div class="dim-bar-val">Core</div>
+        </div>
+      </div>
+      <svg viewBox="0 0 240 200" style="margin-top:1rem;opacity:0.85;" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="120,18 220,175 20,175" fill="none" stroke="rgba(252,76,2,0.5)" stroke-width="2"/>
+        <polygon points="120,55 185,160 55,160" fill="rgba(252,76,2,0.08)" stroke="rgba(252,76,2,0.35)" stroke-width="1.5"/>
+        <circle cx="120" cy="18" r="7" fill="#FC4C02"/>
+        <circle cx="220" cy="175" r="7" fill="#FC4C02"/>
+        <circle cx="20" cy="175" r="7" fill="#FC4C02"/>
+        <text x="120" y="9" fill="#FC4C02" font-size="9" font-family="Inter" font-weight="700" text-anchor="middle">TRAINING</text>
+        <text x="234" y="184" fill="#FC4C02" font-size="9" font-family="Inter" font-weight="700" text-anchor="start">NUTRITION</text>
+        <text x="6" y="184" fill="#FC4C02" font-size="9" font-family="Inter" font-weight="700" text-anchor="start">GOALS</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────── SLIDE 6 ─────────────────────────── -->
+<div class="slide" id="s6">
+  <div class="eyebrow">Technology</div>
+  <div class="slide-title">El Rol de la <span>Inteligencia Artificial</span></div>
+
+  <div class="ia-layout">
+    <div class="ia-radar">
+      <svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+        <!-- Radar circles -->
+        <circle cx="130" cy="130" r="105" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <circle cx="130" cy="130" r="72" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <circle cx="130" cy="130" r="40" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <!-- Axes -->
+        <line x1="130" y1="25" x2="130" y2="235" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <line x1="25" y1="130" x2="235" y2="130" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <line x1="56" y1="56" x2="204" y2="204" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <line x1="204" y1="56" x2="56" y2="204" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+        <!-- Data polygon -->
+        <polygon points="130,38 212,140 142,218 48,140" fill="rgba(252,76,2,0.15)" stroke="#FC4C02" stroke-width="2.5"/>
+        <circle cx="130" cy="38" r="6" fill="#FC4C02"/>
+        <circle cx="212" cy="140" r="6" fill="#FC4C02"/>
+        <circle cx="142" cy="218" r="6" fill="#FC4C02"/>
+        <circle cx="48" cy="140" r="6" fill="#FC4C02"/>
+        <!-- Labels -->
+        <text x="130" y="18" fill="rgba(255,255,255,0.75)" font-size="10" font-family="Inter" font-weight="700" text-anchor="middle">Coach IA</text>
+        <text x="230" y="144" fill="rgba(255,255,255,0.75)" font-size="10" font-family="Inter" font-weight="700" text-anchor="start">Predictor</text>
+        <text x="130" y="244" fill="rgba(255,255,255,0.75)" font-size="10" font-family="Inter" font-weight="700" text-anchor="middle">Detec. Lesión</text>
+        <text x="22" y="144" fill="rgba(255,255,255,0.75)" font-size="10" font-family="Inter" font-weight="700" text-anchor="end">Anti-churn</text>
+        <circle cx="130" cy="130" r="5" fill="rgba(252,76,2,0.6)"/>
+      </svg>
+    </div>
+
+    <div class="ia-caps">
+      <div class="ia-cap">
+        <div class="ia-num">1</div>
+        <div>
+          <h4>Coach personalizado</h4>
+          <p>Interpreta datos y prescribe acciones concretas adaptadas al perfil y momento del atleta.</p>
+        </div>
+      </div>
+      <div class="ia-cap">
+        <div class="ia-num">2</div>
+        <div>
+          <h4>Predictor de rendimiento</h4>
+          <p>"En 8 semanas tu maratón sería X." Proyecciones basadas en historial real y carga actual.</p>
+        </div>
+      </div>
+      <div class="ia-cap">
+        <div class="ia-num">3</div>
+        <div>
+          <h4>Detección temprana de lesión</h4>
+          <p>Identifica variaciones anómalas en métricas antes de que el atleta sienta el problema.</p>
+        </div>
+      </div>
+      <div class="ia-cap">
+        <div class="ia-num">4</div>
+        <div>
+          <h4>Motor anti-churn</h4>
+          <p>Detecta señales de abandono y actúa proactivamente para retener al usuario.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────── SLIDE 7 ─────────────────────────── -->
+<div class="slide" id="s7">
+  <div class="eyebrow">Market expansion</div>
+  <div class="slide-title">Nuevos Casos de Uso por <span>Stakeholder</span></div>
+
+  <div class="stakeholder-grid">
+    <div class="sh-card">
+      <div class="sh-icon">👤</div>
+      <h4>Usuarios</h4>
+      <div class="sh-item"><div class="sh-dot"></div><span>Plan integral entrenamiento + nutrición + objetivo</span></div>
+      <div class="sh-item"><div class="sh-dot"></div><span>Predicción de rendimiento personalizada</span></div>
+      <div class="sh-item"><div class="sh-dot"></div><span>Detección de sobreentrenamiento</span></div>
+    </div>
+    <div class="sh-card">
+      <div class="sh-icon">🏷️</div>
+      <h4>Marcas</h4>
+      <div class="sh-item"><div class="sh-dot"></div><span>Segmentación ultra-precisa por comportamiento real</span></div>
+      <div class="sh-item"><div class="sh-dot"></div><span>Medición de impacto de producto en rendimiento</span></div>
+    </div>
+    <div class="sh-card">
+      <div class="sh-icon">🏙️</div>
+      <h4>Ciudades</h4>
+      <div class="sh-item"><div class="sh-dot"></div><span>Mapa de demanda real de infraestructura ciclista</span></div>
+      <div class="sh-item"><div class="sh-dot"></div><span>Justificación de inversión pública con datos reales</span></div>
+    </div>
+    <div class="sh-card">
+      <div class="sh-icon">🏆</div>
+      <h4>Eventos</h4>
+      <div class="sh-item"><div class="sh-dot"></div><span>Captación segmentada de participantes</span></div>
+      <div class="sh-item"><div class="sh-dot"></div><span>Predicción de tiempos y heat maps de recorrido</span></div>
+    </div>
+    <div class="sh-card">
+      <div class="sh-icon">🛡️</div>
+      <h4>Aseguradoras</h4>
+      <div class="sh-item"><div class="sh-dot"></div><span>Score de actividad física verificado y continuo</span></div>
+      <div class="sh-item"><div class="sh-dot"></div><span>Programas de salud corporativa medibles</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────── SLIDE 8 ─────────────────────────── -->
+<div class="slide" id="s8">
+  <div class="eyebrow">Audience strategy</div>
+  <div class="slide-title">Segmentación por <span>Perfil</span> de Atleta</div>
+
+  <p class="seg-intro">El dato es el mismo. El empaquetado y el mensaje cambian por perfil. No existe una única estrategia para todos.</p>
+
+  <div class="seg-list">
+    <div class="seg-item">
+      <div class="seg-label">
+        <div class="seg-icon">⭐</div>
+        <h4>Profesional / Élite</h4>
+      </div>
+      <div class="seg-body">Integración técnica avanzada, biomecánica, coordinación con equipo técnico y staff médico.</div>
+    </div>
+    <div class="seg-item">
+      <div class="seg-label">
+        <div class="seg-icon">📊</div>
+        <h4>Amateur Serio</h4>
+      </div>
+      <div class="seg-body">Análisis avanzado, coach IA, predicción de rendimiento, planificación de temporada.</div>
+    </div>
+    <div class="seg-item">
+      <div class="seg-label">
+        <div class="seg-icon">🤝</div>
+        <h4>Amateur Casual</h4>
+      </div>
+      <div class="seg-body">Comunidad, motivación, construcción de hábito, retos grupales y logros sociales.</div>
+    </div>
+    <div class="seg-item">
+      <div class="seg-label">
+        <div class="seg-icon">📍</div>
+        <h4>Social / Pasivo</h4>
+      </div>
+      <div class="seg-body">Feed, contenido inspiracional, descubrimiento de rutas y conexión con otros atletas.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────── SLIDE 9 ─────────────────────────── -->
+<div class="slide" id="s9">
+  <div class="eyebrow">Strategic asset</div>
+  <div class="slide-title">Un Dato, <span>Múltiples</span> Propuestas de Valor</div>
+
+  <div class="multiplier-layout">
+    <div class="multiplier-text">
+      <p>La inteligencia de Strava no es exclusiva de un solo caso de uso. Cada capa de datos genera valor cruzado entre stakeholders completamente distintos.</p>
+      <div class="multiplier-insight">
+        <strong>Este efecto multiplicador es el verdadero activo estratégico:</strong> un mismo dato genera múltiples flujos de valor simultáneos.
+      </div>
+    </div>
+    <div class="hub-visual">
+      <svg viewBox="0 0 420 340" xmlns="http://www.w3.org/2000/svg">
+        <!-- Center -->
+        <circle cx="210" cy="170" r="52" fill="#FC4C02" opacity="0.15"/>
+        <circle cx="210" cy="170" r="40" fill="#FC4C02" opacity="0.25"/>
+        <text x="210" y="165" fill="white" font-size="10" font-family="Barlow Condensed, Inter" font-weight="800" text-anchor="middle">CENTRO</text>
+        <text x="210" y="179" fill="white" font-size="10" font-family="Barlow Condensed, Inter" font-weight="800" text-anchor="middle">DE DATOS</text>
+
+        <!-- Lines to nodes -->
+        <line x1="210" y1="130" x2="210" y2="52" stroke="rgba(252,76,2,0.45)" stroke-width="1.5"/>
+        <line x1="210" y1="210" x2="210" y2="290" stroke="rgba(252,76,2,0.45)" stroke-width="1.5"/>
+        <line x1="172" y1="148" x2="80" y2="92" stroke="rgba(252,76,2,0.45)" stroke-width="1.5"/>
+        <line x1="248" y1="148" x2="345" y2="90" stroke="rgba(252,76,2,0.45)" stroke-width="1.5"/>
+        <line x1="172" y1="192" x2="75" y2="238" stroke="rgba(252,76,2,0.45)" stroke-width="1.5"/>
+        <line x1="248" y1="192" x2="348" y2="250" stroke="rgba(252,76,2,0.45)" stroke-width="1.5"/>
+        <line x1="158" y1="170" x2="48" y2="168" stroke="rgba(252,76,2,0.45)" stroke-width="1.5"/>
+        <line x1="262" y1="170" x2="374" y2="170" stroke="rgba(252,76,2,0.45)" stroke-width="1.5"/>
+
+        <!-- Nodes -->
+        <circle cx="210" cy="38" r="21" fill="#1A1A1A" stroke="#FC4C02" stroke-width="1.5"/>
+        <text x="210" y="34" fill="white" font-size="7" font-family="Inter" font-weight="700" text-anchor="middle">MAPA DE</text>
+        <text x="210" y="45" fill="white" font-size="7" font-family="Inter" font-weight="700" text-anchor="middle">RUTAS</text>
+
+        <circle cx="210" cy="304" r="21" fill="#1A1A1A" stroke="#FC4C02" stroke-width="1.5"/>
+        <text x="210" y="300" fill="white" font-size="7" font-family="Inter" font-weight="700" text-anchor="middle">CAPTACIÓN</text>
+        <text x="210" y="311" fill="white" font-size="7" font-family="Inter" font-weight="700" text-anchor="middle">CARRERAS</text>
+
+        <circle cx="62" cy="88" r="21" fill="#1A1A1A" stroke="#FC4C02" stroke-width="1.5"/>
+        <text x="62" y="84" fill="white" font-size="7" font-family="Inter" font-weight="700" text-anchor="middle">SEGM.</text>
+        <text x="62" y="95" fill="white" font-size="7" font-family="Inter" font-weight="700" text-anchor="middle">ATLÉTICA</text>
+
+        <circle cx="358" cy="84" r="21" fill="#1A1A1A" stroke="#FC4C02" stroke-width="1.5"/>
+        <text x="358" y="80" fill="white" font-size="7" font-family="Inter" font-weight="700" text-anchor="middle">CONV.</text>
+        <text x="358" y="91" fill="white" font-size="7" font-family="Inter" font-weight="700" text-anchor="middle">PREMIUM</text>
+
+        <circle cx="57" cy="242" r="21" fill="#1A1A1A" stroke="#FC4C02" stroke-width="1.5"/>
+        <text x="57" y="238" fill="white" font-size="7" font-family="Inter" font-weight="700" text-anchor="middle">SCORE</text>
+        <text x="57" y="249" fill="white" font-size="7" font-family="Inter" font-weight="700" text-anchor="middle">ACTIV.</text>
+
+        <circle cx="362" cy="256" r="21" fill="#1A1A1A" stroke="#FC4C02" stroke-width="1.5"/>
+        <text x="362" y="252" fill="white" font-size="7" font-family="Inter" font-weight="700" text-anchor="middle">SALUD</text>
+        <text x="362" y="263" fill="white" font-size="7" font-family="Inter" font-weight="700" text-anchor="middle">CORP.</text>
+
+        <circle cx="34" cy="168" r="21" fill="#1A1A1A" stroke="#FC4C02" stroke-width="1.5"/>
+        <text x="34" y="164" fill="white" font-size="7" font-family="Inter" font-weight="700" text-anchor="middle">CIUDA-</text>
+        <text x="34" y="175" fill="white" font-size="7" font-family="Inter" font-weight="700" text-anchor="middle">DES</text>
+
+        <circle cx="388" cy="170" r="21" fill="#1A1A1A" stroke="#FC4C02" stroke-width="1.5"/>
+        <text x="388" y="166" fill="white" font-size="7" font-family="Inter" font-weight="700" text-anchor="middle">ON-</text>
+        <text x="388" y="177" fill="white" font-size="7" font-family="Inter" font-weight="700" text-anchor="middle">BOARDING</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────── SLIDE 10 ─────────────────────────── -->
+<div class="slide" id="s10">
+  <div class="glow-top"></div>
+  <div style="position:relative;z-index:1;">
+    <div class="eyebrow">Conclusión</div>
+    <div class="slide-title">El Activo <span>Diferencial</span></div>
+
+    <p class="conclusion-intro">Strava tiene la mayor base de datos de comportamiento atlético geolocalizado del mundo. Ningún competidor puede replicarlo. No es una app. Es una plataforma de inteligencia deportiva única.</p>
+
+    <div class="conclusion-grid">
+      <div class="today-col">
+        <div class="col-header">Hoy</div>
+        <p class="tagline">"Registra tu actividad y compártela."</p>
+        <div class="compare-item">
+          <h5>Mira hacia atrás</h5>
+          <p>Descriptor del pasado. Registra lo que ya ocurrió.</p>
+        </div>
+        <div class="compare-item">
+          <h5>Propuesta reemplazable</h5>
+          <p>Cualquier GPS tracker puede sustituirlo.</p>
+        </div>
+      </div>
+
+      <div class="vs-line"></div>
+
+      <div class="tomorrow-col">
+        <div class="col-header">Mañana</div>
+        <p class="tagline">"Dinos tu objetivo. Nosotros te llevamos hasta allí."</p>
+        <div class="compare-item">
+          <h5>Construye el futuro</h5>
+          <p>Prescriptor inteligente. Entrenamiento + Nutrición + IA.</p>
+        </div>
+        <div class="compare-item">
+          <h5>Activo único e irreplicable</h5>
+          <p>150M+ atletas. La mayor base de datos deportiva del mundo.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="final-strip">
+      <div class="strip-icon">🏆</div>
+      <p><strong>La ventaja competitiva de Strava no es la app, son los datos.</strong> El movimiento de descriptor a prescriptor convierte ese activo en una moat que ningún competidor puede replicar.</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- ── NAVIGATION ── -->
+<div id="nav">
+  <button id="nav-btn-prev">‹</button>
+  <div id="dots"></div>
+  <span id="slide-counter">01 / 10</span>
+  <button id="nav-btn-next">›</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dotsContainer = document.getElementById('dots');
+  const counter = document.getElementById('slide-counter');
+  const bar = document.getElementById('segment-bar');
+  let current = 0;
+  let isAnimating = false;
+
+  // Build dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(d);
+  });
+
+  function updateBar() {
+    const pct = ((current + 1) / slides.length) * 100;
+    bar.style.width = pct + '%';
+  }
+
+  function updateDots() {
+    dotsContainer.querySelectorAll('.dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+    const n = (current + 1).toString().padStart(2, '0');
+    counter.textContent = n + ' / ' + slides.length.toString().padStart(2, '0');
+    updateBar();
+  }
+
+  function goTo(index) {
+    if (isAnimating || index === current || index < 0 || index >= slides.length) return;
+    isAnimating = true;
+
+    const prev = slides[current];
+    const next = slides[index];
+
+    // Direction
+    const dir = index > current ? 1 : -1;
+
+    prev.classList.add('exit');
+    prev.style.transform = `translateX(${-60 * dir}px)`;
+
+    next.style.transform = `translateX(${60 * dir}px)`;
+    next.style.opacity = '0';
+    next.classList.add('active');
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        next.style.transition = 'opacity 0.5s ease, transform 0.5s cubic-bezier(0.4,0,0.2,1)';
+        next.style.transform = 'translateX(0)';
+        next.style.opacity = '1';
+      });
+    });
+
+    setTimeout(() => {
+      prev.classList.remove('active', 'exit');
+      prev.style.transform = '';
+      prev.style.opacity = '';
+      next.style.transition = '';
+      current = index;
+      updateDots();
+      isAnimating = false;
+    }, 500);
+  }
+
+  document.getElementById('nav-btn-prev').addEventListener('click', () => goTo(current - 1));
+  document.getElementById('nav-btn-next').addEventListener('click', () => goTo(current + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+  });
+
+  // Swipe
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const dx = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 50) goTo(dx > 0 ? current + 1 : current - 1);
+  });
+
+  updateDots();
+</script>
+</body>
+</html>
