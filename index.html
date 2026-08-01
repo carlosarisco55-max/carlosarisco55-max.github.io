@@ -124,6 +124,24 @@
     transition:background .15s, border-color .15s;
   }
   .btn-cv:hover{background:#a5751f; border-color:#a5751f;}
+  .btn-cv{cursor:pointer;}
+  .btn-mode{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:var(--mono);
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink);
+    background:transparent;
+    border:1px solid var(--line);
+    padding:10px 18px;
+    border-radius:2px;
+    cursor:pointer;
+    margin-left:10px;
+    transition:border-color .15s, background .15s;
+  }
+  .btn-mode:hover{border-color:var(--ink); background:var(--paper-dim);}
 
   /* timeline */
   .timeline-row{
@@ -275,6 +293,59 @@
     .project{grid-template-columns:1fr;}
     .study-row{grid-template-columns:1fr;}
   }
+
+  /* ---- Modo Ejecutivo (ATS/Print) ---- */
+  body.ats-mode{
+    background:#fff;
+  }
+  body.ats-mode .availability{
+    color:var(--ink);
+    border-color:var(--line);
+    background:transparent;
+  }
+  body.ats-mode .availability .dot{background:var(--ink) !important;}
+  body.ats-mode .legend{display:none;}
+  body.ats-mode h1 span{color:var(--ink);}
+  body.ats-mode .project{
+    border:none;
+    border-bottom:1px solid var(--line);
+    border-radius:0;
+    padding:16px 0;
+    margin-bottom:0;
+  }
+  body.ats-mode .status{
+    background:transparent !important;
+    color:var(--ink-soft) !important;
+    border:1px solid var(--line);
+  }
+  body.ats-mode .tag{
+    color:var(--ink-soft);
+    border-color:var(--line);
+  }
+  body.ats-mode .project-links a{
+    border-bottom-color:var(--ink-soft);
+    color:var(--ink);
+  }
+  body.ats-mode .btn-mode{background:var(--ink); color:var(--paper); border-color:var(--ink);}
+  body.ats-mode .tag-study{color:var(--ink-soft);}
+  body.ats-mode .tl-date{color:var(--ink-soft);}
+
+  @media print{
+    .btn-cv, .btn-mode{display:none;}
+    .legend{display:none;}
+    body{background:#fff;}
+    .availability{color:var(--ink); border-color:var(--line); background:transparent;}
+    .availability .dot{background:var(--ink) !important;}
+    h1 span{color:var(--ink);}
+    .project{border:none; border-bottom:1px solid var(--line); border-radius:0; padding:14px 0; margin-bottom:0; break-inside:avoid;}
+    .status{background:transparent !important; color:var(--ink-soft) !important; border:1px solid var(--line);}
+    .tag{color:var(--ink-soft); border-color:var(--line);}
+    .project-links a{border-bottom-color:var(--ink-soft); color:var(--ink);}
+    .tag-study{color:var(--ink-soft);}
+    .tl-date{color:var(--ink-soft);}
+    section{padding:20px 0;}
+    a{text-decoration:underline;}
+  }
 </style>
 </head>
 <body>
@@ -292,7 +363,8 @@
       <a href="https://www.linkedin.com/in/carlos-garcia-arisco-vilchez" target="_blank" rel="noopener">LinkedIn</a>
     </div>
     <div class="cv-download">
-      <a class="btn-cv" href="CV_Carlos_Garcia_Arisco.pdf" download>Descargar CV (PDF) ↓</a>
+      <button type="button" class="btn-cv" id="btn-print">Descargar CV (PDF) ↓</button>
+      <button type="button" class="btn-mode" id="btn-mode">Modo Ejecutivo (ATS)</button>
     </div>
   </header>
 
@@ -503,6 +575,20 @@
   </footer>
 
 </div>
+
+<script>
+  const btnMode = document.getElementById('btn-mode');
+  const btnPrint = document.getElementById('btn-print');
+
+  btnMode.addEventListener('click', () => {
+    const isAts = document.body.classList.toggle('ats-mode');
+    btnMode.textContent = isAts ? 'Modo Creativo' : 'Modo Ejecutivo (ATS)';
+  });
+
+  btnPrint.addEventListener('click', () => {
+    window.print();
+  });
+</script>
 
 </body>
 </html>
