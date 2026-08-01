@@ -363,7 +363,7 @@
       <a href="https://www.linkedin.com/in/carlos-garcia-arisco-vilchez" target="_blank" rel="noopener">LinkedIn</a>
     </div>
     <div class="cv-download">
-      <button type="button" class="btn-cv" id="btn-print">Descargar CV (PDF) ↓</button>
+      <a class="btn-cv" href="CV_Carlos_Garcia_Arisco.pdf" download>Descargar CV (PDF) ↓</a>
       <button type="button" class="btn-mode" id="btn-mode">Modo Ejecutivo (ATS)</button>
     </div>
   </header>
@@ -578,15 +578,10 @@
 
 <script>
   const btnMode = document.getElementById('btn-mode');
-  const btnPrint = document.getElementById('btn-print');
 
   btnMode.addEventListener('click', () => {
     const isAts = document.body.classList.toggle('ats-mode');
     btnMode.textContent = isAts ? 'Modo Creativo' : 'Modo Ejecutivo (ATS)';
-  });
-
-  btnPrint.addEventListener('click', () => {
-    window.print();
   });
 </script>
 
