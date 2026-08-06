@@ -251,6 +251,46 @@
   }
   .project-links a:hover{color:var(--mustard);}
 
+  /* project areas */
+  .area{margin-bottom:38px;}
+  .area:last-child{margin-bottom:0;}
+  .area-head{margin-bottom:18px;}
+  .area-head h3{
+    font-family:var(--mono);
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--mustard);
+    margin:0 0 6px;
+  }
+  .area-head p{
+    margin:0;
+    color:var(--ink-soft);
+    font-size:14px;
+    max-width:640px;
+  }
+  .learn-note{
+    border:1px dashed var(--line);
+    border-radius:3px;
+    padding:13px 18px;
+    margin-top:4px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    font-size:13.5px;
+    color:var(--ink-soft);
+    flex-wrap:wrap;
+  }
+  .learn-note a{
+    color:var(--mustard);
+    text-decoration:none;
+    border-bottom:1px solid var(--mustard);
+    font-family:var(--mono);
+    font-size:12.5px;
+    white-space:nowrap;
+  }
+
   /* study list */
   .study-list{display:flex; flex-direction:column; gap:0;}
   .study-row{
@@ -377,111 +417,142 @@
   <section id="proyectos">
     <div class="section-head">Proyectos</div>
 
-    <div class="project">
-      <div>
-        <h3>Lead Triage Agent</h3>
-        <p>Workflow de n8n que recibe leads de un formulario, los clasifica automáticamente con Claude Sonnet 5 (hot/warm/cold) con el motivo generado por IA, y los enruta a Slack y CRM. Incluye manejo de errores independiente.</p>
-        <div class="tags">
-          <span class="tag">n8n</span>
-          <span class="tag">Claude Sonnet 5</span>
-          <span class="tag">Automatización</span>
-          <span class="tag">AI Agent</span>
-        </div>
-        <div class="project-links">
-          <a href="https://github.com/carlosarisco55-max/ai-lead-triage-n8n-claude" target="_blank" rel="noopener">Repositorio →</a>
-          <a href="https://carlosarisco55-max.github.io/ai-lead-triage-n8n-claude/" target="_blank" rel="noopener">Ver proyecto →</a>
-        </div>
+    <div class="area">
+      <div class="area-head">
+        <h3>IA & Automatización</h3>
+        <p>Agentes de IA y workflows de automatización aplicados a marketing: de formularios de leads a generación de contenido, construidos con n8n, prompt engineering y modelos LLM.</p>
       </div>
-      <span class="status shipped">Shipped</span>
+
+      <div class="project">
+        <div>
+          <h3>Lead Triage Agent</h3>
+          <p>Workflow de n8n que recibe leads de un formulario, los clasifica automáticamente con Claude Sonnet 5 (hot/warm/cold) con el motivo generado por IA, y los enruta a Slack y CRM. Incluye manejo de errores independiente.</p>
+          <div class="tags">
+            <span class="tag">n8n</span>
+            <span class="tag">Claude Sonnet 5</span>
+            <span class="tag">Automatización</span>
+            <span class="tag">AI Agent</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/carlosarisco55-max/ai-lead-triage-n8n-claude" target="_blank" rel="noopener">Repositorio →</a>
+            <a href="https://carlosarisco55-max.github.io/ai-lead-triage-n8n-claude/" target="_blank" rel="noopener">Ver proyecto →</a>
+          </div>
+        </div>
+        <span class="status shipped">Shipped</span>
+      </div>
+
+      <div class="project">
+        <div>
+          <h3>Agente Repurposer de Contenido</h3>
+          <p>Agente de IA construido en n8n: convierte un post de blog en tres versiones listas para publicar (LinkedIn, X/Twitter, Instagram) mediante un agente con OpenAI, y entrega el resultado por email automáticamente.</p>
+          <div class="tags">
+            <span class="tag">n8n</span>
+            <span class="tag">OpenAI API</span>
+            <span class="tag">Automatización</span>
+            <span class="tag">AI Agent</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/carlosarisco55-max/automations-ai-agents/tree/main/content-repurposer" target="_blank" rel="noopener">Repositorio →</a>
+          </div>
+        </div>
+        <span class="status shipped">Shipped</span>
+      </div>
+
+      <div class="project">
+        <div>
+          <h3>ContentLoop AI</h3>
+          <p>Landing de validación (waitlist) para un agente de IA que aprenderá la identidad de marca de una pyme en 15 minutos y generará automáticamente su calendario de contenido semanal para Instagram, TikTok y LinkedIn. El agente está en desarrollo; esta fase valida la propuesta con leads reales antes de construirlo. TFM del máster.</p>
+          <div class="tags">
+            <span class="tag">Lovable</span>
+            <span class="tag">Prompt engineering</span>
+            <span class="tag">GitHub</span>
+            <span class="tag">Producto IA</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/carlosarisco55-max/contentloop-ai" target="_blank" rel="noopener">Repositorio →</a>
+            <a href="https://contentloop-ai-powered-growth.lovable.app" target="_blank" rel="noopener">Landing / waitlist →</a>
+          </div>
+        </div>
+        <span class="status active">En curso — TFM</span>
+      </div>
+
+      <div class="learn-note">
+        <span>Aprendizaje documentado: stack de automatización 100% local y gratuito (n8n + Groq), sin depender de servicios de pago, con guía completa paso a paso.</span>
+        <a href="https://github.com/carlosarisco55-max/n8n-local-lab" target="_blank" rel="noopener">n8n-local-lab →</a>
+      </div>
     </div>
 
-    <div class="project">
-      <div>
-        <h3>ML Marketing Campaign — Retail</h3>
-        <p>Modelo de predicción de respuesta de clientes sobre datasets reales de campañas retail. Comparativa de Regresión Logística, Árbol de Decisión, KNN y Random Forest, con notebook completo y documentación reproducible.</p>
-        <div class="tags">
-          <span class="tag">Python</span>
-          <span class="tag">Scikit-learn</span>
-          <span class="tag">Google Colab</span>
-          <span class="tag">Machine Learning</span>
-        </div>
-        <div class="project-links">
-          <a href="https://github.com/carlosarisco55-max/ml-marketing-campaign-retail" target="_blank" rel="noopener">Repositorio →</a>
-          <a href="https://carlosarisco55-max.github.io/ml-marketing-campaign-retail/" target="_blank" rel="noopener">Ver proyecto →</a>
-        </div>
+    <div class="area">
+      <div class="area-head">
+        <h3>Datos & Analítica</h3>
+        <p>De dashboards de Business Intelligence a un paso más de Machine Learning: análisis de campañas y segmentación de clientes sobre datos reales.</p>
       </div>
-      <span class="status shipped">Shipped</span>
+
+      <div class="project">
+        <div>
+          <h3>Marketing & Growth Analytics — Customer Personality Analysis</h3>
+          <p>Análisis de un dataset real de Kaggle (~2.240 clientes) para responder qué campañas y canales funcionan mejor y con qué perfil de cliente. Limpieza de datos, dashboard de Power BI (4 páginas, medidas DAX) y dashboard HTML interactivo con insights "so what" — completo de principio a fin.</p>
+          <div class="tags">
+            <span class="tag">Python</span>
+            <span class="tag">Pandas</span>
+            <span class="tag">Power BI</span>
+            <span class="tag">DAX</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/carlosarisco55-max/marketing-campaign-customer-personality-analysis" target="_blank" rel="noopener">Repositorio →</a>
+            <a href="https://carlosarisco55-max.github.io/marketing-campaign-customer-personality-analysis/dashboard/" target="_blank" rel="noopener">Ver dashboard →</a>
+          </div>
+        </div>
+        <span class="status shipped">Shipped</span>
+      </div>
+
+      <div class="project">
+        <div>
+          <h3>ML Marketing Campaign — Retail</h3>
+          <p>Modelo de predicción de respuesta de clientes sobre datasets reales de campañas retail. Comparativa de Regresión Logística, Árbol de Decisión, KNN y Random Forest, con notebook completo y documentación reproducible.</p>
+          <div class="tags">
+            <span class="tag">Python</span>
+            <span class="tag">Scikit-learn</span>
+            <span class="tag">Google Colab</span>
+            <span class="tag">Machine Learning</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/carlosarisco55-max/ml-marketing-campaign-retail" target="_blank" rel="noopener">Repositorio →</a>
+            <a href="https://carlosarisco55-max.github.io/ml-marketing-campaign-retail/" target="_blank" rel="noopener">Ver proyecto →</a>
+          </div>
+        </div>
+        <span class="status shipped">Shipped</span>
+      </div>
+
+      <div class="learn-note">
+        <span>Aprendizaje documentado: guía de instalación para construir informes Power BI (PBIR/TMDL) con Claude Code en vez de arrastrar y soltar.</span>
+        <a href="https://github.com/carlosarisco55-max/powerbi-mcp-guide" target="_blank" rel="noopener">powerbi-mcp-guide →</a>
+      </div>
     </div>
 
-    <div class="project">
-      <div>
-        <h3>Marketing & Growth Analytics — Customer Personality Analysis</h3>
-        <p>Análisis de un dataset real de Kaggle (~2.240 clientes) para responder qué campañas y canales funcionan mejor y con qué perfil de cliente. Limpieza de datos, dashboard de Power BI (4 páginas, medidas DAX) y dashboard HTML interactivo con insights "so what" — completo de principio a fin.</p>
-        <div class="tags">
-          <span class="tag">Python</span>
-          <span class="tag">Pandas</span>
-          <span class="tag">Power BI</span>
-          <span class="tag">DAX</span>
-        </div>
-        <div class="project-links">
-          <a href="https://github.com/carlosarisco55-max/marketing-campaign-customer-personality-analysis" target="_blank" rel="noopener">Repositorio →</a>
-          <a href="https://carlosarisco55-max.github.io/marketing-campaign-customer-personality-analysis/dashboard/" target="_blank" rel="noopener">Ver dashboard →</a>
-        </div>
+    <div class="area">
+      <div class="area-head">
+        <h3>Producto / Apps</h3>
+        <p>Herramientas interactivas construidas de principio a fin, del backend a la experiencia de usuario.</p>
       </div>
-      <span class="status shipped">Shipped</span>
-    </div>
 
-    <div class="project">
-      <div>
-        <h3>Agente Repurposer de Contenido</h3>
-        <p>Agente de IA construido en n8n: convierte un post de blog en tres versiones listas para publicar (LinkedIn, X/Twitter, Instagram) mediante un agente con OpenAI, y entrega el resultado por email automáticamente.</p>
-        <div class="tags">
-          <span class="tag">n8n</span>
-          <span class="tag">OpenAI API</span>
-          <span class="tag">Automatización</span>
-          <span class="tag">AI Agent</span>
+      <div class="project">
+        <div>
+          <h3>Quiz: ¿Cuánto sabes de Marketing Digital e IA?</h3>
+          <p>Quiz interactivo bilingüe (ES/EN) de 10 preguntas sobre marketing digital e IA, con ranking en vivo. Backend en Google Sheets, desplegado como Web App pública de Google Apps Script — jugable sin necesidad de cuenta de Google.</p>
+          <div class="tags">
+            <span class="tag">Google Apps Script</span>
+            <span class="tag">Google Sheets</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">Gamificación</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/carlosarisco55-max/quiz-marketing-appscript" target="_blank" rel="noopener">Repositorio →</a>
+            <a href="https://script.google.com/macros/s/AKfycbzejKXb98rdQQRtYEs_F-1p9qecgxHPwNpzTc1lEDsf9zpCdRrDaho4vnyX9yj_7YR-/exec" target="_blank" rel="noopener">Jugar →</a>
+          </div>
         </div>
-        <div class="project-links">
-          <a href="https://github.com/carlosarisco55-max/automations-ai-agents/tree/main/content-repurposer" target="_blank" rel="noopener">Repositorio →</a>
-        </div>
+        <span class="status shipped">Shipped</span>
       </div>
-      <span class="status shipped">Shipped</span>
-    </div>
-
-    <div class="project">
-      <div>
-        <h3>Quiz: ¿Cuánto sabes de Marketing Digital e IA?</h3>
-        <p>Quiz interactivo bilingüe (ES/EN) de 10 preguntas sobre marketing digital e IA, con ranking en vivo. Backend en Google Sheets, desplegado como Web App pública de Google Apps Script — jugable sin necesidad de cuenta de Google.</p>
-        <div class="tags">
-          <span class="tag">Google Apps Script</span>
-          <span class="tag">Google Sheets</span>
-          <span class="tag">JavaScript</span>
-          <span class="tag">Gamificación</span>
-        </div>
-        <div class="project-links">
-          <a href="https://github.com/carlosarisco55-max/quiz-marketing-appscript" target="_blank" rel="noopener">Repositorio →</a>
-          <a href="https://script.google.com/macros/s/AKfycbzejKXb98rdQQRtYEs_F-1p9qecgxHPwNpzTc1lEDsf9zpCdRrDaho4vnyX9yj_7YR-/exec" target="_blank" rel="noopener">Jugar →</a>
-        </div>
-      </div>
-      <span class="status shipped">Shipped</span>
-    </div>
-
-    <div class="project">
-      <div>
-        <h3>ContentLoop AI</h3>
-        <p>Landing de validación (waitlist) para un agente de IA que aprenderá la identidad de marca de una pyme en 15 minutos y generará automáticamente su calendario de contenido semanal para Instagram, TikTok y LinkedIn. El agente está en desarrollo; esta fase valida la propuesta con leads reales antes de construirlo. TFM del máster.</p>
-        <div class="tags">
-          <span class="tag">Lovable</span>
-          <span class="tag">Prompt engineering</span>
-          <span class="tag">GitHub</span>
-          <span class="tag">Producto IA</span>
-        </div>
-        <div class="project-links">
-          <a href="https://github.com/carlosarisco55-max/contentloop-ai" target="_blank" rel="noopener">Repositorio →</a>
-          <a href="https://contentloop-ai-powered-growth.lovable.app" target="_blank" rel="noopener">Landing / waitlist →</a>
-        </div>
-      </div>
-      <span class="status active">En curso — TFM</span>
     </div>
 
   </section>
