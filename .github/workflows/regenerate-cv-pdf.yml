@@ -1,0 +1,57 @@
+name: Regenerar CV en PDF
+
+# Se dispara solo cuando cambia cv-source.html — así el PDF nunca se queda
+# desactualizado respecto a la fuente, sin que nadie tenga que acordarse
+# de regenerarlo a mano.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "cv-source.html"
+  workflow_dispatch: {} # también se puede lanzar manualmente desde la pestaña Actions
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar Playwright + Chromium
+        run: |
+          npm init -y > /dev/null
+          npm install playwright@1.48.0 > /dev/null
+          npx playwright install --with-deps chromium
+
+      - name: Generar PDF desde cv-source.html
+        run: |
+          node -e "
+          const { chromium } = require('playwright');
+          const path = require('path');
+          (async () => {
+            const browser = await chromium.launch();
+            const page = await browser.newPage();
+            await page.goto('file://' + path.resolve('cv-source.html'));
+            await page.pdf({
+              path: 'CV_Carlos_Garcia_Arisco.pdf',
+              format: 'A4',
+              printBackground: true,
+              margin: { top: '0', bottom: '0', left: '0', right: '0' }
+            });
+            await browser.close();
+          })();
+          "
+
+      - name: Commitear el PDF si cambió
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add CV_Carlos_Garcia_Arisco.pdf
+          git diff --staged --quiet || git commit -m "chore: regenerar CV PDF desde cv-source.html [skip ci]"
+          git push
