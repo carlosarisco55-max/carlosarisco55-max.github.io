@@ -19,15 +19,18 @@
 <meta name="twitter:image" content="https://carlosarisco55-max.github.io/og-image.png">
 
 <!-- Google Analytics 4 (gtag.js) con Consent Mode v2 -->
-<!-- Consent Mode v2: se declara ANTES de cargar gtag.js, con todo denegado por defecto hasta que el usuario dé su consentimiento (requisito EEE) -->
+<!-- Consent Mode v2: se declara ANTES de cargar gtag.js. Si el visitante ya había aceptado antes
+     (guardado en localStorage), se respeta desde el arranque para que el page_view inicial ya
+     cuente como consentido; si no, todo denegado por defecto hasta que acepte el banner. -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  var storedConsent = localStorage.getItem('cookie_consent');
   gtag('consent', 'default', {
     'ad_storage': 'denied',
     'ad_user_data': 'denied',
     'ad_personalization': 'denied',
-    'analytics_storage': 'denied'
+    'analytics_storage': storedConsent === 'granted' ? 'granted' : 'denied'
   });
 </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-B9DDSLY37C"></script>
@@ -738,12 +741,16 @@
       });
       localStorage.setItem('cookie_consent', granted ? 'granted' : 'denied');
       banner.style.display = 'none';
+      if (granted) {
+        // El page_view inicial ya se mandó con consentimiento denegado (antes de que
+        // el usuario aceptara) — se reenvía ahora que sí hay consentimiento, si no,
+        // esta primera visita nunca se contaría.
+        gtag('event', 'page_view');
+      }
     }
 
     if (!choice) {
       banner.style.display = 'block';
-    } else if (choice === 'granted') {
-      setConsent(true);
     }
 
     document.getElementById('cookie-accept').addEventListener('click', () => setConsent(true));
