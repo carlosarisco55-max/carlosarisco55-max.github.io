@@ -728,6 +728,28 @@
   btnMode.addEventListener('click', () => {
     const isAts = document.body.classList.toggle('ats-mode');
     btnMode.textContent = isAts ? 'Modo Creativo' : 'Modo Ejecutivo (ATS)';
+    // Evento propio: la descarga del CV y los clics salientes (LinkedIn, GitHub...)
+    // ya los captura la Medición mejorada de GA4 sola — esto no, es una interacción
+    // específica de esta web, así que sí merece evento propio.
+    if (typeof gtag === 'function') {
+      gtag('event', 'toggle_ats_mode', { mode: isAts ? 'ats' : 'creativo' });
+    }
+  });
+
+  // Evento propio: qué proyecto/enlace concreto interesa más (repo, demo, dashboard...).
+  // Tampoco lo cubre la Medición mejorada tal cual — esa solo dice "hubo un clic saliente",
+  // no a qué proyecto pertenecía.
+  document.querySelectorAll('.project-links a').forEach(function (link) {
+    link.addEventListener('click', function () {
+      if (typeof gtag !== 'function') return;
+      const card = link.closest('.project, .study-row');
+      const projectName = card ? card.querySelector('h3, h4')?.textContent.trim() : '';
+      gtag('event', 'select_content', {
+        content_type: 'project_link',
+        item_id: projectName || 'desconocido',
+        link_text: link.textContent.trim()
+      });
+    });
   });
 
   // --- Consentimiento de cookies (Consent Mode v2) ---
