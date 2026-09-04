@@ -709,6 +709,16 @@
 
 </div>
 
+<div id="cookie-banner" style="display:none; position:fixed; left:0; right:0; bottom:0; z-index:999; background:var(--paper-dim); border-top:1px solid var(--ink-soft); padding:16px 20px; font-family:var(--mono); font-size:13px; color:var(--ink);">
+  <div style="max-width:900px; margin:0 auto; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+    <span style="flex:1; min-width:220px;">Uso Google Analytics para saber cuántas visitas recibe esta web — sin publicidad, sin datos personales. ¿Lo aceptas?</span>
+    <div style="display:flex; gap:8px; flex-shrink:0;">
+      <button id="cookie-reject" style="background:var(--paper); color:var(--ink-soft); border:1px solid var(--ink-soft); border-radius:4px; padding:8px 14px; font-family:var(--mono); font-size:13px; cursor:pointer;">Rechazar</button>
+      <button id="cookie-accept" style="background:var(--sage); color:var(--paper); border:1px solid var(--sage); border-radius:4px; padding:8px 14px; font-family:var(--mono); font-size:13px; cursor:pointer;">Aceptar</button>
+    </div>
+  </div>
+</div>
+
 <script>
   const btnMode = document.getElementById('btn-mode');
 
@@ -716,6 +726,29 @@
     const isAts = document.body.classList.toggle('ats-mode');
     btnMode.textContent = isAts ? 'Modo Creativo' : 'Modo Ejecutivo (ATS)';
   });
+
+  // --- Consentimiento de cookies (Consent Mode v2) ---
+  (function () {
+    const banner = document.getElementById('cookie-banner');
+    const choice = localStorage.getItem('cookie_consent');
+
+    function setConsent(granted) {
+      gtag('consent', 'update', {
+        'analytics_storage': granted ? 'granted' : 'denied'
+      });
+      localStorage.setItem('cookie_consent', granted ? 'granted' : 'denied');
+      banner.style.display = 'none';
+    }
+
+    if (!choice) {
+      banner.style.display = 'block';
+    } else if (choice === 'granted') {
+      setConsent(true);
+    }
+
+    document.getElementById('cookie-accept').addEventListener('click', () => setConsent(true));
+    document.getElementById('cookie-reject').addEventListener('click', () => setConsent(false));
+  })();
 </script>
 
 </body>
