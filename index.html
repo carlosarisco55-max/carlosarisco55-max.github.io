@@ -427,6 +427,7 @@
         <div>
           <h3>Lead Triage Agent</h3>
           <p>Workflow de n8n que recibe leads de un formulario, los clasifica automáticamente con Claude Sonnet 5 (hot/warm/cold) con el motivo generado por IA, y los enruta a Slack y CRM. Incluye manejo de errores independiente.</p>
+          <p>Elegí n8n + Claude en vez de un scoring por reglas fijas porque la calidad de un lead casi nunca es una fórmula lineal — necesitaba que el modelo razonara el "por qué" (presupuesto mencionado, urgencia, tamaño de empresa) y lo explicara en lenguaje natural, no solo devolver un número. El branch de errores corre en paralelo al flujo principal: si el enriquecimiento o el enrutado a Slack/CRM falla, el lead no se pierde silenciosamente, se captura y notifica aparte.</p>
           <div class="tags">
             <span class="tag">n8n</span>
             <span class="tag">Claude Sonnet 5</span>
@@ -462,6 +463,7 @@
         <div>
           <h3>ContentLoop AI</h3>
           <p>Landing de validación (waitlist) para un agente de IA que aprenderá la identidad de marca de una pyme en 15 minutos y generará automáticamente su calendario de contenido semanal para Instagram, TikTok y LinkedIn. El agente está en desarrollo; esta fase valida la propuesta con leads reales antes de construirlo. TFM del máster.</p>
+          <p>Antes de construir el agente completo, decidí validar la demanda con una landing real en Lovable en vez de saltar directo al desarrollo: mejor descubrir en una semana si el problema (dueños de pyme sin tiempo para redes) engancha lo suficiente como para dejar un email, que invertir semanas de ingeniería en un producto que nadie pida. Es la fase "conseguir tráfico y medir interés" antes de la fase "construir".</p>
           <div class="tags">
             <span class="tag">Lovable</span>
             <span class="tag">Prompt engineering</span>
@@ -474,6 +476,26 @@
           </div>
         </div>
         <span class="status active">En curso — TFM</span>
+      </div>
+
+      <div class="project">
+        <div>
+          <h3>Lead Generation Multicanal</h3>
+          <p>Automatización completa de lead-generation-to-close-of-sale en n8n (self-hosted, gratuito): captura leads de 4 canales (paid media, formulario web/orgánico, SMS y email marketing), los enriquece con señales de comportamiento reales de GA4 capturadas en cliente —no vía API, que solo da reporting agregado o exportación diaria a BigQuery, no lookup en tiempo real de un usuario concreto—, los puntúa con reglas 100% configurables en una tabla (sin tocar código: cambiar un umbral reclasifica un lead al instante), los guarda en un CRM gratuito construido sobre Data Tables nativas de n8n, y los mueve por un pipeline de ventas real (Nuevo → MQL → SQL → Contactado → Reunión Agendada → Propuesta → Negociación → Cerrado Ganado/Perdido) con alertas y emails de nurturing enviados por Gmail.</p>
+          <p>Tras construirlo hice mi propia auditoría de seguridad y fiabilidad, y encontré y arreglé dos bugs reales: una race condition en la que dos comprobaciones paralelas de "¿existe ya este lead?" podían disparar antes de que ninguna escritura terminara, duplicando logs de interacción (arreglado pasando a un upsert atómico); y una pérdida silenciosa de campo, donde un paso de logging eliminaba un campo que el siguiente nodo necesitaba para enrutar, así que una alerta de "lead caliente" nunca llegaba a dispararse (arreglado restructurando el flujo de datos). También añadí autenticación por cabecera de secreto compartido en todos los webhooks (verificada con pruebas reales 403 vs 200) y manejo de errores con alertas por email — todo comprobado con ejecuciones de prueba reales, no solo "a simple vista parece correcto".</p>
+          <div class="tags">
+            <span class="tag">n8n</span>
+            <span class="tag">GA4</span>
+            <span class="tag">Automatización</span>
+            <span class="tag">AI Agent</span>
+            <span class="tag">CRM</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/carlosarisco55-max/lead-generation-multicanal" target="_blank" rel="noopener">Repositorio →</a>
+            <a href="https://github.com/carlosarisco55-max/automatizaciones" target="_blank" rel="noopener">Índice de automatizaciones →</a>
+          </div>
+        </div>
+        <span class="status shipped">Shipped</span>
       </div>
 
       <div class="learn-note">
