@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medir la fidelización con GA4, GTM y Looker Studio — Carlos García-Arisco Vílchez</title>
+<meta name="description" content="Caso de estudio de analítica web (trabajo en equipo, INESDI): plan de medición, implementación en GTM con auditoría propia, verificación en GA4 y dashboard en Looker Studio para una tienda de drops.">
+<link rel="canonical" href="https://carlosarisco55-max.github.io/casos/analitica-mkia-storrr/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231A1A18'/%3E%3Ctext x='50' y='68' font-size='54' font-family='Arial,sans-serif' font-weight='700' fill='%23C08A2E' text-anchor='middle'%3ECA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1EFE9; --paper-dim:#E7E4DB; --ink:#1A1A18; --ink-soft:#57544C; --line:#D8D4C8;
+    --mustard:#C08A2E; --mustard-text:#8A5F12; --sage:#3F6B5E; --terracotta:#B5533C;
+    --mono:'JetBrains Mono',ui-monospace,monospace; --display:'Space Grotesk',ui-sans-serif,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--display); -webkit-font-smoothing:antialiased; line-height:1.6;}
+  a{color:inherit;}
+  a:focus-visible{outline:2px solid var(--ink); outline-offset:3px;}
+  ::selection{background:var(--mustard); color:var(--paper);}
+  .wrap{max-width:820px; margin:0 auto; padding:0 24px;}
+  .back{display:inline-block; margin:32px 0 0; font-family:var(--mono); font-size:13px; text-decoration:none; border-bottom:1px solid var(--mustard-text); color:var(--mustard-text);}
+  header{padding:28px 0 36px; border-bottom:1px solid var(--line);}
+  .eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:14px;}
+  h1{font-size:clamp(28px,4.6vw,42px); line-height:1.12; margin:0 0 18px; font-weight:700; letter-spacing:-0.01em;}
+  .lede{font-size:17px; color:var(--ink-soft); max-width:60ch; margin:0 0 22px;}
+  .meta{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px 24px; font-size:14px; margin:0;}
+  .meta dt{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:2px;}
+  .meta dd{margin:0;}
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; padding:32px 0; border-bottom:1px solid var(--line);}
+  .stat{background:#fff; border:1px solid var(--line); border-radius:3px; padding:16px 18px;}
+  .stat b{display:block; font-size:26px; white-space:nowrap; line-height:1.1; font-weight:700;}
+  .stat span{font-size:13.5px; color:var(--ink-soft);}
+  section{padding:38px 0 6px;}
+  h2{font-family:var(--mono); font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--mustard-text); margin:0 0 14px; display:flex; gap:10px; align-items:center;}
+  h2::after{content:""; flex:1; height:1px; background:var(--line);}
+  p{margin:0 0 14px; max-width:66ch;}
+  .why{border-left:3px solid var(--mustard); background:#fff; padding:14px 18px; margin:18px 0; max-width:66ch; font-size:15px;}
+  .why b{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--mustard-text); display:block; margin-bottom:4px;}
+  ol.findings{padding-left:0; list-style:none; counter-reset:f; margin:16px 0; max-width:66ch;}
+  ol.findings li{counter-increment:f; position:relative; padding:0 0 14px 40px;}
+  ol.findings li::before{content:counter(f); position:absolute; left:0; top:0; width:26px; height:26px; border:1px solid var(--ink); border-radius:50%; font-family:var(--mono); font-size:12px; display:grid; place-items:center;}
+  figure{margin:22px 0; }
+  figure img{width:100%; height:auto; border:1px solid var(--line); border-radius:3px; background:#fff; display:block;}
+  figcaption{font-size:13px; color:var(--ink-soft); margin-top:8px; font-family:var(--mono);}
+  .limits{background:var(--paper-dim); border:1px solid var(--line); border-radius:3px; padding:16px 20px; margin-top:8px;}
+  .limits ul{margin:6px 0 0; padding-left:18px;}
+  .limits li{margin-bottom:6px;}
+  code{font-family:var(--mono); font-size:.9em; background:var(--paper-dim); padding:1px 5px; border-radius:2px;}
+  footer{border-top:1px solid var(--line); margin-top:44px; padding:28px 0 56px; font-family:var(--mono); font-size:12.5px; color:var(--ink-soft); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../../#casos">← Volver al portfolio</a>
+
+  <header>
+    <div class="eyebrow">Caso de estudio · Analítica web · Trabajo en equipo</div>
+    <h1>Medir la fidelización, no solo las ventas: GA4, GTM y Looker Studio para una tienda de drops</h1>
+    <p class="lede">Proyecto final del Módulo 6 del máster (INESDI). Un equipo de seis hicimos de agencia para un cliente simulado: diseñamos el plan de medición, lo implementamos en producción, verificamos que los datos llegaban y construimos el dashboard.</p>
+    <dl class="meta">
+      <div><dt>Mi parte</dt><dd>Construcción en GTM y auditoría previa a publicar</dd></div>
+      <div><dt>Equipo</dt><dd>6 personas (Grupo 2)</dd></div>
+      <div><dt>Herramientas</dt><dd>GA4 · Google Tag Manager · Looker Studio</dd></div>
+      <div><dt>Cliente</dt><dd>MKIA STORRR, tienda de merchandising por drops (caso simulado)</dd></div>
+    </dl>
+  </header>
+
+  <div class="stats" role="list" aria-label="Cifras clave">
+    <div class="stat" role="listitem"><b>14 · 13 · 16</b><span>etiquetas, activadores y variables publicados en GTM</span></div>
+    <div class="stat" role="listitem"><b>10 de 13</b><span>eventos con datos reales en producción</span></div>
+    <div class="stat" role="listitem"><b>4</b><span>fallos encontrados al auditar antes de publicar</span></div>
+    <div class="stat" role="listitem"><b>50,3 %</b><span>de los ingresos, de usuarios recurrentes (datos demo)</span></div>
+  </div>
+
+  <section>
+    <h2>El problema y la decisión</h2>
+    <p>MKIA STORRR vende ediciones limitadas que se agotan y reaparecen en lanzamientos futuros. Con ese modelo, vender más de golpe es fácil de medir pero no es lo que mueve el negocio: lo que importa es que el mismo comprador vuelva en el siguiente drop.</p>
+    <div class="why"><b>Decisión</b>Elegimos <strong>fidelizar clientes recurrentes</strong> como objetivo, en lugar de conversión o captación, y diseñamos todo el plan de medición alrededor de esa métrica.</div>
+  </section>
+
+  <section>
+    <h2>Plan de medición</h2>
+    <p>Seis KPIs: tasa de clientes recurrentes, frecuencia de compra, CLV, porcentaje de sesiones recurrentes, apertura de email y clic de email. Para el embudo de fidelización, tres eventos propios que cuentan una historia de intención, identificación e interacción: <code>add_to_wishlist</code> → <code>login</code> → <code>whatsapp_click</code>.</p>
+    <div class="why"><b>Decisión</b>Dos de los seis KPIs (apertura y clic de email) quedaron fuera de GA4 a propósito. GA4 no sabe si alguien abrió un email, solo si después llegó a la web con una UTM. Forzar un evento que técnicamente no puede existir habría sido fingir una medición.</div>
+  </section>
+
+  <section>
+    <h2>Mi parte: GTM y auditoría</h2>
+    <p>Construí el contenedor con una nomenclatura consistente (<code>CE - evento</code> para activadores, <code>GA4 - evento</code> para etiquetas, <code>DLV - parámetro</code> para variables) y lo auditamos en modo Preview antes de publicar la versión v2.0. La auditoría encontró cuatro problemas:</p>
+    <ol class="findings">
+      <li><strong>Permisos.</strong> Al principio solo teníamos lectura y no se podía crear nada. Se resolvió pidiendo acceso de Editor.</li>
+      <li><strong>9 etiquetas mal construidas.</strong> Leían variables sueltas en vez del objeto <code>ecommerce</code> estándar de GA4 y habrían enviado <code>undefined</code>. Se detectaron en Preview y se corrigieron antes de publicar.</li>
+      <li><strong>Un activador con el nombre de evento equivocado.</strong> <code>contact_whatsapp_click</code> nunca coincidía con el <code>whatsapp_click</code> real de la web: esa etiqueta no se habría disparado jamás.</li>
+      <li><strong>Un bug de la web, no del contenedor.</strong> <code>checkout.html</code> no carga GTM. No podíamos arreglarlo porque no tocamos el código del cliente, así que lo documentamos y lo reportamos.</li>
+    </ol>
+    <figure>
+      <img src="img/gtm-etiquetas.jpg" alt="Lista de etiquetas del contenedor de Google Tag Manager de MKIA STORRR con sus activadores" width="1400" height="867" loading="lazy">
+      <figcaption>Etiquetas del contenedor publicado en GTM.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Verificación en GA4</h2>
+    <p>Que algo aparezca configurado no basta. Navegamos la web en producción, sin Preview, y confirmamos que 10 de los 13 eventos llegaban con datos reales. Marcamos tres Key Events con flujo activo: <code>add_to_cart</code>, <code>add_to_wishlist</code> y <code>begin_checkout</code>.</p>
+    <div class="why"><b>Decisión</b><code>purchase</code> no está marcado como Key Event. Su payload es correcto en DebugView (transaction_id, currency, items), pero no tiene datos reales por el bug de <code>checkout.html</code>. Un Key Event con cero conversiones reales es peor que no tenerlo: parece que mentimos.</div>
+    <figure>
+      <img src="img/ga4-key-events.jpg" alt="Pantalla de eventos clave de GA4: add_to_cart, add_to_wishlist y begin_checkout con flujo activo; purchase sin datos de flujo" width="1400" height="632" loading="lazy">
+      <figcaption>Key Events en GA4. <code>purchase</code> figura sin datos de flujo.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Dashboard e insight</h2>
+    <p>Preparamos el dashboard en Looker Studio en dos versiones con el mismo diseño de KPIs: una conectada a nuestra propiedad (con poco volumen, esperable recién publicada la implementación) y otra a la cuenta demo pública de Google Merchandise Store, con volumen real, tal como pedía el enunciado.</p>
+    <p><strong>Con los datos demo:</strong> los usuarios recurrentes son el 5,5 % de los usuarios activos y el 14,9 % de las sesiones, pero generan el <strong>50,3 % de los ingresos</strong>. Cada sesión recurrente vale 5,5 veces más que una nueva, y cada usuario recurrente 17,6 veces más.</p>
+    <div class="why"><b>Acción recomendada</b>Email o remarketing a compradores primerizos durante sus primeros 7 días, que es donde se pierde casi todo el mundo. La retención a día 7 estaba entre el 0,3 % y el 0,5 %: GA4 solo da una curva por cohorte, así que dimos el rango observado en vez de inventar un promedio único.</div>
+    <figure>
+      <img src="img/looker-dashboard.jpg" alt="Dashboard de Looker Studio con sesiones, porcentaje de rebote, usuarios, vistas, gráfico de sesiones frente al año anterior y tabla de eventos" width="1400" height="936" loading="lazy">
+      <figcaption>Dashboard en Looker Studio sobre la cuenta demo de Google Merchandise Store (datos que no son de MKIA STORRR).</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Límites</h2>
+    <div class="limits">
+      <ul>
+        <li>Es un proyecto académico con un cliente simulado y trabajo en equipo. No hay resultado de negocio real, solo el diseño y la implementación.</li>
+        <li>El insight de recurrencia sale de la cuenta demo de Google, no de MKIA STORRR, que aún no tiene volumen suficiente.</li>
+        <li><code>purchase</code> queda sin verificar en producción hasta que el cliente corrija <code>checkout.html</code>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Carlos García-Arisco Vílchez</span>
+    <a href="../../#casos">← Volver al portfolio</a>
+  </footer>
+
+</div>
+</body>
+</html>
