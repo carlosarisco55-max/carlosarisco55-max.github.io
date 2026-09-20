@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presentación Final — MKIA STORRR</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --paper:#F4F6F6; --surface:#FFFFFF; --ink:#17212B; --ink-soft:#54636B; --ink-faint:#7D8C93;
+  --line:#DDE4E3; --line-soft:#EAEFEE; --done:#2E7D5B; --done-tint:#E5F2EB;
+  --pending:#B5551F; --pending-tint:#F7EBDF; --accent:#0B7A82; --accent-tint:#E3F2F1;
+  --shadow: 0 1px 2px rgba(20,30,32,.06), 0 8px 24px -12px rgba(20,30,32,.14);
+  --radius: 12px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#10171B; --surface:#182228; --ink:#E8EFEF; --ink-soft:#A3B3B9; --ink-faint:#758689;
+    --line:#293539; --line-soft:#212B2F; --done:#5FC190; --done-tint:rgba(95,193,144,.10);
+    --pending:#E79857; --pending-tint:rgba(231,152,87,.10); --accent:#5FD3D6; --accent-tint:rgba(95,211,214,.10);
+    --shadow: 0 1px 2px rgba(0,0,0,.35), 0 8px 24px -12px rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#10171B; --surface:#182228; --ink:#E8EFEF; --ink-soft:#A3B3B9; --ink-faint:#758689;
+  --line:#293539; --line-soft:#212B2F; --done:#5FC190; --done-tint:rgba(95,193,144,.10);
+  --pending:#E79857; --pending-tint:rgba(231,152,87,.10); --accent:#5FD3D6; --accent-tint:rgba(95,211,214,.10);
+  --shadow: 0 1px 2px rgba(0,0,0,.35), 0 8px 24px -12px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box;}
+html,body{ height:100%; margin:0; }
+body{ background:var(--ink); color:var(--ink); font-family:'Source Sans 3', system-ui, sans-serif; overflow:hidden; }
+h1,h2,h3{ font-family:'Fraunces', Georgia, serif; font-weight:600; text-wrap:balance; line-height:1.15; margin:0; }
+code{ font-family:'IBM Plex Mono', ui-monospace, Consolas, monospace; font-size:.85em; background:var(--line-soft); padding:.1em .4em; border-radius:4px; }
+::-webkit-scrollbar{ width:8px; } ::-webkit-scrollbar-thumb{ background:var(--line); border-radius:8px; }
+
+/* ---------- deck shell ---------- */
+.deck{ position:relative; height:100vh; width:100vw; overflow:hidden; }
+.slides{ height:100%; width:100%; }
+.slide{
+  position:absolute; inset:0; display:none; flex-direction:column;
+  background:var(--paper); color:var(--ink);
+  overflow-y:auto; padding:5.5vh 8vw 9vh;
+}
+.slide.active{ display:flex; }
+.slide-inner{ max-width:1000px; margin:auto 0; width:100%; }
+.slide.title .slide-inner{ margin:auto; }
+
+.eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:.8rem; text-transform:uppercase; letter-spacing:.12em; color:var(--accent); margin:0 0 14px; display:flex; align-items:center; gap:10px; }
+.eyebrow .time{ color:var(--ink-faint); }
+.eyebrow::before{ content:""; width:8px; height:8px; border-radius:50%; background:var(--accent); flex:none; }
+
+h1.slide-title{ font-size:clamp(1.7rem,3.6vw,2.7rem); margin-bottom:14px; }
+p.lede{ font-size:1.08rem; color:var(--ink-soft); max-width:74ch; line-height:1.5; }
+
+/* nav controls */
+.nav{
+  position:fixed; bottom:18px; left:50%; transform:translateX(-50%); z-index:50;
+  display:flex; align-items:center; gap:14px; background:var(--surface); border:1px solid var(--line);
+  border-radius:999px; padding:8px 10px; box-shadow:var(--shadow);
+}
+.nav button{
+  border:none; background:none; color:var(--ink); font-family:'IBM Plex Mono',monospace; font-size:.85rem;
+  cursor:pointer; padding:6px 12px; border-radius:999px; display:flex; align-items:center; gap:6px;
+}
+.nav button:hover{ background:var(--line-soft); }
+.nav .count{ font-family:'IBM Plex Mono',monospace; font-size:.8rem; color:var(--ink-faint); min-width:56px; text-align:center; }
+.progress-rail{ position:fixed; top:0; left:0; height:3px; background:var(--accent); z-index:60; transition:width .25s ease; }
+
+/* ---------- narrative blocks ---------- */
+.kpi-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; margin-top:20px; }
+.kpi-card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:15px 18px; box-shadow:var(--shadow); }
+.kpi-card .label{ font-family:'IBM Plex Mono',monospace; font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); margin-bottom:5px;}
+.kpi-card .formula{ font-size:.85rem; color:var(--ink-soft); }
+.kpi-card.email{ border-left:3px solid var(--pending); }
+.kpi-card.email .label::after{ content:" (fuera de GA4)"; color:var(--pending); text-transform:none; letter-spacing:0; }
+
+.flow{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:20px 0; }
+.flow .node{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:12px 16px; font-size:.9rem; box-shadow:var(--shadow); }
+.flow .node b{ display:block; font-family:'Fraunces',serif; font-size:1rem; margin-bottom:2px; }
+.flow .node span{ color:var(--ink-soft); font-size:.82rem; }
+.flow .arrow{ color:var(--ink-faint); font-size:1.2rem; }
+
+.status-row{ display:flex; align-items:center; gap:10px; margin:8px 0; font-size:.96rem; }
+.pill{ font-family:'IBM Plex Mono',monospace; font-size:.66rem; text-transform:uppercase; letter-spacing:.05em; padding:3px 10px; border-radius:999px; font-weight:600; flex:none; }
+.pill.done{ background:var(--done-tint); color:var(--done); }
+.pill.progress{ background:var(--pending-tint); color:var(--pending); }
+.pill.todo{ background:var(--line-soft); color:var(--ink-faint); }
+
+.callout{ margin-top:14px; padding:13px 16px; border-radius:var(--radius); border:1px solid var(--line); background:var(--surface); font-size:.88rem; border-left:3px solid var(--pending); }
+.callout .ctitle{ font-weight:700; font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; color:var(--pending); margin-bottom:5px; }
+.callout p{ margin:0; color:var(--ink-soft); }
+
+.insight-box{ margin-top:18px; border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--line); }
+.insight-row{ display:flex; gap:14px; padding:12px 18px; background:var(--surface); border-top:1px solid var(--line-soft); }
+.insight-row:first-child{ border-top:none; }
+.insight-row .step{ font-family:'IBM Plex Mono',monospace; font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; color:var(--accent); flex:none; width:100px; padding-top:2px; }
+.insight-row p{ margin:0; font-size:.92rem; color:var(--ink-soft); }
+
+.qa-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:12px; margin-top:18px; }
+.qa-card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; box-shadow:var(--shadow); }
+.qa-card .q{ font-weight:600; margin-bottom:5px; font-size:.92rem; }
+.qa-card .a{ color:var(--ink-soft); font-size:.85rem; }
+
+kbd{ font-family:'IBM Plex Mono',monospace; background:var(--line-soft); border:1px solid var(--line); border-radius:5px; padding:1px 6px; font-size:.78rem; }
+
+/* title slide */
+.slide.title{ background:var(--ink); color:var(--paper); align-items:center; text-align:center; overflow:hidden; }
+:root[data-theme="dark"] .slide.title, :root:not([data-theme="light"]) .slide.title{ background:var(--surface); }
+.slide.title .eyebrow{ justify-content:center; }
+.slide.title h1{ color:#fff; font-size:clamp(2.2rem,5.5vw,3.8rem); }
+:root[data-theme="dark"] .slide.title h1, :root:not([data-theme="light"]) .slide.title h1{ color:var(--ink); }
+.slide.title p.lede{ color:#C7D0CF; margin:0 auto; }
+:root[data-theme="dark"] .slide.title p.lede, :root:not([data-theme="light"]) .slide.title p.lede{ color:var(--ink-soft); }
+.team-list{ margin-top:30px; font-size:.94rem; color:#C7D0CF; }
+:root[data-theme="dark"] .team-list, :root:not([data-theme="light"]) .team-list{ color:var(--ink-soft); }
+.team-list b{ color:#fff; }
+:root[data-theme="dark"] .team-list b, :root:not([data-theme="light"]) .team-list b{ color:var(--ink); }
+
+/* roadmap */
+.roadmap{ display:flex; flex-direction:column; gap:7px; margin-top:18px; }
+.rm-row{ display:grid; grid-template-columns:26px 1fr auto; gap:12px; align-items:center; padding:9px 14px; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); }
+.rm-num{ font-family:'Fraunces',serif; font-weight:600; color:var(--accent); font-size:1rem; }
+.rm-label{ font-size:.9rem; }
+.rm-label b{ display:block; }
+.rm-label span{ color:var(--ink-soft); font-size:.78rem; }
+
+/* audit timeline */
+.audit-timeline{ display:flex; flex-direction:column; gap:0; margin-top:16px; }
+.at-item{ display:grid; grid-template-columns:20px 1fr; gap:14px; position:relative; padding-bottom:14px; }
+.at-item::before{ content:""; position:absolute; left:9px; top:20px; bottom:0; width:2px; background:var(--line); }
+.at-item:last-child::before{ display:none; }
+.at-dot{ width:20px; height:20px; border-radius:50%; background:var(--done); display:flex; align-items:center; justify-content:center; color:#fff; font-size:.68rem; font-weight:700; z-index:1; }
+.at-item.found .at-dot{ background:var(--pending); }
+.at-text b{ display:block; font-size:.9rem; }
+.at-text span{ color:var(--ink-soft); font-size:.82rem; }
+
+/* ---------- FLIP CARDS ---------- */
+.flip-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; margin-top:18px; }
+.flip-grid.wide{ grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+.flip-card{ perspective:1600px; height:172px; }
+.flip-inner{ position:relative; width:100%; height:100%; transition:transform .55s cubic-bezier(.4,.1,.2,1); transform-style:preserve-3d; cursor:pointer; }
+.flip-card.flipped .flip-inner{ transform:rotateY(180deg); }
+.flip-face{ position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:var(--radius); border:1px solid var(--line); box-shadow:var(--shadow); overflow:hidden; }
+.flip-front{ background:var(--surface); padding:15px 17px; display:flex; flex-direction:column; justify-content:space-between; }
+.flip-front .fc-label{ font-family:'IBM Plex Mono',monospace; font-size:.66rem; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); }
+.flip-front .fc-stat{ font-family:'Fraunces',serif; font-size:1.3rem; font-weight:600; line-height:1.15; margin:6px 0; }
+.flip-front .fc-sub{ font-size:.78rem; color:var(--ink-soft); }
+.flip-front .fc-hint{ font-size:.68rem; color:var(--accent); font-family:'IBM Plex Mono',monospace; display:flex; align-items:center; gap:5px; }
+.flip-front .fc-hint::before{ content:"⟲"; }
+.flip-back{ transform:rotateY(180deg); background:var(--ink); display:flex; align-items:center; justify-content:center; }
+.flip-back img{ width:100%; height:100%; object-fit:cover; object-position:top center; display:block; }
+.flip-back .fc-missing{ color:var(--pending); font-family:'IBM Plex Mono',monospace; font-size:.75rem; text-align:center; padding:14px; }
+.flip-back .fc-cap{ position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent,rgba(0,0,0,.8)); color:#fff; font-size:.68rem; padding:22px 10px 6px; font-family:'IBM Plex Mono',monospace; }
+.flip-card.expanded{ position:fixed; inset:6vh 8vw; height:auto; z-index:200; perspective:none; }
+.flip-card.expanded .flip-inner{ transform:none !important; }
+.flip-card.expanded .flip-face{ position:relative; inset:auto; height:88vh; }
+.flip-card.expanded .flip-front{ display:none; }
+.flip-card.expanded .flip-back{ transform:none; }
+.flip-card.expanded .flip-back img{ object-fit:contain; background:#000; }
+.scrim{ position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:150; display:none; }
+.scrim.show{ display:block; }
+</style>
+</head>
+<body>
+
+<div class="progress-rail" id="progressRail" style="width:0%"></div>
+<div class="scrim" id="scrim"></div>
+
+<div class="deck">
+  <div class="slides" id="slides">
+
+    <!-- SLIDE 0 — PORTADA -->
+    <section class="slide title active">
+      <div class="slide-inner">
+        <p class="eyebrow">Módulo 6 · Analítica y Medición del Plan de Marketing con IA</p>
+        <h1>MKIA STORRR</h1>
+        <p class="lede">Entrega final del proyecto de agencia — Grupo 2 &quot;Reias&quot;<br>Plan de medición, implementación GTM + GA4, dashboard y análisis sobre datos reales</p>
+        <p class="team-list"><b>Equipo:</b> Grupo 2 · 6 personas</p>
+        <p style="margin-top:26px; font-family:'IBM Plex Mono',monospace; font-size:.72rem; color:#8A9AA0;">Toca las tarjetas con ⟲ para ver la captura real detrás de cada dato</p>
+      </div>
+    </section>
+
+    <!-- SLIDE 0b — AGENDA -->
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Agenda</p>
+        <h1 class="slide-title">Una historia con 7 capítulos</h1>
+        <p class="lede" style="font-size:.98rem;">De un objetivo de negocio a una recomendación con datos reales — así se conecta cada pieza:</p>
+        <div class="roadmap">
+          <div class="rm-row"><span class="rm-num">1</span><div class="rm-label"><b>Plan de medición</b><span>Elegimos QUÉ medir y por qué</span></div><span class="pill done">Cerrado</span></div>
+          <div class="rm-row"><span class="rm-num">2</span><div class="rm-label"><b>Data layers</b><span>Traducimos eso a eventos concretos</span></div><span class="pill done">Cerrado</span></div>
+          <div class="rm-row"><span class="rm-num">3</span><div class="rm-label"><b>Implementación GTM</b><span>Construimos el mecanismo que los captura</span></div><span class="pill done">Cerrado</span></div>
+          <div class="rm-row"><span class="rm-num">4</span><div class="rm-label"><b>Configuración GA4</b><span>Decidimos qué cuenta como conversión</span></div><span class="pill done">Cerrado</span></div>
+          <div class="rm-row"><span class="rm-num">5</span><div class="rm-label"><b>Dashboard Looker Studio</b><span>Lo hacemos legible para decidir</span></div><span class="pill done">Cerrado</span></div>
+          <div class="rm-row"><span class="rm-num">6</span><div class="rm-label"><b>Análisis e insight</b><span>Encontramos la palanca real</span></div><span class="pill done">Cerrado</span></div>
+          <div class="rm-row"><span class="rm-num">7</span><div class="rm-label"><b>Esta presentación</b><span>10 min + defensa</span></div><span class="pill progress">Ahora</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 1 — CONTEXTO (1 min) -->
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">01 · Contexto <span class="time">~1 min</span></p>
+        <h1 class="slide-title">Trabajamos como agencia, para un cliente real</h1>
+        <p class="lede">MKIA STORRR es una tienda de merchandising con modelo de <b>&quot;drops&quot; limitados</b> — ediciones que se agotan y vuelven a aparecer en lanzamientos futuros. El profesor hace de cliente y de equipo de desarrollo; nosotros especificamos, configuramos y analizamos — nunca tocamos el código.</p>
+        <div class="flow">
+          <div class="node"><b>El cliente</b><span>Tiene una tienda, no sabe qué hacen sus usuarios</span></div>
+          <div class="arrow">→</div>
+          <div class="node"><b>Nosotros</b><span>Medimos, construimos, analizamos</span></div>
+          <div class="arrow">→</div>
+          <div class="node"><b>Decisión</b><span>Qué palanca de fidelización activar primero</span></div>
+        </div>
+        <p style="margin-top:18px; color:var(--ink-soft); font-size:.95rem;"><b>Objetivo elegido:</b> fidelizar a los clientes recurrentes — que vuelvan en el siguiente drop, reduciendo la dependencia de la adquisición pagada. Todo lo que viene a continuación existe para responder una sola pregunta: <em>¿está funcionando esa apuesta, y qué hacemos si no?</em></p>
+      </div>
+    </section>
+
+    <!-- SLIDE 2 — PLAN DE MEDICIÓN (2 min) -->
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">02 · Plan de medición <span class="time">~2 min</span></p>
+        <h1 class="slide-title">6 KPIs — uno de ellos, deliberadamente fuera de GA4</h1>
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="label">Tasa de clientes recurrentes</div><div class="formula">Clientes con +1 compra / Total clientes</div></div>
+          <div class="kpi-card"><div class="label">Frecuencia media de compra</div><div class="formula">Nº compras totales / Nº clientes</div></div>
+          <div class="kpi-card"><div class="label">CLV estimado</div><div class="formula">Valor medio × Frecuencia × Tiempo de relación</div></div>
+          <div class="kpi-card"><div class="label">% sesiones recurrentes</div><div class="formula">Sesiones de recurrentes / Total sesiones</div></div>
+          <div class="kpi-card email"><div class="label">Tasa de apertura de email</div><div class="formula">Plataforma de email, no GA4/GTM</div></div>
+          <div class="kpi-card email"><div class="label">Clic de email a suscriptores</div><div class="formula">Plataforma de email, no GA4/GTM</div></div>
+        </div>
+        <p style="margin-top:16px; color:var(--ink-soft); font-size:.88rem;">Decisión deliberada: reconocer los límites de la herramienta en vez de forzar un evento que no puede existir — GA4 no sabe si alguien abrió un email, solo si después hizo clic y llegó a la web. Los otros 4 KPIs sí son 100% medibles con lo que construimos en los siguientes capítulos.</p>
+      </div>
+    </section>
+
+    <!-- SLIDE 3 — EMBUDO DE FIDELIZACIÓN -->
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">02b · Traduciendo el KPI a eventos</p>
+        <h1 class="slide-title">Un embudo pensado para el modelo de drops</h1>
+        <p class="lede" style="font-size:.96rem;">Cada KPI necesita datos concretos. Para fidelización, diseñamos 3 eventos que juntos cuentan una historia:</p>
+        <div class="flow">
+          <div class="node"><b>add_to_wishlist</b><span>Interés guardado — señal de recompra futura</span></div>
+          <div class="arrow">→</div>
+          <div class="node"><b>login</b><span>Identificación — customer_status: nuevo/recurrente</span></div>
+          <div class="arrow">→</div>
+          <div class="node"><b>whatsapp_click</b><span>Interacción directa con la marca</span></div>
+        </div>
+        <div class="status-row"><span class="pill done">Hecho</span><span>Los 3 eventos están montados en GTM y verificados con datos reales</span></div>
+        <p style="margin-top:10px; color:var(--ink-soft); font-size:.85rem;">Esto responde al capítulo 2 (data layers). El capítulo 3 es cómo lo construimos de verdad, sin tocar el código de la web →</p>
+      </div>
+    </section>
+
+    <!-- SLIDE 4 — GTM: LA CONSTRUCCIÓN (2 min) -->
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">03 · Implementación GTM <span class="time">~2 min</span></p>
+        <h1 class="slide-title">De la especificación al dato, en producción</h1>
+        <p class="lede" style="font-size:.95rem;">Construimos el embudo de ecommerce completo (10 eventos) además de los 3 de fidelización — 13 en total. Toca cada tarjeta para ver la prueba real:</p>
+        <div class="flip-grid" id="grid-gtm">
+          <div class="flip-card" data-img="capturas/gtm-etiquetas.jpg" data-cap="GTM — Etiquetas, publicadas v2.0">
+            <div class="flip-inner">
+              <div class="flip-face flip-front"><div><div class="fc-label">Etiquetas</div><div class="fc-stat">14</div><div class="fc-sub">GA4 Event, publicadas en producción</div></div><div class="fc-hint">toca para ver</div></div>
+              <div class="flip-face flip-back"></div>
+            </div>
+          </div>
+          <div class="flip-card" data-img="capturas/gtm-activadores.jpg" data-cap="GTM — Activadores CE-">
+            <div class="flip-inner">
+              <div class="flip-face flip-front"><div><div class="fc-label">Activadores</div><div class="fc-stat">13</div><div class="fc-sub">Patrón CE-&lt;evento&gt;, evento personalizado</div></div><div class="fc-hint">toca para ver</div></div>
+              <div class="flip-face flip-back"></div>
+            </div>
+          </div>
+          <div class="flip-card" data-img="capturas/gtm-variables.jpg" data-cap="GTM — Variables DLV-">
+            <div class="flip-inner">
+              <div class="flip-face flip-front"><div><div class="fc-label">Variables</div><div class="fc-stat">16</div><div class="fc-sub">Leyendo el objeto ecommerce del dataLayer</div></div><div class="fc-hint">toca para ver</div></div>
+              <div class="flip-face flip-back"></div>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <p class="ctitle">Hallazgo corregido antes de publicar</p>
+          <p>9 etiquetas leían variables sueltas en vez del objeto <code>ecommerce</code> estándar de GA4 — habrían enviado <code>undefined</code>. Las corregimos antes de publicar, no después.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4b — GA4: LA PRUEBA (parte del mismo bloque de 2 min) -->
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">03b · La prueba en GA4</p>
+        <h1 class="slide-title">No "está configurado" — está llegando</h1>
+        <p class="lede" style="font-size:.95rem;">Publicamos, navegamos la web real (sin modo Preview), y esto es lo que confirmó GA4:</p>
+        <div class="flip-grid" id="grid-ga4">
+          <div class="flip-card" data-img="capturas/ga4-eventos-final.jpg" data-cap="GA4 — Informe de Eventos, 14 filas reales">
+            <div class="flip-inner">
+              <div class="flip-face flip-front"><div><div class="fc-label">Eventos con datos reales</div><div class="fc-stat">10 / 13</div><div class="fc-sub">view_item, add_to_cart, view_cart, begin_checkout...</div></div><div class="fc-hint">toca para ver</div></div>
+              <div class="flip-face flip-back"></div>
+            </div>
+          </div>
+          <div class="flip-card" data-img="capturas/ga4-key-events-final.jpg" data-cap="GA4 — Eventos clave confirmados">
+            <div class="flip-inner">
+              <div class="flip-face flip-front"><div><div class="fc-label">Key Events</div><div class="fc-stat">3</div><div class="fc-sub">add_to_cart, add_to_wishlist, begin_checkout</div></div><div class="fc-hint">toca para ver</div></div>
+              <div class="flip-face flip-back"></div>
+            </div>
+          </div>
+          <div class="flip-card" data-img="capturas/ga4-informe-panoramico.jpg" data-cap="GA4 — Informe panorámico, actividad real">
+            <div class="flip-inner">
+              <div class="flip-face flip-front"><div><div class="fc-label">Actividad confirmada</div><div class="fc-stat">8</div><div class="fc-sub">usuarios activos reales en la propiedad</div></div><div class="fc-hint">toca para ver</div></div>
+              <div class="flip-face flip-back"></div>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <p class="ctitle">Hallazgo de QA documentado, no bloqueante</p>
+          <p><code>purchase</code>, <code>add_shipping_info</code> y <code>add_payment_info</code> están verificados con payload correcto en Preview/DebugView, pero <code>checkout.html</code> no carga el contenedor GTM en producción — bug de la web, reportado, fuera de nuestro alcance de edición.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4c — AUDITORÍA COMO HISTORIA -->
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Cómo trabaja un analista senior</p>
+        <h1 class="slide-title">Auditar antes de publicar, no después</h1>
+        <div class="audit-timeline">
+          <div class="at-item found"><span class="at-dot">!</span><div class="at-text"><b>Permiso de solo lectura en GTM</b><span>Bloqueaba crear nada — resuelto pidiendo acceso de Editor</span></div></div>
+          <div class="at-item found"><span class="at-dot">!</span><div class="at-text"><b>9 etiquetas leían la variable equivocada</b><span>Parámetros sueltos en vez del objeto ecommerce estándar</span></div></div>
+          <div class="at-item found"><span class="at-dot">!</span><div class="at-text"><b>Activador con nombre de evento incorrecto</b><span><code>contact_whatsapp_click</code> nunca coincidía con el real <code>whatsapp_click</code></span></div></div>
+          <div class="at-item found"><span class="at-dot">!</span><div class="at-text"><b>Bug de la web: checkout.html sin GTM</b><span>Detectado, documentado y reportado — no bloquea el resto del embudo</span></div></div>
+          <div class="at-item"><span class="at-dot">✓</span><div class="at-text"><b>Publicado y verificado en producción real</b><span>10 de 13 eventos confirmados con navegación real</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5 — DASHBOARD 5A (3 min, parte 1) -->
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">04 · Dashboard — la propuesta <span class="time">~3 min</span></p>
+        <h1 class="slide-title">5A — Sobre nuestra propia web</h1>
+        <p class="lede" style="font-size:.95rem;">Conectado a la propiedad GA4 real de MKIA STORRR. Datos aún escasos — <b>tal como anticipa el enunciado</b>: &quot;aunque tenga pocos datos todavía, es la propuesta que le entregaríais al cliente&quot;.</p>
+        <div class="flip-grid" style="max-width:320px;">
+          <div class="flip-card" data-img="capturas/looker-5a.jpg" data-cap="Looker Studio — MKIA STORRR (propia)">
+            <div class="flip-inner">
+              <div class="flip-face flip-front"><div><div class="fc-label">Estructura propuesta</div><div class="fc-stat">Conectado</div><div class="fc-sub">A la propiedad real, fase temprana de datos</div></div><div class="fc-hint">toca para ver</div></div>
+              <div class="flip-face flip-back"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5b — DASHBOARD 5B (continúa el mismo bloque de 3 min) -->
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">04b · Dashboard — con volumen real</p>
+        <h1 class="slide-title">5B — Sobre la Demo Account oficial de Google</h1>
+        <p class="lede" style="font-size:.95rem;">Mismos KPIs, conectado a la <b>Google Merchandise Store Demo Account</b> — la cuenta pública que ofrece Google para practicar con volumen real. No es dato de MKIA STORRR: es el benchmark de "cómo se vería con tráfico real".</p>
+        <div class="flip-grid wide">
+          <div class="flip-card" data-img="capturas/looker-5b-resumen.jpg" data-cap="Sesiones, usuarios, vistas — MoM/YoY">
+            <div class="flip-inner">
+              <div class="flip-face flip-front"><div><div class="fc-label">Sesiones</div><div class="fc-stat">124,8 mil</div><div class="fc-sub">+5,5% MoM · +3,8% YoY</div></div><div class="fc-hint">toca para ver</div></div>
+              <div class="flip-face flip-back"></div>
+            </div>
+          </div>
+          <div class="flip-card" data-img="capturas/looker-5b-productos.jpg" data-cap="Top productos por ingresos">
+            <div class="flip-inner">
+              <div class="flip-face flip-front"><div><div class="fc-label">Producto top</div><div class="fc-stat">$14.475</div><div class="fc-sub">Google Marine Layer 1998 Pullover, 143 uds.</div></div><div class="fc-hint">toca para ver</div></div>
+              <div class="flip-face flip-back"></div>
+            </div>
+          </div>
+          <div class="flip-card" data-img="capturas/looker-5b-dispositivo.jpg" data-cap="Split móvil / desktop">
+            <div class="flip-inner">
+              <div class="flip-face flip-front"><div><div class="fc-label">Dispositivo</div><div class="fc-stat">57,7%</div><div class="fc-sub">de las sesiones son móvil, 41,7% desktop</div></div><div class="fc-hint">toca para ver</div></div>
+              <div class="flip-face flip-back"></div>
+            </div>
+          </div>
+          <div class="flip-card" data-img="capturas/looker-5b-canales.jpg" data-cap="Canales, comparativa MoM/YoY">
+            <div class="flip-inner">
+              <div class="flip-face flip-front"><div><div class="fc-label">Canal top</div><div class="fc-stat">Direct</div><div class="fc-sub">73k sesiones · Organic Search 29k</div></div><div class="fc-hint">toca para ver</div></div>
+              <div class="flip-face flip-back"></div>
+            </div>
+          </div>
+          <div class="flip-card" data-img="capturas/looker-5b-paginas.jpg" data-cap="Páginas más vistas">
+            <div class="flip-inner">
+              <div class="flip-face flip-front"><div><div class="fc-label">Página top</div><div class="fc-stat">Home</div><div class="fc-sub">109k vistas combinadas móvil+desktop</div></div><div class="fc-hint">toca para ver</div></div>
+              <div class="flip-face flip-back"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6 — INSIGHT (2 min) -->
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">05 · Insight + recomendación <span class="time">~2 min</span></p>
+        <h1 class="slide-title">Un dato, no una lista de métricas</h1>
+        <p class="lede" style="font-size:.92rem;">Todo lo anterior —el plan, los eventos, el dashboard— existe para llegar a esto:</p>
+        <div class="insight-box">
+          <div class="insight-row"><div class="step">1 · Dato</div><p>Los usuarios <b>recurrentes</b> son solo el <b>5,5%</b> de los usuarios activos y el <b>14,9%</b> de las sesiones — pero generan el <b>50,3%</b> de todos los ingresos ($712.803 de $1.418.223, ene–ago 2026).</p></div>
+          <div class="insight-row"><div class="step">2 · Contexto</div><p>Cada sesión recurrente vale <b>$5,84</b> frente a <b>$1,06</b> de una nueva (5,5x). Por usuario: <b>$21,68</b> frente a <b>$1,24</b> (17,6x). La retención a Día 7 apenas llega al 0,3-0,5%.</p></div>
+          <div class="insight-row"><div class="step">3 · Implicación</div><p>La tienda pierde a casi todo el que llega por primera vez, mientras el pequeño grupo que vuelve sostiene la mitad del negocio — <b>fidelizar es la palanca correcta</b>, no captar más.</p></div>
+          <div class="insight-row"><div class="step">4 · Acción</div><p>Email/remarketing a compradores primerizos en los <b>primeros 7 días</b>, y medir CAC vs. LTV del segmento recurrente antes de seguir invirtiendo en adquisición pura.</p></div>
+        </div>
+        <p style="margin-top:12px; color:var(--ink-faint); font-size:.8rem;">Fuente: GA4 Demo Account (GMS), 1 ene–31 ago 2026 · Explorar → Nuevo/Recurrente + Retención por cohorte.</p>
+      </div>
+    </section>
+
+    <!-- SLIDE 7 — Q&A -->
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Preparación para el Q&amp;A</p>
+        <h1 class="slide-title">Lo que nos pueden preguntar</h1>
+        <div class="qa-grid">
+          <div class="qa-card"><div class="q">¿Por qué fidelización y no ventas?</div><div class="a">Modelo de drops limitados — el valor está en que el comprador vuelva.</div></div>
+          <div class="qa-card"><div class="q">¿Por qué esos 3 eventos custom?</div><div class="a">Embudo real: interés guardado → identificación → interacción con la marca.</div></div>
+          <div class="qa-card"><div class="q">¿Cómo medís la apertura de email?</div><div class="a">No con GA4 — plataforma de email, fuera de alcance técnico, decisión deliberada.</div></div>
+          <div class="qa-card"><div class="q">¿Qué pasó en Preview Mode?</div><div class="a">Descubrimos 9 etiquetas leyendo el dato equivocado del dataLayer — se habrían publicado con <code>undefined</code>. Las corregimos antes.</div></div>
+          <div class="qa-card"><div class="q">¿Cómo pedisteis los eventos que faltaban?</div><div class="a">El cliente nos corrigió la ficha: especificar la variable y su origen, no un valor de ejemplo — así se comunica analítica con desarrollo de verdad.</div></div>
+          <div class="qa-card"><div class="q">¿A quién va dirigido el dashboard?</div><div class="a">5A al equipo interno (fase temprana); 5B es el benchmark de "cómo se vería a escala".</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8 — CIERRE -->
+    <section class="slide title">
+      <div class="slide-inner">
+        <p class="eyebrow">Gracias</p>
+        <h1>¿Preguntas?</h1>
+        <p class="lede">Grupo 2 &quot;Reias&quot; · MKIA STORRR<br>Módulo 6 — Analítica y Medición del Plan de Marketing con IA · INESDI Barcelona</p>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="nav">
+    <button id="prevBtn">&larr; <kbd>←</kbd></button>
+    <span class="count" id="count">1 / 10</span>
+    <button id="nextBtn"><kbd>→</kbd> &rarr;</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var slides = document.querySelectorAll('.slide');
+  var i = 0;
+  var countEl = document.getElementById('count');
+  var railEl = document.getElementById('progressRail');
+  function show(n){
+    slides[i].classList.remove('active');
+    i = (n + slides.length) % slides.length;
+    slides[i].classList.add('active');
+    countEl.textContent = (i+1) + ' / ' + slides.length;
+    railEl.style.width = (((i+1)/slides.length)*100) + '%';
+  }
+  document.getElementById('nextBtn').addEventListener('click', function(){ show(i+1); });
+  document.getElementById('prevBtn').addEventListener('click', function(){ show(i-1); });
+  document.addEventListener('keydown', function(e){
+    if(document.querySelector('.flip-card.expanded')) return;
+    if(e.key === 'ArrowRight' || e.key === ' ') { show(i+1); }
+    if(e.key === 'ArrowLeft') { show(i-1); }
+    if(e.key === 'Escape') collapseAll();
+  });
+  show(0);
+
+  // ---- Flip cards: build backs with images, wire click-to-flip + click-to-expand ----
+  var scrim = document.getElementById('scrim');
+  function collapseAll(){
+    document.querySelectorAll('.flip-card.expanded').forEach(function(c){ c.classList.remove('expanded'); });
+    scrim.classList.remove('show');
+  }
+  scrim.addEventListener('click', collapseAll);
+
+  document.querySelectorAll('.flip-card').forEach(function(card){
+    var src = card.getAttribute('data-img');
+    var cap = card.getAttribute('data-cap') || '';
+    var back = card.querySelector('.flip-back');
+    var img = new Image();
+    img.alt = cap;
+    img.onerror = function(){
+      back.innerHTML = '<div class="fc-missing">⏳ pendiente de captura<br>' + cap + '</div>';
+    };
+    img.onload = function(){
+      back.innerHTML = '';
+      back.appendChild(img);
+      var capEl = document.createElement('div');
+      capEl.className = 'fc-cap';
+      capEl.textContent = cap;
+      back.appendChild(capEl);
+    };
+    img.src = src;
+
+    card.addEventListener('click', function(e){
+      if(card.classList.contains('expanded')){ collapseAll(); return; }
+      if(!card.classList.contains('flipped')){
+        card.classList.add('flipped');
+      } else {
+        // second click on an already-flipped card: expand to full view
+        collapseAll();
+        card.classList.add('expanded');
+        scrim.classList.add('show');
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
