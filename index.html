@@ -219,6 +219,38 @@
   .dot.study{background:var(--terracotta);}
 
   section{padding:48px 0;}
+
+  /* filtro de proyectos por area */
+  .area-filter{
+    position:sticky;
+    top:0;
+    z-index:10;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    padding:10px 0;
+    margin-bottom:20px;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+  }
+  .filter-btn{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--ink-soft);
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:7px 14px;
+    cursor:pointer;
+    transition:border-color .15s, background .15s, color .15s;
+  }
+  .filter-btn:hover{border-color:var(--ink);}
+  .filter-btn.active{
+    color:var(--paper);
+    background:var(--ink);
+    border-color:var(--ink);
+  }
+  .area[hidden]{display:none;}
   h2.section-head{
     margin:0 0 22px;
     font-weight:600;
@@ -441,6 +473,8 @@
   @media print{
     .btn-cv, .btn-mode{display:none;}
     .legend{display:none;}
+    .area-filter{display:none;}
+    .area[hidden]{display:block;}
     body{background:#fff;}
     .availability{color:var(--ink); border-color:var(--line); background:transparent;}
     .availability .dot{background:var(--ink) !important;}
@@ -485,7 +519,14 @@
   <section id="proyectos">
     <h2 class="section-head">Proyectos</h2>
 
-    <div class="area">
+    <div class="area-filter" role="tablist" aria-label="Filtrar proyectos por área">
+      <button type="button" class="filter-btn active" data-filter="todos" role="tab" aria-selected="true">Todos</button>
+      <button type="button" class="filter-btn" data-filter="ia" role="tab" aria-selected="false">IA & Automatización</button>
+      <button type="button" class="filter-btn" data-filter="datos" role="tab" aria-selected="false">Datos & Analítica</button>
+      <button type="button" class="filter-btn" data-filter="producto" role="tab" aria-selected="false">Producto / Apps</button>
+    </div>
+
+    <div class="area" data-area="ia">
       <div class="area-head">
         <h3>IA & Automatización</h3>
         <p>Agentes de IA y workflows de automatización aplicados a marketing: de formularios de leads a generación de contenido, construidos con n8n, prompt engineering y modelos LLM.</p>
@@ -606,7 +647,7 @@
       </div>
     </div>
 
-    <div class="area">
+    <div class="area" data-area="datos">
       <div class="area-head">
         <h3>Datos & Analítica</h3>
         <p>De dashboards de Business Intelligence a un paso más de Machine Learning: análisis de campañas y segmentación de clientes sobre datos reales.</p>
@@ -676,7 +717,7 @@
       </div>
     </div>
 
-    <div class="area">
+    <div class="area" data-area="producto">
       <div class="area-head">
         <h3>Producto / Apps</h3>
         <p>Herramientas interactivas construidas de principio a fin, del backend a la experiencia de usuario.</p>
@@ -866,6 +907,34 @@
       });
     });
   });
+
+  // --- Filtro de proyectos por área ---
+  // Objetivo: que se pueda entrar directo a un área sin hacer scroll por las 12
+  // tarjetas. Oculta con [hidden] los bloques .area que no coincidan, nunca con
+  // display para no interferir con la regla @media print (que no debe filtrar nada).
+  (function () {
+    const buttons = document.querySelectorAll('.filter-btn');
+    const areas = document.querySelectorAll('.area');
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const filter = btn.dataset.filter;
+
+        buttons.forEach(function (b) {
+          b.classList.toggle('active', b === btn);
+          b.setAttribute('aria-selected', b === btn ? 'true' : 'false');
+        });
+
+        areas.forEach(function (area) {
+          area.hidden = filter !== 'todos' && area.dataset.area !== filter;
+        });
+
+        if (typeof gtag === 'function') {
+          gtag('event', 'filter_projects', { area: filter });
+        }
+      });
+    });
+  })();
 
   // --- Consentimiento de cookies (Consent Mode v2) ---
   (function () {
