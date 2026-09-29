@@ -178,6 +178,20 @@
     align-items:baseline;
   }
   .timeline-row:last-child{border-bottom:none;}
+  .timeline{position:relative; padding-left:22px;}
+  .timeline::before{content:""; position:absolute; left:0; top:8px; bottom:8px; width:1px; background:var(--line);}
+  .timeline .timeline-row{position:relative;}
+  .timeline .timeline-row::before{
+    content:"";
+    position:absolute;
+    left:-22px;
+    top:6px;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--sage);
+    border:2px solid var(--paper);
+  }
   .timeline-row .tl-date{
     font-family:var(--mono);
     font-size:12px;
@@ -235,7 +249,10 @@
     grid-template-columns:1fr auto;
     gap:16px;
     align-items:start;
+    transition:box-shadow .18s, transform .18s;
   }
+  .project:hover{box-shadow:0 6px 20px rgba(26,26,24,.08); transform:translateY(-2px);}
+  .project.featured:hover{box-shadow:0 6px 20px rgba(138,95,18,.14);}
   .project .status{
     font-family:var(--mono);
     font-size:11px;
@@ -638,6 +655,7 @@
         <div>
           <h4>Medir la fidelización — GA4 + GTM + Looker Studio</h4>
           <p>Proyecto final de analítica web en equipo (6) para una tienda de drops simulada. Plan de medición, contenedor de GTM publicado (14 etiquetas) y una auditoría propia que encontró 4 fallos antes de publicar, 10 de 13 eventos verificados con datos reales en GA4 y dashboard en Looker Studio.</p>
+          <img class="shot" src="casos/analitica-mkia-storrr/img/gtm-etiquetas.jpg" alt="Contenedor de Google Tag Manager con las 14 etiquetas publicadas para MKIA STORRR" loading="lazy" width="1400" height="867">
           <div class="tags">
             <span class="tag">GA4</span>
             <span class="tag">Google Tag Manager</span>
@@ -674,7 +692,7 @@
 
   <section id="experiencia">
     <h2 class="section-head">Experiencia profesional</h2>
-    <div class="study-list">
+    <div class="study-list timeline">
 
       <div class="timeline-row">
         <div class="tl-date">Sep 2026 – Actualidad</div>
@@ -697,7 +715,7 @@
 
   <section id="formacion">
     <h2 class="section-head">Formación académica</h2>
-    <div class="study-list">
+    <div class="study-list timeline">
 
       <div class="timeline-row">
         <div class="tl-date">2026 – Feb 2027<br>En curso</div>
