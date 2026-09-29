@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Carlos García-Arisco Vílchez — Data · IA · Growth Marketing</title>
-<meta name="description" content="Portfolio de proyectos de marketing digital, analítica de datos, growth marketing e IA aplicada. CV descargable para posiciones junior.">
+<meta name="description" content="Portfolio de proyectos de growth marketing, analítica de datos y automatización con IA: de la estrategia al prototipo funcional.">
 <link rel="canonical" href="https://carlosarisco55-max.github.io/">
 
 <!-- Open Graph / previsualización al compartir el link -->
 <meta property="og:type" content="profile">
 <meta property="og:title" content="Carlos García-Arisco Vílchez — Data · IA · Growth Marketing">
-<meta property="og:description" content="Portfolio de proyectos de marketing digital, analítica de datos, growth marketing e IA aplicada. CV descargable para posiciones junior.">
+<meta property="og:description" content="Portfolio de proyectos de growth marketing, analítica de datos y automatización con IA: de la estrategia al prototipo funcional.">
 <meta property="og:url" content="https://carlosarisco55-max.github.io">
 <meta property="og:image" content="https://carlosarisco55-max.github.io/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Carlos García-Arisco Vílchez — Data · IA · Growth Marketing">
-<meta name="twitter:description" content="Portfolio de proyectos de marketing digital, analítica de datos, growth marketing e IA aplicada.">
+<meta name="twitter:description" content="Portfolio de proyectos de growth marketing, analítica de datos y automatización con IA: de la estrategia al prototipo funcional.">
 <meta name="twitter:image" content="https://carlosarisco55-max.github.io/og-image.png">
 
 <!-- Google Analytics 4 (gtag.js) con Consent Mode v2 -->
@@ -51,6 +51,7 @@
     --ink-soft:#57544C;
     --line:#D8D4C8;
     --mustard:#C08A2E;
+    --mustard-text:#8A5F12;
     --sage:#4C7C6E;
     --terracotta:#B5533C;
     --mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -66,6 +67,7 @@
     -webkit-font-smoothing:antialiased;
   }
   a{color:inherit;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--ink); outline-offset:3px;}
   ::selection{background:var(--mustard); color:var(--paper);}
 
   .wrap{max-width:920px; margin:0 auto; padding:0 24px;}
@@ -105,7 +107,7 @@
     font-weight:700;
     letter-spacing:-0.01em;
   }
-  h1 span{color:var(--mustard);}
+  h1 span{color:var(--mustard-text);}
   .lede{
     font-size:17px;
     color:var(--ink-soft);
@@ -203,13 +205,14 @@
   .dot.study{background:var(--terracotta);}
 
   section{padding:48px 0;}
-  .section-head{
+  h2.section-head{
+    margin:0 0 22px;
+    font-weight:600;
     font-family:var(--mono);
     font-size:12px;
     letter-spacing:.12em;
     text-transform:uppercase;
     color:var(--ink-soft);
-    margin-bottom:22px;
     display:flex;
     align-items:center;
     gap:10px;
@@ -244,9 +247,9 @@
     height:fit-content;
   }
   .status.shipped{background:rgba(76,124,110,.12); color:var(--sage);}
-  .status.active{background:rgba(192,138,46,.14); color:var(--mustard);}
+  .status.active{background:rgba(192,138,46,.14); color:var(--mustard-text);}
   .status.study{background:rgba(181,83,60,.10); color:var(--terracotta);}
-  .project h3{
+  .project h4{
     margin:0 0 8px;
     font-size:20px;
     font-weight:600;
@@ -273,7 +276,7 @@
     border-bottom:1px solid var(--mustard);
     padding-bottom:1px;
   }
-  .project-links a:hover{color:var(--mustard);}
+  .project-links a:hover{color:var(--mustard-text);}
 
   /* project areas */
   .area{margin-bottom:38px;}
@@ -284,7 +287,7 @@
     font-size:14px;
     text-transform:uppercase;
     letter-spacing:.08em;
-    color:var(--mustard);
+    color:var(--mustard-text);
     margin:0 0 6px;
   }
   .area-head p{
@@ -307,7 +310,7 @@
     flex-wrap:wrap;
   }
   .learn-note a{
-    color:var(--mustard);
+    color:var(--mustard-text);
     text-decoration:none;
     border-bottom:1px solid var(--mustard);
     font-family:var(--mono);
@@ -343,7 +346,7 @@
 
   footer{
     border-top:1px solid var(--line);
-    padding:36px 0 56px;
+    padding:36px 0 96px;
     font-family:var(--mono);
     font-size:12.5px;
     color:var(--ink-soft);
@@ -418,7 +421,7 @@
 
   <header>
     <div class="availability"><span class="dot shipped"></span> En prácticas en Lotuscale · abierto a oportunidades — Barcelona</div>
-    <div class="eyebrow">Barcelona · Data Analyst Junior · Growth Marketing · Marketing Digital · IA aplicada</div>
+    <div class="eyebrow">Barcelona · Growth Marketing + Analítica de Datos + Automatización con IA</div>
     <h1>Carlos García-Arisco Vílchez<br><span>convierte estrategia en productos que funcionan.</span></h1>
     <p class="lede">Máster en Marketing Digital e IA en INESDI. Trabajo en la intersección entre analítica de datos, growth marketing y product marketing — no me quedo en el plan, lo llevo hasta el prototipo funcional.</p>
     <div class="contact-row">
@@ -439,7 +442,7 @@
   </div>
 
   <section id="proyectos">
-    <div class="section-head">Proyectos</div>
+    <h2 class="section-head">Proyectos</h2>
 
     <div class="area">
       <div class="area-head">
@@ -449,7 +452,26 @@
 
       <div class="project">
         <div>
-          <h3>Lead Triage Agent</h3>
+          <h4>Agente RAG sobre mi propio CV y proyectos</h4>
+          <p>Le preguntas en lenguaje natural ("¿qué hice con HasOffers?") y responde citando de qué documento sale cada dato — sin inventar. Corpus de 9 documentos (CV, READMEs) troceado en 141 chunks, embeddings locales y recuperación con SQLite (sqlite-vec), generación con Groq.</p>
+          <p>Evaluado con un set de 23 preguntas: 22 aciertos, 0 alucinaciones. Cuando fallaba, siempre era por recuperación (el chunk correcto no llegaba al top-K), nunca por generación — el ajuste más barato antes de complicar el chunking fue subir ese top-K, no trocear más fino.</p>
+          <div class="tags">
+            <span class="tag">Python</span>
+            <span class="tag">Embeddings</span>
+            <span class="tag">SQLite (sqlite-vec)</span>
+            <span class="tag">Groq</span>
+            <span class="tag">RAG</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/carlosarisco55-max/rag-local-documentos" target="_blank" rel="noopener">Repositorio →</a>
+          </div>
+        </div>
+        <span class="status shipped">Shipped</span>
+      </div>
+
+      <div class="project">
+        <div>
+          <h4>Lead Triage Agent</h4>
           <p>Workflow de n8n que recibe leads de un formulario, los clasifica automáticamente con Claude Sonnet 5 (hot/warm/cold) con el motivo generado por IA, y los enruta a Slack y CRM. Incluye manejo de errores independiente.</p>
           <p>Elegí n8n + Claude en vez de un scoring por reglas fijas porque la calidad de un lead casi nunca es una fórmula lineal — necesitaba que el modelo razonara el "por qué" (presupuesto mencionado, urgencia, tamaño de empresa) y lo explicara en lenguaje natural, no solo devolver un número. El branch de errores corre en paralelo al flujo principal: si el enriquecimiento o el enrutado a Slack/CRM falla, el lead no se pierde silenciosamente, se captura y notifica aparte.</p>
           <div class="tags">
@@ -468,7 +490,7 @@
 
       <div class="project">
         <div>
-          <h3>Agente Repurposer de Contenido</h3>
+          <h4>Agente Repurposer de Contenido</h4>
           <p>Agente de IA construido en n8n: convierte un post de blog en tres versiones listas para publicar (LinkedIn, X/Twitter, Instagram) mediante un agente con OpenAI, y entrega el resultado por email automáticamente.</p>
           <div class="tags">
             <span class="tag">n8n</span>
@@ -485,7 +507,7 @@
 
       <div class="project">
         <div>
-          <h3>ContentLoop AI</h3>
+          <h4>ContentLoop AI</h4>
           <p>Landing de validación (waitlist) para un agente de IA que aprenderá la identidad de marca de una pyme en 15 minutos y generará automáticamente su calendario de contenido semanal para Instagram, TikTok y LinkedIn. El agente está en desarrollo; esta fase valida la propuesta con leads reales antes de construirlo. TFM del máster.</p>
           <p>Antes de construir el agente completo, decidí validar la demanda con una landing real en Lovable en vez de saltar directo al desarrollo: mejor descubrir en una semana si el problema (dueños de pyme sin tiempo para redes) engancha lo suficiente como para dejar un email, que invertir semanas de ingeniería en un producto que nadie pida. Es la fase "conseguir tráfico y medir interés" antes de la fase "construir".</p>
           <div class="tags">
@@ -504,7 +526,7 @@
 
       <div class="project">
         <div>
-          <h3>Lead Generation Multicanal</h3>
+          <h4>Lead Generation Multicanal</h4>
           <p>Automatización completa de lead-generation-to-close-of-sale en n8n (self-hosted, gratuito): captura leads de 4 canales (paid media, formulario web/orgánico, SMS y email marketing), los enriquece con señales de comportamiento reales de GA4 capturadas en cliente —no vía API, que solo da reporting agregado o exportación diaria a BigQuery, no lookup en tiempo real de un usuario concreto—, los puntúa con reglas 100% configurables en una tabla (sin tocar código: cambiar un umbral reclasifica un lead al instante), los guarda en un CRM gratuito construido sobre Data Tables nativas de n8n, y los mueve por un pipeline de ventas real (Nuevo → MQL → SQL → Contactado → Reunión Agendada → Propuesta → Negociación → Cerrado Ganado/Perdido) con alertas y emails de nurturing enviados por Gmail.</p>
           <p>Tras construirlo hice mi propia auditoría de seguridad y fiabilidad, y encontré y arreglé dos bugs reales: una race condition en la que dos comprobaciones paralelas de "¿existe ya este lead?" podían disparar antes de que ninguna escritura terminara, duplicando logs de interacción (arreglado pasando a un upsert atómico); y una pérdida silenciosa de campo, donde un paso de logging eliminaba un campo que el siguiente nodo necesitaba para enrutar, así que una alerta de "lead caliente" nunca llegaba a dispararse (arreglado restructurando el flujo de datos). También añadí autenticación por cabecera de secreto compartido en todos los webhooks (verificada con pruebas reales 403 vs 200) y manejo de errores con alertas por email — todo comprobado con ejecuciones de prueba reales, no solo "a simple vista parece correcto".</p>
           <div class="tags">
@@ -517,6 +539,23 @@
           <div class="project-links">
             <a href="https://github.com/carlosarisco55-max/lead-generation-multicanal" target="_blank" rel="noopener">Repositorio →</a>
             <a href="https://github.com/carlosarisco55-max/automatizaciones" target="_blank" rel="noopener">Índice de automatizaciones →</a>
+          </div>
+        </div>
+        <span class="status shipped">Shipped</span>
+      </div>
+
+      <div class="project">
+        <div>
+          <h4>Growth Marketing Automations — 8 workflows de n8n</h4>
+          <p>Kit reutilizable de 8 workflows para un equipo de growth/lead-gen: cualificación de leads, reporting semanal, salud web, afiliados, contenido SEO, reputación, ritmo de presupuesto y nutrición multi-touch. Generalizado a partir de una automatización real hecha en mi beca, sin ningún dato ni nombre de cliente. Documentación bilingüe ES/EN.</p>
+          <div class="tags">
+            <span class="tag">n8n</span>
+            <span class="tag">Data Tables</span>
+            <span class="tag">Groq</span>
+            <span class="tag">Documentación bilingüe</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/carlosarisco55-max/growth-marketing-automations" target="_blank" rel="noopener">Repositorio →</a>
           </div>
         </div>
         <span class="status shipped">Shipped</span>
@@ -536,7 +575,7 @@
 
       <div class="project">
         <div>
-          <h3>Marketing & Growth Analytics — Customer Personality Analysis</h3>
+          <h4>Marketing & Growth Analytics — Customer Personality Analysis</h4>
           <p>Análisis de un dataset real de Kaggle (~2.240 clientes) para responder qué campañas y canales funcionan mejor y con qué perfil de cliente. Limpieza de datos, dashboard de Power BI (4 páginas, medidas DAX) y dashboard HTML interactivo con insights "so what" — completo de principio a fin.</p>
           <div class="tags">
             <span class="tag">Python</span>
@@ -554,7 +593,7 @@
 
       <div class="project">
         <div>
-          <h3>ML Marketing Campaign — Retail</h3>
+          <h4>ML Marketing Campaign — Retail</h4>
           <p>Modelo de predicción de respuesta de clientes sobre datasets reales de campañas retail. Comparativa de Regresión Logística, Árbol de Decisión, KNN y Random Forest, con notebook completo y documentación reproducible.</p>
           <div class="tags">
             <span class="tag">Python</span>
@@ -572,7 +611,7 @@
 
       <div class="project">
         <div>
-          <h3>Medir la fidelización — GA4 + GTM + Looker Studio</h3>
+          <h4>Medir la fidelización — GA4 + GTM + Looker Studio</h4>
           <p>Proyecto final de analítica web en equipo (6) para una tienda de drops simulada. Plan de medición, contenedor de GTM publicado (14 etiquetas) y una auditoría propia que encontró 4 fallos antes de publicar, 10 de 13 eventos verificados con datos reales en GA4 y dashboard en Looker Studio.</p>
           <div class="tags">
             <span class="tag">GA4</span>
@@ -602,7 +641,7 @@
 
       <div class="project">
         <div>
-          <h3>Quiz: ¿Cuánto sabes de Marketing Digital e IA?</h3>
+          <h4>Quiz: ¿Cuánto sabes de Marketing Digital e IA?</h4>
           <p>Quiz interactivo bilingüe (ES/EN) de 10 preguntas sobre marketing digital e IA, con ranking en vivo. Backend en Google Sheets, desplegado como Web App pública de Google Apps Script — jugable sin necesidad de cuenta de Google.</p>
           <div class="tags">
             <span class="tag">Google Apps Script</span>
@@ -622,7 +661,7 @@
   </section>
 
   <section id="experiencia">
-    <div class="section-head">Experiencia profesional</div>
+    <h2 class="section-head">Experiencia profesional</h2>
     <div class="study-list">
 
       <div class="timeline-row">
@@ -645,7 +684,7 @@
   </section>
 
   <section id="formacion">
-    <div class="section-head">Formación académica</div>
+    <h2 class="section-head">Formación académica</h2>
     <div class="study-list">
 
       <div class="timeline-row">
@@ -668,7 +707,7 @@
   </section>
 
   <section id="casos">
-    <div class="section-head">Casos de estudio académicos</div>
+    <h2 class="section-head">Casos de estudio académicos</h2>
     <div class="study-list">
 
       <div class="study-row">
@@ -709,7 +748,7 @@
   </section>
 
   <section id="stack">
-    <div class="section-head">Stack y marcos de trabajo</div>
+    <h2 class="section-head">Stack y marcos de trabajo</h2>
     <div class="stack-grid">
       <span class="tag">Python</span>
       <span class="tag">SQL</span>
@@ -743,8 +782,8 @@
   <div style="max-width:900px; margin:0 auto; display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
     <span style="flex:1; min-width:220px;">Uso Google Analytics para saber cuántas visitas recibe esta web — sin publicidad, sin datos personales. ¿Lo aceptas?</span>
     <div style="display:flex; gap:8px; flex-shrink:0;">
-      <button id="cookie-reject" style="background:var(--paper); color:var(--ink-soft); border:1px solid var(--ink-soft); border-radius:4px; padding:8px 14px; font-family:var(--mono); font-size:13px; cursor:pointer;">Rechazar</button>
-      <button id="cookie-accept" style="background:var(--sage); color:var(--paper); border:1px solid var(--sage); border-radius:4px; padding:8px 14px; font-family:var(--mono); font-size:13px; cursor:pointer;">Aceptar</button>
+      <button id="cookie-reject" style="background:var(--paper); color:var(--ink); border:1px solid var(--ink); border-radius:4px; padding:8px 14px; font-family:var(--mono); font-size:13px; font-weight:600; cursor:pointer;">Rechazar</button>
+      <button id="cookie-accept" style="background:var(--ink); color:var(--paper); border:1px solid var(--ink); border-radius:4px; padding:8px 14px; font-family:var(--mono); font-size:13px; font-weight:600; cursor:pointer;">Aceptar</button>
     </div>
   </div>
 </div>
