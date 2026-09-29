@@ -355,6 +355,16 @@
   .study-row .project-links{margin-top:8px;}
 
   /* stack */
+  .stack-group{margin-bottom:22px;}
+  .stack-group:last-child{margin-bottom:0;}
+  .stack-group h3{
+    font-family:var(--mono);
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--mustard-text);
+    margin:0 0 10px;
+  }
   .stack-grid{display:flex; flex-wrap:wrap; gap:8px;}
   .stack-grid .tag{font-size:12.5px; padding:5px 11px;}
 
@@ -751,30 +761,45 @@
 
   <section id="stack">
     <h2 class="section-head">Stack y marcos de trabajo</h2>
-    <div class="stack-grid">
-      <span class="tag">Python</span>
-      <span class="tag">SQL</span>
-      <span class="tag">Power BI</span>
-      <span class="tag">DAX</span>
-      <span class="tag">Google Analytics (GA4)</span>
-      <span class="tag">Google Tag Manager</span>
-      <span class="tag">Looker Studio</span>
-      <span class="tag">SEMrush</span>
-      <span class="tag">Meta Ads Manager</span>
-      <span class="tag">n8n</span>
-      <span class="tag">Claude / GenAI aplicada</span>
-      <span class="tag">Groq</span>
-      <span class="tag">Scikit-learn</span>
-      <span class="tag">Google Colab</span>
-      <span class="tag">Lovable</span>
-      <span class="tag">Google Apps Script</span>
-      <span class="tag">Notion</span>
-      <span class="tag">Gamma</span>
-      <span class="tag">SOSTAC</span>
-      <span class="tag">Porter</span>
-      <span class="tag">DAFO</span>
-      <span class="tag">ICE Scoring</span>
-      <span class="tag">North Star Metric</span>
+    <div class="stack-group">
+      <h3>Avanzado</h3>
+      <div class="stack-grid">
+        <span class="tag">Claude / GenAI aplicada</span>
+        <span class="tag">Notion</span>
+      </div>
+    </div>
+
+    <div class="stack-group">
+      <h3>Medio</h3>
+      <div class="stack-grid">
+        <span class="tag">Power BI</span>
+        <span class="tag">DAX</span>
+        <span class="tag">Google Analytics (GA4)</span>
+        <span class="tag">n8n</span>
+        <span class="tag">Google Apps Script</span>
+        <span class="tag">Lovable</span>
+        <span class="tag">Google Tag Manager</span>
+        <span class="tag">SQL</span>
+      </div>
+    </div>
+
+    <div class="stack-group">
+      <h3>Familiarizado</h3>
+      <div class="stack-grid">
+        <span class="tag">Python</span>
+        <span class="tag">Scikit-learn</span>
+        <span class="tag">Google Colab</span>
+        <span class="tag">Looker Studio</span>
+        <span class="tag">Groq</span>
+        <span class="tag">Gamma</span>
+        <span class="tag">SEMrush</span>
+        <span class="tag">Meta Ads Manager</span>
+        <span class="tag">SOSTAC</span>
+        <span class="tag">Porter</span>
+        <span class="tag">DAFO</span>
+        <span class="tag">ICE Scoring</span>
+        <span class="tag">North Star Metric</span>
+      </div>
     </div>
   </section>
 
