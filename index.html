@@ -150,23 +150,6 @@
   }
   .btn-cv:hover{background:#a5751f; border-color:#a5751f;}
   .btn-cv{cursor:pointer;}
-  .btn-mode{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    font-family:var(--mono);
-    font-size:13px;
-    font-weight:600;
-    color:var(--ink);
-    background:transparent;
-    border:1px solid var(--line);
-    padding:10px 18px;
-    border-radius:2px;
-    cursor:pointer;
-    margin-left:10px;
-    transition:border-color .15s, background .15s;
-  }
-  .btn-mode:hover{border-color:var(--ink); background:var(--paper-dim);}
 
   /* timeline */
   .timeline-row{
@@ -434,44 +417,8 @@
     .study-row{grid-template-columns:1fr;}
   }
 
-  /* ---- Modo Ejecutivo (ATS/Print) ---- */
-  body.ats-mode{
-    background:#fff;
-  }
-  body.ats-mode .availability{
-    color:var(--ink);
-    border-color:var(--line);
-    background:transparent;
-  }
-  body.ats-mode .availability .dot{background:var(--ink) !important;}
-  body.ats-mode .legend{display:none;}
-  body.ats-mode h1 span{color:var(--ink);}
-  body.ats-mode .project{
-    border:none;
-    border-bottom:1px solid var(--line);
-    border-radius:0;
-    padding:16px 0;
-    margin-bottom:0;
-  }
-  body.ats-mode .status{
-    background:transparent !important;
-    color:var(--ink-soft) !important;
-    border:1px solid var(--line);
-  }
-  body.ats-mode .tag{
-    color:var(--ink-soft);
-    border-color:var(--line);
-  }
-  body.ats-mode .project-links a{
-    border-bottom-color:var(--ink-soft);
-    color:var(--ink);
-  }
-  body.ats-mode .btn-mode{background:var(--ink); color:var(--paper); border-color:var(--ink);}
-  body.ats-mode .tag-study{color:var(--ink-soft);}
-  body.ats-mode .tl-date{color:var(--ink-soft);}
-
   @media print{
-    .btn-cv, .btn-mode{display:none;}
+    .btn-cv{display:none;}
     .legend{display:none;}
     .area-filter{display:none;}
     .area[hidden]{display:block;}
@@ -506,7 +453,6 @@
     </div>
     <div class="cv-download">
       <a class="btn-cv" href="CV_Carlos_Garcia_Arisco.pdf" download>Descargar CV (PDF) ↓</a>
-      <button type="button" class="btn-mode" id="btn-mode">Modo Ejecutivo (ATS)</button>
     </div>
   </header>
 
@@ -786,6 +732,9 @@
         <div>
           <h4>Máster en Marketing Digital e Inteligencia Artificial</h4>
           <p>INESDI Business Techschool, Barcelona · Estrategia digital · Analítica de datos · Machine Learning · IA generativa · Growth Hacking.</p>
+          <div class="project-links">
+            <a href="casos/academicos/">Proyectos académicos →</a>
+          </div>
         </div>
       </div>
 
@@ -794,47 +743,6 @@
         <div>
           <h4>Grado en Administración y Dirección de Empresas (ADE) — Universitat de Barcelona</h4>
           <p>Base en gestión empresarial, economía y análisis financiero.</p>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <section id="casos">
-    <h2 class="section-head">Estrategia</h2>
-    <div class="study-list">
-
-      <div class="study-row">
-        <div class="tag-study">Sostac</div>
-        <div>
-          <h4>Plan de marketing digital — Idealista España</h4>
-          <p>Plan SOSTAC completo: PEST, 5 fuerzas de Porter, TAM/SAM/SOM, matriz competitiva y 6 objetivos SMART. Presupuesto de €14M, dos buyer personas, North Star Metric definida.</p>
-          <div class="project-links">
-            <a href="casos/plan-marketing-idealista.pdf" target="_blank" rel="noopener">Ver plan (PDF) →</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="study-row">
-        <div class="tag-study">Branding</div>
-        <div>
-          <h4>DRIP MUNDIAL</h4>
-          <p>Marca de streetwear para el Mundial 2026: identidad visual, presentación de 12 slides y landing interactiva con countdown en vivo y catálogo por selección nacional.</p>
-          <div class="project-links">
-            <a href="casos/drip-mundial/" target="_blank" rel="noopener">Landing interactiva →</a>
-            <a href="casos/drip-mundial/presentacion.html" target="_blank" rel="noopener">Presentación →</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="study-row">
-        <div class="tag-study">Estrategia</div>
-        <div>
-          <h4>Strava — de descriptor a prescriptor</h4>
-          <p>Pitch de reposicionamiento estratégico construido sobre tres pilares: entrenamiento, nutrición y objetivos guiados por IA.</p>
-          <div class="project-links">
-            <a href="casos/strava/" target="_blank" rel="noopener">Ver presentación →</a>
-          </div>
         </div>
       </div>
 
@@ -902,19 +810,6 @@
 </div>
 
 <script>
-  const btnMode = document.getElementById('btn-mode');
-
-  btnMode.addEventListener('click', () => {
-    const isAts = document.body.classList.toggle('ats-mode');
-    btnMode.textContent = isAts ? 'Modo Creativo' : 'Modo Ejecutivo (ATS)';
-    // Evento propio: la descarga del CV y los clics salientes (LinkedIn, GitHub...)
-    // ya los captura la Medición mejorada de GA4 sola — esto no, es una interacción
-    // específica de esta web, así que sí merece evento propio.
-    if (typeof gtag === 'function') {
-      gtag('event', 'toggle_ats_mode', { mode: isAts ? 'ats' : 'creativo' });
-    }
-  });
-
   // Evento propio: qué proyecto/enlace concreto interesa más (repo, demo, dashboard...).
   // Tampoco lo cubre la Medición mejorada tal cual — esa solo dice "hubo un clic saliente",
   // no a qué proyecto pertenecía.

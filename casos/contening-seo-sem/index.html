@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO + Paid Media para Contening — Carlos García-Arisco Vílchez</title>
+<meta name="description" content="Caso de estudio (trabajo final Módulo 7, INESDI): estrategia SEO completa y plan de Paid Media multicanal para Contening, mi propio SaaS. Keyword research, 6 clústeres de contenido, 14 páginas metadatadas, framework de 9 pasos de paid media y campañas de Google Ads y Meta Ads.">
+<link rel="canonical" href="https://carlosarisco55-max.github.io/casos/contening-seo-sem/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231A1A18'/%3E%3Ctext x='50' y='68' font-size='54' font-family='Arial,sans-serif' font-weight='700' fill='%23C08A2E' text-anchor='middle'%3ECA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1EFE9; --paper-dim:#E7E4DB; --ink:#1A1A18; --ink-soft:#57544C; --line:#D8D4C8;
+    --mustard:#C08A2E; --mustard-text:#8A5F12; --sage:#3F6B5E; --terracotta:#B5533C;
+    --mono:'JetBrains Mono',ui-monospace,monospace; --display:'Space Grotesk',ui-sans-serif,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--display); -webkit-font-smoothing:antialiased; line-height:1.6;}
+  a{color:inherit;}
+  a:focus-visible{outline:2px solid var(--ink); outline-offset:3px;}
+  ::selection{background:var(--mustard); color:var(--paper);}
+  .wrap{max-width:820px; margin:0 auto; padding:0 24px;}
+  .back{display:inline-block; margin:32px 0 0; font-family:var(--mono); font-size:13px; text-decoration:none; border-bottom:1px solid var(--mustard-text); color:var(--mustard-text);}
+  header{padding:28px 0 36px; border-bottom:1px solid var(--line);}
+  .eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:14px;}
+  h1{font-size:clamp(28px,4.6vw,42px); line-height:1.12; margin:0 0 18px; font-weight:700; letter-spacing:-0.01em;}
+  .lede{font-size:17px; color:var(--ink-soft); max-width:62ch; margin:0 0 22px;}
+  .meta{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px 24px; font-size:14px; margin:0;}
+  .meta dt{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:2px;}
+  .meta dd{margin:0;}
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; padding:32px 0; border-bottom:1px solid var(--line);}
+  .stat{background:#fff; border:1px solid var(--line); border-radius:3px; padding:16px 18px;}
+  .stat b{display:block; font-size:24px; white-space:nowrap; line-height:1.1; font-weight:700;}
+  .stat span{font-size:13.5px; color:var(--ink-soft);}
+  section{padding:38px 0 6px;}
+  h2{font-family:var(--mono); font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--mustard-text); margin:0 0 14px; display:flex; gap:10px; align-items:center;}
+  h2::after{content:""; flex:1; height:1px; background:var(--line);}
+  h3{font-size:16px; margin:20px 0 8px;}
+  p{margin:0 0 14px; max-width:66ch;}
+  .why{border-left:3px solid var(--mustard); background:#fff; padding:14px 18px; margin:18px 0; max-width:66ch; font-size:15px;}
+  .why b{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--mustard-text); display:block; margin-bottom:4px;}
+  .why.alt{border-left-color:var(--sage);}
+  .why.alt b{color:var(--sage);}
+  table.data{width:100%; border-collapse:collapse; margin:14px 0 22px; font-size:13.5px;}
+  table.data th, table.data td{border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top;}
+  table.data th{background:var(--paper-dim); font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-soft);}
+  .tags{display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 0;}
+  .tag{font-family:var(--mono); font-size:11.5px; border:1px solid var(--line); border-radius:20px; padding:3px 10px; color:var(--ink-soft);}
+  video{width:100%; border:1px solid var(--line); border-radius:3px; background:#000; display:block;}
+  figure{margin:22px 0;}
+  figcaption{font-size:13px; color:var(--ink-soft); margin-top:8px; font-family:var(--mono);}
+  .limits{background:var(--paper-dim); border:1px solid var(--line); border-radius:3px; padding:16px 20px; margin-top:8px;}
+  .limits ul{margin:6px 0 0; padding-left:18px;}
+  .limits li{margin-bottom:6px;}
+  code{font-family:var(--mono); font-size:.9em; background:var(--paper-dim); padding:1px 5px; border-radius:2px;}
+  .filelink{font-family:var(--mono); font-size:13px; color:var(--mustard-text); border-bottom:1px solid var(--mustard-text); text-decoration:none;}
+  footer{border-top:1px solid var(--line); margin-top:44px; padding:28px 0 56px; font-family:var(--mono); font-size:12.5px; color:var(--ink-soft); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../academicos/">← Volver a proyectos académicos</a>
+
+  <header>
+    <div class="eyebrow">Caso de estudio · SEO + Paid Media · Trabajo final Módulo 7, INESDI</div>
+    <h1>De cero visibilidad a un plan de adquisición: SEO y Paid Media para Contening</h1>
+    <p class="lede">Dos entregables finales del máster, ambos sobre Contening (mi propio SaaS de gestión de redes sociales con IA para pymes locales): una estrategia SEO completa de 0 a 1 y un plan de Paid Media multicanal, ambos pensados para producción, no solo para aprobar el módulo.</p>
+    <dl class="meta">
+      <div><dt>Mi parte</dt><dd>Entregable técnico completo de SEO; framework estratégico + Google Ads + Meta Ads en SEM</dd></div>
+      <div><dt>Equipo</dt><dd>Trabajo en equipo (INESDI) — ver desglose por sección</dd></div>
+      <div><dt>Herramientas</dt><dd>Google Trends · AnswerThePublic · Google Ads · Meta Ads Manager</dd></div>
+      <div><dt>Cliente</dt><dd>Contening — SaaS propio, 49-99 €/mes, retail/restauración/salud/hostelería</dd></div>
+    </dl>
+  </header>
+
+  <p style="margin:22px 0 0">
+    <a class="filelink" href="Contening-SEO-Final.pdf" target="_blank" rel="noopener">Ver entregable SEO completo (PDF) →</a>
+    &nbsp;&nbsp;
+    <a class="filelink" href="Contening-SEM-Final.pdf" target="_blank" rel="noopener">Ver entregable SEM/Paid Media completo (PDF) →</a>
+  </p>
+
+  <div class="stats" role="list" aria-label="Cifras clave">
+    <div class="stat" role="listitem"><b>14</b><span>páginas con title/meta/H1 medidos carácter a carácter, no estimados</span></div>
+    <div class="stat" role="listitem"><b>6 clústeres</b><span>18 piezas de contenido (landing + bloque comercial + artículo)</span></div>
+    <div class="stat" role="listitem"><b>25</b><span>keywords investigadas, 7 personas objetivo</span></div>
+    <div class="stat" role="listitem"><b>9 pasos</b><span>framework de Paid Media, de negocio a presupuesto</span></div>
+  </div>
+
+  <section>
+    <h2>El problema y el objetivo de negocio</h2>
+    <p>Contening es un SaaS de suscripción (49-99 €/mes) para pymes locales — restaurantes, clínicas, centros de estética, tiendas de moda, inmobiliarias y academias — que automatiza su contenido de redes sociales. Sin tráfico orgánico ni de pago, el producto no tiene forma de llegar a esos seis sectores. El trabajo final del módulo me sirvió para construir, con rigor de agencia, los dos canales de adquisición que le faltaban al proyecto real: SEO (demanda orgánica, largo plazo) y Paid Media (demanda activa e inducida, corto plazo).</p>
+  </section>
+
+  <section>
+    <h2>SEO — investigación, arquitectura y contenido</h2>
+    <p><strong>Mi parte:</strong> el entregable técnico completo — investigación de keywords, personas, los 6 clústeres de contenido, la arquitectura de metadatos de las 14 páginas y el plan de enlazado externo. El equipo aportó validación cruzada de las personas objetivo.</p>
+
+    <h3>Investigación: 25 keywords, 7 personas</h3>
+    <p>Sin acceso a Semrush en el curso, sustituí el volumen/dificultad habitual por una combinación de Google Trends, AnswerThePublic y comprobación manual del SERP para las 25 keywords del estudio.</p>
+    <div class="why"><b>Decisión</b>Donde no tenía dato real de volumen, lo dejé marcado como pendiente en vez de estimarlo a ojo. Un número inventado con apariencia de dato es peor que un hueco declarado.</div>
+
+    <h3>Arquitectura y 6 clústeres de contenido</h3>
+    <p>Una keyword principal por página, sin canibalización: Home (gestión de redes sociales para pymes) → 6 landings de sector → un artículo de precio compartido con anclas por sector (<code>/blog/precio-community-manager#clinicas</code>, etc.) → 6 artículos informacionales. Cada clúster son 3 piezas completas: landing transaccional, bloque comercial con ancla, y artículo informacional, con encabezados justificados y enlazado interno.</p>
+    <div class="why alt"><b>Decisión de arquitectura</b>El artículo de precio tiene <strong>una sola H1</strong> y seis H2 de sector colgando como anclas, en vez de seis artículos de precio duplicados. Evita contenido casi-idéntico compitiendo por la misma intención (canibalización), a costa de que solo restaurantes tenga la keyword de precio en el title.</div>
+
+    <h3>Metadatos: 14 páginas, longitud medida, no estimada</h3>
+    <p>Title, meta description y H1 para las 14 páginas, con longitud contada con <code>wc -m</code> sobre el texto real de cada celda — no una cifra de clase aproximada. Ejemplo real, la página de restaurantes:</p>
+    <table class="data">
+      <tr><th>Campo</th><th>Texto</th><th>Largo</th></tr>
+      <tr><td>Title</td><td>Gestión de redes sociales para restaurantes | Contening</td><td>56</td></tr>
+      <tr><td>Meta description</td><td>Fotos de tus platos y el menú del día, convertidos en contenido cada semana. Apruebas por WhatsApp en 10 min, sin perder horas de cocina. Desde 49 €/mes.</td><td>157</td></tr>
+      <tr><td>H1</td><td>Gestión de redes sociales para tu restaurante, sin que te quite horas de cocina</td><td>79</td></tr>
+    </table>
+
+    <h3>Enlazado externo: 5 medios, 6 URLs, anchors</h3>
+    <p>Plan de relevancia con 5 medios sectoriales objetivo, 6 URLs a impulsar y sus anchor text, respaldado con 49 capturas reales de Google y de los sitios de referencia durante el taller del Día 3.</p>
+  </section>
+
+  <section>
+    <h2>SEM — framework estratégico de 9 pasos</h2>
+    <p><strong>Mi parte:</strong> el framework completo y la ejecución de Google Ads y Meta Ads. Un compañero de equipo (Andrés) aportó piezas creativas adicionales de TikTok que no se muestran aquí por no ser trabajo propio.</p>
+    <p>Antes de tocar ninguna plataforma, un flujo descendente de 9 pasos para que ninguna campaña naciera desarticulada: Negocio → Objetivo de negocio → Funnel → Plataforma → Campaña → Audiencia y señales → Creatividad → KPIs → Presupuesto. La herramienta (Google Ads, Meta Ads...) es el penúltimo paso, no el primero.</p>
+
+    <h3>Una plataforma por tipo de demanda, no "todas a la vez"</h3>
+    <table class="data">
+      <tr><th>Plataforma</th><th>Tipo de demanda</th><th>Función en el funnel</th></tr>
+      <tr><td>Google Ads</td><td>Activa</td><td>Captura de intención comercial (Search/PMax) — quien ya busca una solución</td></tr>
+      <tr><td>Meta Ads</td><td>Latente e inducida</td><td>Consideración y alcance algorítmico — intereses no verbalizados</td></tr>
+      <tr><td>TikTok Ads</td><td>Inducida</td><td>Awareness — genera deseo de algo que el usuario no buscaba</td></tr>
+      <tr><td>LinkedIn Ads</td><td>Contexto B2B</td><td>Calificación del buying committee por cargo/sector/tamaño</td></tr>
+    </table>
+
+    <h3>Google Ads — Search y PMax por nivel de intención</h3>
+    <p>Arquitectura de keywords en tres niveles de intención: problema ("caos pedidos tienda"), solución ("software reservas restaurante") y competencia ("alternativa a CoverManager"), cada uno con un rol distinto en el funnel.</p>
+    <figure>
+      <video controls preload="metadata" poster="" width="1280" height="720">
+        <source src="media/google-ads-contening.mp4" type="video/mp4">
+      </video>
+      <figcaption>Presentación de la campaña de Google Ads para Contening.</figcaption>
+    </figure>
+
+    <h3>Meta Ads — creatividad y el análisis CPL vs. CPO</h3>
+    <p>La pieza creativa sigue el framework STOP-STAY-ACT (dolor → beneficio → prueba → CTA) sobre el caos operativo del día a día en el sector. Pero la parte que de verdad cambia una decisión de presupuesto es económica, no creativa:</p>
+    <div class="why"><b>Decisión</b>Comparar solo el CPL entre plataformas lleva a conclusiones erróneas. Ejemplo con cifras del propio plan: Meta (2.000 € → 100 leads, CPL 20 €) da 5 oportunidades reales → CPO 400 €. LinkedIn (2.400 € → 30 leads, CPL 80 €, 4 veces más caro) da 10 oportunidades reales → CPO 240 €, un 40 % más barato. El CPL barato de Meta esconde un pipeline peor cualificado.</div>
+    <figure>
+      <video controls preload="metadata" poster="" width="1280" height="720">
+        <source src="media/meta-ads-contening.mp4" type="video/mp4">
+      </video>
+      <figcaption>Presentación de la campaña de Meta Ads para Contening.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Límites</h2>
+    <div class="limits">
+      <ul>
+        <li>Es un entregable académico sobre mi propio proyecto, no una campaña con presupuesto real en producción: las cifras de CPL/CPO del ejemplo son del plan, no de gasto real verificado.</li>
+        <li>Sin Semrush disponible este curso, el volumen/dificultad de keywords se sustituyó por Google Trends, AnswerThePublic y comprobación manual del SERP — menos preciso que una herramienta de pago, declarado como tal en el propio entregable.</li>
+        <li>Las piezas creativas de TikTok y otros formatos de un compañero de equipo no se incluyen aquí por no ser trabajo propio.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Carlos García-Arisco Vílchez</span>
+    <a href="../academicos/">← Volver a proyectos académicos</a>
+  </footer>
+
+</div>
+</body>
+</html>
