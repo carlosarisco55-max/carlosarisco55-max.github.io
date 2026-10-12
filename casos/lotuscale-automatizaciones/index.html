@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automatizaciones en Lotuscale — Carlos García-Arisco Vílchez</title>
+<meta name="description" content="Dos automatizaciones construidas y mantenidas en n8n durante mi beca en Lotuscale: un stack de reporting con validación cruzada entre dos fuentes, y un sistema de newsletter a afiliados con un incidente de producción real, causa raíz y corrección verificada.">
+<link rel="canonical" href="https://carlosarisco55-max.github.io/casos/lotuscale-automatizaciones/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231A1A18'/%3E%3Ctext x='50' y='68' font-size='54' font-family='Arial,sans-serif' font-weight='700' fill='%23C08A2E' text-anchor='middle'%3ECA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1EFE9; --paper-dim:#E7E4DB; --ink:#1A1A18; --ink-soft:#57544C; --line:#D8D4C8;
+    --mustard:#C08A2E; --mustard-text:#8A5F12; --sage:#3F6B5E; --terracotta:#B5533C;
+    --mono:'JetBrains Mono',ui-monospace,monospace; --display:'Space Grotesk',ui-sans-serif,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--display); -webkit-font-smoothing:antialiased; line-height:1.6;}
+  a{color:inherit;}
+  a:focus-visible{outline:2px solid var(--ink); outline-offset:3px;}
+  ::selection{background:var(--mustard); color:var(--paper);}
+  .wrap{max-width:820px; margin:0 auto; padding:0 24px;}
+  .back{display:inline-block; margin:32px 0 0; font-family:var(--mono); font-size:13px; text-decoration:none; border-bottom:1px solid var(--mustard-text); color:var(--mustard-text);}
+  header{padding:28px 0 36px; border-bottom:1px solid var(--line);}
+  .eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:14px;}
+  h1{font-size:clamp(28px,4.6vw,42px); line-height:1.12; margin:0 0 18px; font-weight:700; letter-spacing:-0.01em;}
+  .lede{font-size:17px; color:var(--ink-soft); max-width:62ch; margin:0 0 22px;}
+  .meta{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px 24px; font-size:14px; margin:0;}
+  .meta dt{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:2px;}
+  .meta dd{margin:0;}
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; padding:32px 0; border-bottom:1px solid var(--line);}
+  .stat{background:#fff; border:1px solid var(--line); border-radius:3px; padding:16px 18px;}
+  .stat b{display:block; font-size:24px; white-space:nowrap; line-height:1.1; font-weight:700;}
+  .stat span{font-size:13.5px; color:var(--ink-soft);}
+  section{padding:38px 0 6px;}
+  h2{font-family:var(--mono); font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--mustard-text); margin:0 0 14px; display:flex; gap:10px; align-items:center;}
+  h2::after{content:""; flex:1; height:1px; background:var(--line);}
+  h3{font-size:16px; margin:20px 0 8px;}
+  p{margin:0 0 14px; max-width:66ch;}
+  .why{border-left:3px solid var(--mustard); background:#fff; padding:14px 18px; margin:18px 0; max-width:66ch; font-size:15px;}
+  .why b{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--mustard-text); display:block; margin-bottom:4px;}
+  .why.bad{border-left-color:var(--terracotta);}
+  .why.bad b{color:var(--terracotta);}
+  .why.good{border-left-color:var(--sage);}
+  .why.good b{color:var(--sage);}
+  ol.findings{padding-left:0; list-style:none; counter-reset:f; margin:16px 0; max-width:66ch;}
+  ol.findings li{counter-increment:f; position:relative; padding:0 0 14px 40px;}
+  ol.findings li::before{content:counter(f); position:absolute; left:0; top:0; width:26px; height:26px; border:1px solid var(--ink); border-radius:50%; font-family:var(--mono); font-size:12px; display:grid; place-items:center;}
+  video{width:100%; border:1px solid var(--line); border-radius:3px; background:#000; display:block;}
+  figure{margin:22px 0;}
+  figcaption{font-size:13px; color:var(--ink-soft); margin-top:8px; font-family:var(--mono);}
+  .limits{background:var(--paper-dim); border:1px solid var(--line); border-radius:3px; padding:16px 20px; margin-top:8px;}
+  .limits ul{margin:6px 0 0; padding-left:18px;}
+  .limits li{margin-bottom:6px;}
+  code{font-family:var(--mono); font-size:.9em; background:var(--paper-dim); padding:1px 5px; border-radius:2px;}
+  footer{border-top:1px solid var(--line); margin-top:44px; padding:28px 0 56px; font-family:var(--mono); font-size:12.5px; color:var(--ink-soft); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../../#experiencia">← Volver al portfolio</a>
+
+  <header>
+    <div class="eyebrow">Caso de estudio · Automatización con n8n · Lotuscale</div>
+    <h1>Dos automatizaciones en producción: reporting validado y una newsletter que sobrevivió a su propio incidente</h1>
+    <p class="lede">Construidas y mantenidas en solitario durante mi beca en Lotuscale. Los nombres de cliente y las cifras de negocio se han generalizado para poder compartirlas fuera de la empresa — la arquitectura, las cifras técnicas y los incidentes son reales.</p>
+    <dl class="meta">
+      <div><dt>Mi parte</dt><dd>Diseño, construcción y mantenimiento en solitario</dd></div>
+      <div><dt>Herramientas</dt><dd>n8n · HasOffers API · Telegram · Google Sheets · SMTP</dd></div>
+      <div><dt>Contexto</dt><dd>Growth Digital Marketing Intern — Lotuscale (Sep 2026–actualidad)</dd></div>
+    </dl>
+  </header>
+
+  <div class="stats" role="list" aria-label="Cifras clave">
+    <div class="stat" role="listitem"><b>4 ramas</b><span>reporting: alertas, diario, semanal, mensual — cada una con su propio horario y recuperación</span></div>
+    <div class="stat" role="listitem"><b>62 nodos</b><span>workflow de newsletter, activo en n8n Cloud</span></div>
+    <div class="stat" role="listitem"><b>176</b><span>envíos reenviados tras el incidente — 0 duplicados</span></div>
+    <div class="stat" role="listitem"><b>8 reintentos</b><span>cada llamada HTTP del reporting, sobrevivió a un corte real de red</span></div>
+  </div>
+
+  <section>
+    <h2>Stack de reporting — validado contra una segunda fuente</h2>
+    <p>Antes, cada informe empezaba igual: entrar a la plataforma de afiliación, exportar un CSV, y esperar a que alguien necesitara los números dentro de una hora. Ahora es un único workflow de n8n con cuatro ramas independientes — alertas, reporting diario, scorecard semanal e informe mensual de red — cada una con su propio horario y su propia recuperación si algo falla aguas arriba.</p>
+
+    <h3>Lo que de verdad importa: validación cruzada, no solo automatización</h3>
+    <p>Cada ciclo, un segundo conector construido por un compañero comprueba los datos contra el feed directo de la plataforma. No es solo "ya no hago el export a mano" — es "el dato está verificado por dos caminos independientes antes de llegar al informe".</p>
+    <div class="why good"><b>Resultado</b>Comprobación de esta semana: feed directo ✓ frente a segundo conector ✓ — coinciden exactamente.</div>
+    <p>Cada llamada HTTP (a la plataforma de afiliación, Cloudflare, Telegram) reintenta 8 veces antes de rendirse. Ya sobrevivió a un corte de red real de ~1 minuto sin que nadie tocara un teclado.</p>
+
+    <figure>
+      <video controls preload="metadata" width="1080" height="1920">
+        <source src="media/reporting-stack.mp4" type="video/mp4">
+      </video>
+      <figcaption>Vídeo explicativo del stack de reporting (versión generalizada, sin datos de cliente).</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Newsletter a afiliados — probada a romperse antes de lanzarla, y rota por algo que no se podía prever</h2>
+    <p>Workflow de 62 nodos que recoge ofertas y altas/bajas de afiliados por formulario, las valida, las manda a aprobación por Telegram, y envía el email real por SMTP — con registro de cada rechazo. Solo exige nombre y payout; el resto de campos son opcionales.</p>
+
+    <h3>Cuatro fallos forzados antes de salir a producción</h3>
+    <ol class="findings">
+      <li><strong>Lista vacía.</strong> El workflow se detiene limpio en vez de enviar un email sin contenido.</li>
+      <li><strong>Baseline de cordura.</strong> Forzado a comparar 1.000 frente a 249 reales — se negó a enviar con el error exacto, en vez de mandar un dato absurdo.</li>
+      <li><strong>Rechazo real por Telegram.</strong> Quedó registrado y el envío por SMTP nunca se ejecutó.</li>
+      <li><strong>Misma oferta enviada dos veces.</strong> El filtro de duplicados la detectó.</li>
+    </ol>
+    <p>Estas pruebas encontraron dos bugs reales antes del lanzamiento: un Sheet que se desvinculó sin avisar (0 de 4 respuestas registradas) y un filtro de duplicados que solo comparaba contra filas ya pendientes, no contra el mismo lote — una entrada repetida en el mismo envío se habría colado.</p>
+
+    <h3>El quinto fallo, el que ninguna prueba forzada podía prever</h3>
+    <div class="why bad"><b>Incidente real</b>El primer envío en producción mandó los correos en un lote de 30 a la vez, sin pausa. Gmail limitó el ritmo a mitad de envío y una parte de la lista de 253 afiliados se quedó sin recibirlo.</div>
+    <p><strong>Causa raíz:</strong> 30 envíos por lote, sin pausa entre tandas. <strong>Corrección:</strong> lote de 1 en 1, con 3 segundos de pausa entre cada envío.</p>
+    <div class="why good"><b>Reenvío dirigido</b>176 destinatarios —exactamente los que habían fallado— recibieron un reenvío individual. Los 176 llegaron. Nadie lo recibió dos veces.</div>
+    <p>Cierre honesto, sin épica: probado contra cada fallo que se pudo imaginar. Reforzado por el que no se pudo.</p>
+
+    <figure>
+      <video controls preload="metadata" width="1080" height="1920">
+        <source src="media/newsletter-publishers.mp4" type="video/mp4">
+      </video>
+      <figcaption>Vídeo explicativo de la newsletter de afiliados: diseño, pruebas forzadas, incidente real y corrección (versión generalizada, sin datos de cliente).</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Límites</h2>
+    <div class="limits">
+      <ul>
+        <li>Los nombres de cliente, el nombre comercial de la red de afiliados y las cifras de negocio (ingresos, nombres de partners) se han quitado de ambos vídeos a propósito — son datos de Lotuscale, no míos para compartir.</li>
+        <li>Las cifras técnicas que sí aparecen (nodos, reintentos, recuentos de envío, el resultado de la validación cruzada) son reales y verificadas, no una recreación.</li>
+        <li>Ambas automatizaciones siguen activas en producción; este caso describe su estado en octubre de 2026.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Carlos García-Arisco Vílchez</span>
+    <a href="../../#experiencia">← Volver al portfolio</a>
+  </footer>
+
+</div>
+</body>
+</html>
