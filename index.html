@@ -7,6 +7,53 @@
 <meta name="description" content="Portfolio de proyectos de growth marketing, analítica de datos y automatización con IA: de la estrategia al prototipo funcional.">
 <link rel="canonical" href="https://carlosarisco55-max.github.io/">
 
+<!-- Datos estructurados: quién es, qué busca y dónde encontrarlo, para buscadores de IA (GEO) y resultados enriquecidos -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Carlos García-Arisco Vílchez",
+  "url": "https://carlosarisco55-max.github.io/",
+  "image": "https://carlosarisco55-max.github.io/og-image.png",
+  "jobTitle": "Growth Digital Marketing Intern",
+  "description": "Graduado en ADE cursando el Máster en Marketing Digital e Inteligencia Artificial (INESDI). Combina analítica de datos (Python, Power BI, Machine Learning) con automatización e IA aplicada (n8n, Make, agentes de IA) para growth marketing.",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "Lotuscale"
+  },
+  "alumniOf": [
+    {
+      "@type": "CollegeOrUniversity",
+      "name": "INESDI Business Techschool"
+    },
+    {
+      "@type": "CollegeOrUniversity",
+      "name": "Universitat de Barcelona"
+    }
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Barcelona",
+    "addressCountry": "ES"
+  },
+  "sameAs": [
+    "https://www.linkedin.com/in/carlos-garcia-arisco-vilchez",
+    "https://github.com/carlosarisco55-max"
+  ],
+  "knowsAbout": [
+    "Growth Marketing",
+    "Analítica de datos",
+    "Machine Learning",
+    "Automatización con IA",
+    "n8n",
+    "Make",
+    "Power BI",
+    "SEO",
+    "GEO"
+  ]
+}
+</script>
+
 <!-- Open Graph / previsualización al compartir el link -->
 <meta property="og:type" content="profile">
 <meta property="og:title" content="Carlos García-Arisco Vílchez — Data · IA · Growth Marketing">
@@ -407,10 +454,19 @@
     font-size:12.5px;
     color:var(--ink-soft);
     display:flex;
-    justify-content:space-between;
-    flex-wrap:wrap;
-    gap:10px;
+    flex-direction:column;
+    gap:18px;
   }
+  .footer-cta{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:18px;
+    font-size:14px;
+  }
+  .footer-cta-text{font-family:var(--display); font-weight:700; color:var(--ink); font-size:16px;}
+  .footer-cta a{color:var(--mustard-text); font-weight:600; text-decoration:none; border-bottom:1px solid var(--mustard-text);}
+  .footer-meta{display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
 
   @media (max-width:600px){
     .project{grid-template-columns:1fr;}
@@ -869,6 +925,10 @@
         <span class="tag">Lovable</span>
         <span class="tag">Google Tag Manager</span>
         <span class="tag">SQL</span>
+        <span class="tag">Next.js</span>
+        <span class="tag">React</span>
+        <span class="tag">TypeScript</span>
+        <span class="tag">Make</span>
       </div>
     </div>
 
@@ -880,6 +940,8 @@
         <span class="tag">Google Colab</span>
         <span class="tag">Looker Studio</span>
         <span class="tag">Groq</span>
+        <span class="tag">RAG / Embeddings</span>
+        <span class="tag">SQLite</span>
         <span class="tag">Gamma</span>
         <span class="tag">Screaming Frog</span>
         <span class="tag">SOSTAC</span>
@@ -892,8 +954,16 @@
   </section>
 
   <footer>
-    <span>© 2026 Carlos García-Arisco Vílchez</span>
-    <span>Barcelona, España — INESDI Business Techschool</span>
+    <div class="footer-cta">
+      <span class="footer-cta-text">¿Hablamos?</span>
+      <a href="https://www.linkedin.com/in/carlos-garcia-arisco-vilchez" target="_blank" rel="noopener">LinkedIn →</a>
+      <a href="mailto:carlosarisco55@gmail.com">Email →</a>
+      <a href="cv-source.html">CV →</a>
+    </div>
+    <div class="footer-meta">
+      <span>© 2026 Carlos García-Arisco Vílchez</span>
+      <span>Barcelona, España — INESDI Business Techschool</span>
+    </div>
   </footer>
 
 </div>
