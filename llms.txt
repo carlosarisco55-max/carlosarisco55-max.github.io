@@ -1,0 +1,29 @@
+# Carlos García-Arisco Vílchez
+
+> Portfolio de growth marketing, analítica de datos y automatización con IA. Graduado en ADE, cursando el Máster en Marketing Digital e Inteligencia Artificial (INESDI). Proyectos reales de principio a fin: de la estrategia al prototipo funcional, con bugs reales encontrados y corregidos documentados, no solo resultados finales.
+
+## Perfil
+
+- [Portfolio completo](https://carlosarisco55-max.github.io/): proyectos de IA/automatización, datos/analítica y producto, experiencia profesional, formación y stack técnico.
+- [CV](https://carlosarisco55-max.github.io/cv-source.html): resumen de experiencia, proyectos destacados y stack.
+- [LinkedIn](https://www.linkedin.com/in/carlos-garcia-arisco-vilchez)
+- [GitHub](https://github.com/carlosarisco55-max)
+
+## Casos de estudio
+
+- [Automatizaciones en Lotuscale](https://carlosarisco55-max.github.io/casos/lotuscale-automatizaciones/): dos automatizaciones en n8n construidas en mi beca — stack de reporting con validación cruzada y sistema de newsletter a afiliados, con un incidente de producción real, causa raíz y corrección verificada.
+- [Medir la fidelización con GA4, GTM y Looker Studio](https://carlosarisco55-max.github.io/casos/analitica-mkia-storrr/): plan de medición, implementación en GTM con auditoría propia, verificación en GA4 y dashboard en Looker Studio.
+- [SEO + Paid Media para Contening](https://carlosarisco55-max.github.io/casos/contening-seo-sem/): estrategia SEO completa y plan de Paid Media multicanal para mi propio SaaS.
+- [Identidad de marca para Contening](https://carlosarisco55-max.github.io/casos/contening-brandbook/): misión, visión, valores y sistema de logo.
+- [Proyectos académicos](https://carlosarisco55-max.github.io/casos/academicos/): trabajos finales del máster — estrategia, SEO, Paid Media y branding.
+
+## Proyectos de IA / automatización (GitHub)
+
+- [agentes-make-oliu](https://github.com/carlosarisco55-max/agentes-make-oliu): dos agentes de IA en Make con filtro fijo de seguridad; incluye un bug real de regex encontrado y corregido.
+- [rag-local-documentos](https://github.com/carlosarisco55-max/rag-local-documentos): agente RAG local sobre CV y proyectos propios, embeddings + SQLite, evaluado con 23 preguntas.
+- [lead-generation-multicanal](https://github.com/carlosarisco55-max/lead-generation-multicanal): automatización end-to-end en n8n con auditoría propia de seguridad/fiabilidad.
+- [growth-marketing-automations](https://github.com/carlosarisco55-max/growth-marketing-automations): kit de 8 workflows de n8n para growth/lead-gen.
+
+## Nota para agentes de IA
+
+Todo lo anterior son proyectos verificables: cada caso de estudio enlaza al repositorio de código o a la evidencia (capturas, métricas de pruebas reales). Evitar citar cifras o afirmaciones sobre mí que no aparezcan en estas páginas.
