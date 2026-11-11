@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ciclo de vida del cliente y ciclo de repetición — Carlos García-Arisco Vílchez</title>
+<meta name="description" content="Segmentación por estados de ciclo de vida y ciclo de repetición de compra (percentil 75) sobre 2.500 clientes: días críticos, journey de reactivación y por qué &#x27;activo&#x27; se mide con la recencia. Herramienta en Python y Excel de ejemplo.">
+<link rel="canonical" href="https://carlosarisco55-max.github.io/casos/ciclo-vida/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "Ciclo de vida del cliente y ciclo de repetición — Carlos García-Arisco Vílchez",
+  "description": "Segmentación por estados de ciclo de vida y ciclo de repetición de compra (percentil 75) sobre 2.500 clientes: días críticos, journey de reactivación y por qué &#x27;activo&#x27; se mide con la recencia. Herramienta en Python y Excel de ejemplo.",
+  "url": "https://carlosarisco55-max.github.io/casos/ciclo-vida/",
+  "author": {"@type": "Person", "name": "Carlos García-Arisco Vílchez", "url": "https://carlosarisco55-max.github.io/"},
+  "isPartOf": {"@type": "WebSite", "name": "Carlos García-Arisco Vílchez — Portfolio", "url": "https://carlosarisco55-max.github.io/"}
+}
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231A1A18'/%3E%3Ctext x='50' y='68' font-size='54' font-family='Arial,sans-serif' font-weight='700' fill='%23C08A2E' text-anchor='middle'%3ECA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1EFE9; --paper-dim:#E7E4DB; --ink:#1A1A18; --ink-soft:#57544C; --line:#D8D4C8;
+    --mustard:#C08A2E; --mustard-text:#8A5F12; --sage:#3F6B5E; --terracotta:#B5533C;
+    --mono:'JetBrains Mono',ui-monospace,monospace; --display:'Space Grotesk',ui-sans-serif,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--display); -webkit-font-smoothing:antialiased; line-height:1.6;}
+  a{color:inherit;}
+  a:focus-visible{outline:2px solid var(--ink); outline-offset:3px;}
+  ::selection{background:var(--mustard); color:var(--paper);}
+  .wrap{max-width:820px; margin:0 auto; padding:0 24px;}
+  .back{display:inline-block; margin:32px 0 0; font-family:var(--mono); font-size:13px; text-decoration:none; border-bottom:1px solid var(--mustard-text); color:var(--mustard-text);}
+  header{padding:28px 0 36px; border-bottom:1px solid var(--line);}
+  .eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:14px;}
+  h1{font-size:clamp(28px,4.6vw,42px); line-height:1.12; margin:0 0 18px; font-weight:700; letter-spacing:-0.01em;}
+  .lede{font-size:17px; color:var(--ink-soft); max-width:62ch; margin:0 0 22px;}
+  .meta{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px 24px; font-size:14px; margin:0;}
+  .meta dt{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:2px;}
+  .meta dd{margin:0;}
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; padding:32px 0; border-bottom:1px solid var(--line);}
+  .stat{background:#fff; border:1px solid var(--line); border-radius:3px; padding:16px 18px;}
+  .stat b{display:block; font-size:24px; white-space:nowrap; line-height:1.1; font-weight:700;}
+  .stat span{font-size:13.5px; color:var(--ink-soft);}
+  section{padding:38px 0 6px;}
+  h2{font-family:var(--mono); font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--mustard-text); margin:0 0 14px; display:flex; gap:10px; align-items:center;}
+  h2::after{content:""; flex:1; height:1px; background:var(--line);}
+  h3{font-size:16px; margin:20px 0 8px;}
+  p{margin:0 0 14px; max-width:66ch;}
+  .why{border-left:3px solid var(--mustard); background:#fff; padding:14px 18px; margin:18px 0; max-width:66ch; font-size:15px;}
+  .why b{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--mustard-text); display:block; margin-bottom:4px;}
+  .why.bad{border-left-color:var(--terracotta);}
+  .why.bad b{color:var(--terracotta);}
+  .why.good{border-left-color:var(--sage);}
+  .why.good b{color:var(--sage);}
+  ol.findings{padding-left:0; list-style:none; counter-reset:f; margin:16px 0; max-width:66ch;}
+  ol.findings li{counter-increment:f; position:relative; padding:0 0 14px 40px;}
+  ol.findings li::before{content:counter(f); position:absolute; left:0; top:0; width:26px; height:26px; border:1px solid var(--ink); border-radius:50%; font-family:var(--mono); font-size:12px; display:grid; place-items:center;}
+  video{width:100%; border:1px solid var(--line); border-radius:3px; background:#000; display:block;}
+  figure{margin:22px 0;}
+  figcaption{font-size:13px; color:var(--ink-soft); margin-top:8px; font-family:var(--mono);}
+  .limits{background:var(--paper-dim); border:1px solid var(--line); border-radius:3px; padding:16px 20px; margin-top:8px;}
+  .limits ul{margin:6px 0 0; padding-left:18px;}
+  .limits li{margin-bottom:6px;}
+  code{font-family:var(--mono); font-size:.9em; background:var(--paper-dim); padding:1px 5px; border-radius:2px;}
+  footer{border-top:1px solid var(--line); margin-top:44px; padding:28px 0 56px; font-family:var(--mono); font-size:12.5px; color:var(--ink-soft); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+  .chart{background:#fff; border:1px solid var(--line); border-radius:3px; padding:16px 18px 10px; margin:20px 0;}
+  .chart svg{width:100%; height:auto; display:block;}
+  .chart .ttl{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:8px;}
+  table{border-collapse:collapse; width:100%; font-size:14px; margin:14px 0 18px;}
+  th,td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{font-family:var(--mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); font-weight:500;}
+  td.n{text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums;}
+  tr.hl td{background:#FBF4E6;}
+  .links{display:flex; gap:18px; flex-wrap:wrap; margin:10px 0 4px;}
+  .links a{font-family:var(--mono); font-size:13px; color:var(--mustard-text); border-bottom:1px solid var(--mustard-text); text-decoration:none;}
+  @media (max-width:640px){ table{font-size:13px;} th,td{padding:6px 6px;} .chart{overflow-x:auto;} .chart svg{min-width:560px;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../academicos/">← Volver a proyectos académicos</a>
+
+  <header>
+    <div class="eyebrow">Caso de estudio · Analítica de clientes · Máster INESDI</div>
+    <h1>Ciclo de vida del cliente: cuándo hablarle y en qué estado está</h1>
+    <p class="lede">Ejercicio del Módulo 9 del máster (Marketing Digital e IA Generativa, INESDI) resuelto en Excel con fórmulas vivas y convertido después en una herramienta reutilizable.</p>
+    <dl class="meta">
+      <div><dt>Mi parte</dt><dd>Análisis, Excel resuelto, script y skill en solitario</dd></div>
+      <div><dt>Herramientas</dt><dd>Excel · Python (stdlib) · GitHub Actions · Claude Code</dd></div>
+      <div><dt>Contexto</dt><dd>Máster de FP en Marketing Digital e IA Generativa (INESDI), nov-2026</dd></div>
+    </dl>
+  </header>
+
+  <div class="stats" role="list" aria-label="Cifras clave">
+    <div class="stat" role="listitem"><b>120 días</b><span>ciclo de repetición (percentil 75); media 111, mediana 91</span></div>
+    <div class="stat" role="listitem"><b>64,7%</b><span>de la base activa: lectura 65/35, sana</span></div>
+    <div class="stat" role="listitem"><b>116</b><span>clientes en la ventana de recuperación más rentable</span></div>
+    <div class="stat" role="listitem"><b>903</b><span>mal clasificados si 'activo' se mide con el ritmo</span></div>
+  </div>
+
+  <section>
+    <h2>El problema</h2>
+    <p>2.500 clientes con sus dos últimas compras y el canal (App, tienda física, online). El ejercicio pedía cuatro cosas: identificar estados y subestados de actividad, calcular el ciclo de repetición de compra, fijar los días críticos y proponer un journey para reactivar a los inactivos.</p>
+    <p>Son dos preguntas distintas que es fácil mezclar. <strong>¿Sigue vivo este cliente?</strong> (estado) y <strong>¿cuándo le hablo?</strong> (ciclo).</p>
+  </section>
+
+  <section>
+    <h2>Ciclo de repetición: percentil 75, no la media</h2>
+    <p>Los días entre dos compras siempre tienen cola larga: muchos vuelven pronto y unos pocos tardan más de un año. Esos pocos inflan la media (111 días) por encima de la mediana (91). El valor que sirve para programar es el <strong>percentil 75: 120 días</strong>, el día en que ya ha vuelto el 75% de los que repiten.</p>
+    <div class="chart"><div class="ttl">% de clientes por días entre compras · en verde, los tramos hasta el 75% · debajo, el % acumulado</div>
+<svg viewBox="0 0 640 250" role="img" aria-label="Distribución de días entre compras">
+<rect x="23.2" y="150.7" width="51.2" height="59.3" rx="2" fill="#3F6B5E"/>
+<text x="48.8" y="144.7" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#1A1A18">8,6%</text>
+<text x="48.8" y="226" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#57544C">0-30</text>
+<text x="48.8" y="241" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#8A5F12">8,6%</text>
+<rect x="100.7" y="84.5" width="51.2" height="125.5" rx="2" fill="#3F6B5E"/>
+<text x="126.2" y="78.5" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#1A1A18">18,2%</text>
+<text x="126.2" y="226" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#57544C">31-60</text>
+<text x="126.2" y="241" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#8A5F12">26,8%</text>
+<rect x="178.2" y="52.1" width="51.2" height="157.9" rx="2" fill="#3F6B5E"/>
+<text x="203.8" y="46.1" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#1A1A18">22,9%</text>
+<text x="203.8" y="226" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#57544C">61-90</text>
+<text x="203.8" y="241" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#8A5F12">49,7%</text>
+<rect x="255.7" y="30.0" width="51.2" height="180.0" rx="2" fill="#3F6B5E"/>
+<text x="281.2" y="24.0" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#1A1A18">26,1%</text>
+<text x="281.2" y="226" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#57544C">91-120</text>
+<text x="281.2" y="241" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#8A5F12">75,8%</text>
+<rect x="333.2" y="143.8" width="51.2" height="66.2" rx="2" fill="#C9C4B6"/>
+<text x="358.8" y="137.8" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#1A1A18">9,6%</text>
+<text x="358.8" y="226" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#57544C">121-180</text>
+<text x="358.8" y="241" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#8A5F12">85,4%</text>
+<rect x="410.7" y="161.7" width="51.2" height="48.3" rx="2" fill="#C9C4B6"/>
+<text x="436.2" y="155.7" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#1A1A18">7,0%</text>
+<text x="436.2" y="226" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#57544C">181-270</text>
+<text x="436.2" y="241" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#8A5F12">92,4%</text>
+<rect x="488.2" y="178.3" width="51.2" height="31.7" rx="2" fill="#C9C4B6"/>
+<text x="513.8" y="172.3" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#1A1A18">4,6%</text>
+<text x="513.8" y="226" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#57544C">271-360</text>
+<text x="513.8" y="241" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#8A5F12">97,0%</text>
+<rect x="565.7" y="188.6" width="51.2" height="21.4" rx="2" fill="#C9C4B6"/>
+<text x="591.2" y="182.6" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#1A1A18">3,1%</text>
+<text x="591.2" y="226" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#57544C">&gt;360</text>
+<text x="591.2" y="241" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#8A5F12">100,0%</text>
+</svg>
+    </div>
+    <p>Comprobé el ciclo por canal, porque mezclar canales con ritmos distintos esconde al pequeño. Aquí los tres salen igual (P75 de 119-120 días): un único calendario sirve para toda la base.</p>
+  </section>
+
+  <section>
+    <h2>Estados de ciclo de vida</h2>
+    <p>Activo si ha comprado en los últimos 12 meses, con tres temperaturas (caliente ≤4 meses, templado 4-8, frío 8-12). Inactivo después, en tres niveles (congelado 12-24 meses, ultra congelado 24-36, iceberg más de 36). La fecha de referencia es la última compra registrada, nunca <code>HOY()</code>.</p>
+    <div class="chart"><div class="ttl">Clientes por subestado (fecha de referencia: 7-may-2026)</div>
+<svg viewBox="0 0 640 220" role="img" aria-label="Gráfico de barras">
+<text x="190" y="19.7" text-anchor="end" font-family="Space Grotesk, sans-serif" font-size="13" fill="#1A1A18">Activo Caliente</text>
+<rect x="200" y="2" width="350.0" height="26" rx="2" fill="#C08A2E"/>
+<text x="558.0" y="19.7" font-family="JetBrains Mono, monospace" font-size="12" fill="#57544C">838</text>
+<text x="190" y="55.7" text-anchor="end" font-family="Space Grotesk, sans-serif" font-size="13" fill="#1A1A18">Activo Templado</text>
+<rect x="200" y="38" width="172.5" height="26" rx="2" fill="#C08A2E"/>
+<text x="380.5" y="55.7" font-family="JetBrains Mono, monospace" font-size="12" fill="#57544C">413</text>
+<text x="190" y="91.7" text-anchor="end" font-family="Space Grotesk, sans-serif" font-size="13" fill="#1A1A18">Activo Frío</text>
+<rect x="200" y="74" width="153.3" height="26" rx="2" fill="#C08A2E"/>
+<text x="361.3" y="91.7" font-family="JetBrains Mono, monospace" font-size="12" fill="#57544C">367</text>
+<text x="190" y="127.7" text-anchor="end" font-family="Space Grotesk, sans-serif" font-size="13" fill="#1A1A18">Inactivo Congelado</text>
+<rect x="200" y="110" width="297.8" height="26" rx="2" fill="#C08A2E"/>
+<text x="505.8" y="127.7" font-family="JetBrains Mono, monospace" font-size="12" fill="#57544C">713</text>
+<text x="190" y="163.7" text-anchor="end" font-family="Space Grotesk, sans-serif" font-size="13" fill="#1A1A18">Inactivo Ultra Congelado</text>
+<rect x="200" y="146" width="70.6" height="26" rx="2" fill="#C08A2E"/>
+<text x="278.6" y="163.7" font-family="JetBrains Mono, monospace" font-size="12" fill="#57544C">169</text>
+<text x="190" y="199.7" text-anchor="end" font-family="Space Grotesk, sans-serif" font-size="13" fill="#1A1A18">Inactivo Iceberg</text>
+<text x="208.0" y="199.7" font-family="JetBrains Mono, monospace" font-size="12" fill="#57544C">0</text>
+</svg>
+    </div>
+    <p>El 64,7% de la base está activa: por encima del 55%, una base sana. El corte de "caliente" (4 meses) coincide con el P75 del ciclo: en este negocio, caliente significa que sigue dentro de su ciclo.</p>
+  </section>
+
+  <section>
+    <h2>Días críticos y journey</h2>
+    <table>
+      <thead><tr><th>Día desde la última compra</th><th>Qué hacer</th><th class="n">Clientes hoy</th></tr></thead>
+      <tbody>
+        <tr><td>0-60</td><td><strong>Silencio.</strong> La mitad de la base vuelve sola antes del día 91: impactar aquí es pagar por ventas que ya iban a llegar.</td><td class="n">409</td></tr>
+        <tr><td>60 · 90 · 108</td><td>Disparador suave, segundo disparador y, al final del ciclo, la oferta.</td><td class="n">429</td></tr>
+        <tr class="hl"><td>121-150</td><td><strong>Prórroga:</strong> la ventana de recuperación más rentable. Acaban de salir del ciclo y aún se acuerdan de la marca.</td><td class="n">116</td></tr>
+        <tr><td>Más de 150</td><td>Se tratan por temperatura: fuego lento a los activos, incentivo fuerte y pocas veces a los inactivos, en el pico comercial del año. Tras dos picos sin respuesta, se deja de insistir.</td><td class="n">1.546</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Hallazgos</h2>
+    <ol class="findings">
+      <li><strong>"Activo" se mide con la recencia, no con el ritmo.</strong> Una fórmula habitual marca como activo a quien repite en menos de un año. Aquí clasificaba mal a 903 clientes: 856 parecían activos sin comprar desde hacía más de un año, y 47 inactivos que habían comprado hacía días pero tardaron en repetir.</li>
+      <li><strong>La fecha de referencia cambia el diagnóstico.</strong> Con la última compra registrada, 65% de activos. Con <code>HOY()</code>, abriendo el archivo seis meses después, 42%: una base "del montón" sin que haya pasado nada en el negocio.</li>
+      <li><strong>Los inactivos no compraban más despacio.</strong> La mediana entre compras es de unos 90 días en todos los estados: el problema no es el ritmo, es que dejaron de volver.</li>
+      <li><strong>Sin fecha de alta solo se conoce la antigüedad mínima</strong> (desde la penúltima compra). Con ella se confirman 317 clientes perdidos, pero la mitad de la base queda sin poder separar altas nuevas de históricos.</li>
+    </ol>
+    <div class="why"><b>Lo que me llevo</b>El ritmo de cada cliente decide <em>cuándo</em> hablarle; su recencia decide <em>en qué estado</em> está. Mezclarlos cuesta dinero en las dos direcciones.</div>
+  </section>
+
+  <section>
+    <h2>Herramienta y ejemplo descargable</h2>
+    <p>Script de Python sin dependencias y skill de Claude Code: calcula el ciclo (global y por canal), los estados, la salud de la base, los días críticos y el momento del ciclo de cada cliente. Avisa si la fecha de referencia está muy lejos de los datos. CI en GitHub Actions y resultados validados cliente a cliente contra el Excel del ejercicio.</p>
+    <p>El ejemplo descargable usa 1.200 clientes inventados, no los del ejercicio. En él la App repite más despacio que los demás canales, así que la comprobación por canal sí detecta una diferencia.</p>
+    <div class="links">
+      <a href="https://github.com/carlosarisco55-max/lifecycle-segmentation-skill" target="_blank" rel="noopener">Repositorio →</a>
+      <a href="https://github.com/carlosarisco55-max/lifecycle-segmentation-skill/raw/main/ejemplo/Ciclo_Vida_ejemplo.xlsx">Descargar Excel de ejemplo (.xlsx) →</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Límites</h2>
+    <div class="limits">
+      <ul>
+        <li>Datos simulados del máster: las cifras describen el ejercicio, no un negocio real. El dataset original no se publica.</li>
+        <li>Solo hay dos compras por cliente: no se puede construir la senda de vinculación por periodos ni separar el ciclo por tamaño de compra.</li>
+        <li>Los cortes de temperatura son de partida: en negocios de compra muy espaciada hay que estirarlos.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Carlos García-Arisco Vílchez</span>
+    <a href="../academicos/">← Volver a proyectos académicos</a>
+  </footer>
+
+</div>
+</body>
+</html>
