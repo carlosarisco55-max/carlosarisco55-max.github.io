@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De cinco modelos de clientes a una acción medida — Carlos García-Arisco Vílchez</title>
+<meta name="description" content="Sistema de decisión de clientes: RFM, ciclo de vida, propensión, patrón de cesta y grupo de control en una ficha por cliente con qué ofrecer, cuándo, con qué palanca de comportamiento y cómo medirlo. Tres herramientas en Python con CI.">
+<link rel="canonical" href="https://carlosarisco55-max.github.io/casos/decision-clientes/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "De cinco modelos de clientes a una acción medida — Carlos García-Arisco Vílchez",
+  "description": "Sistema de decisión de clientes: RFM, ciclo de vida, propensión, patrón de cesta y grupo de control en una ficha por cliente con qué ofrecer, cuándo, con qué palanca de comportamiento y cómo medirlo. Tres herramientas en Python con CI.",
+  "url": "https://carlosarisco55-max.github.io/casos/decision-clientes/",
+  "author": {"@type": "Person", "name": "Carlos García-Arisco Vílchez", "url": "https://carlosarisco55-max.github.io/"},
+  "isPartOf": {"@type": "WebSite", "name": "Carlos García-Arisco Vílchez — Portfolio", "url": "https://carlosarisco55-max.github.io/"}
+}
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231A1A18'/%3E%3Ctext x='50' y='68' font-size='54' font-family='Arial,sans-serif' font-weight='700' fill='%23C08A2E' text-anchor='middle'%3ECA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1EFE9; --paper-dim:#E7E4DB; --ink:#1A1A18; --ink-soft:#57544C; --line:#D8D4C8;
+    --mustard:#C08A2E; --mustard-text:#8A5F12; --sage:#3F6B5E; --terracotta:#B5533C;
+    --mono:'JetBrains Mono',ui-monospace,monospace; --display:'Space Grotesk',ui-sans-serif,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--display); -webkit-font-smoothing:antialiased; line-height:1.6;}
+  a{color:inherit;}
+  a:focus-visible{outline:2px solid var(--ink); outline-offset:3px;}
+  ::selection{background:var(--mustard); color:var(--paper);}
+  .wrap{max-width:820px; margin:0 auto; padding:0 24px;}
+  .back{display:inline-block; margin:32px 0 0; font-family:var(--mono); font-size:13px; text-decoration:none; border-bottom:1px solid var(--mustard-text); color:var(--mustard-text);}
+  header{padding:28px 0 36px; border-bottom:1px solid var(--line);}
+  .eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:14px;}
+  h1{font-size:clamp(28px,4.6vw,42px); line-height:1.12; margin:0 0 18px; font-weight:700; letter-spacing:-0.01em;}
+  .lede{font-size:17px; color:var(--ink-soft); max-width:62ch; margin:0 0 22px;}
+  .meta{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px 24px; font-size:14px; margin:0;}
+  .meta dt{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:2px;}
+  .meta dd{margin:0;}
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; padding:32px 0; border-bottom:1px solid var(--line);}
+  .stat{background:#fff; border:1px solid var(--line); border-radius:3px; padding:16px 18px;}
+  .stat b{display:block; font-size:24px; white-space:nowrap; line-height:1.1; font-weight:700;}
+  .stat span{font-size:13.5px; color:var(--ink-soft);}
+  section{padding:38px 0 6px;}
+  h2{font-family:var(--mono); font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--mustard-text); margin:0 0 14px; display:flex; gap:10px; align-items:center;}
+  h2::after{content:""; flex:1; height:1px; background:var(--line);}
+  p{margin:0 0 14px; max-width:66ch;}
+  .why{border-left:3px solid var(--mustard); background:#fff; padding:14px 18px; margin:18px 0; max-width:66ch; font-size:15px;}
+  .why b{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--mustard-text); display:block; margin-bottom:4px;}
+  ol.findings{padding-left:0; list-style:none; counter-reset:f; margin:16px 0; max-width:66ch;}
+  ol.findings li{counter-increment:f; position:relative; padding:0 0 14px 40px;}
+  ol.findings li::before{content:counter(f); position:absolute; left:0; top:0; width:26px; height:26px; border:1px solid var(--ink); border-radius:50%; font-family:var(--mono); font-size:12px; display:grid; place-items:center;}
+  .limits{background:var(--paper-dim); border:1px solid var(--line); border-radius:3px; padding:16px 20px; margin-top:8px;}
+  .limits ul{margin:6px 0 0; padding-left:18px;}
+  .limits li{margin-bottom:6px;}
+  code{font-family:var(--mono); font-size:.9em; background:var(--paper-dim); padding:1px 5px; border-radius:2px;}
+  footer{border-top:1px solid var(--line); margin-top:44px; padding:28px 0 56px; font-family:var(--mono); font-size:12.5px; color:var(--ink-soft); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+  table{border-collapse:collapse; width:100%; font-size:14px; margin:14px 0 18px;}
+  th,td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{font-family:var(--mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); font-weight:500;}
+  td.n{text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums;}
+  tr.hl td{background:#FBF4E6;}
+  .links{display:flex; gap:18px; flex-wrap:wrap; margin:10px 0 4px;}
+  .links a{font-family:var(--mono); font-size:13px; color:var(--mustard-text); border-bottom:1px solid var(--mustard-text); text-decoration:none;}
+  @media (max-width:640px){ table{font-size:13px;} th,td{padding:6px 6px;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../academicos/">← Volver a proyectos académicos</a>
+
+  <header>
+    <div class="eyebrow">Caso de estudio · Analítica de clientes · Máster INESDI</div>
+    <h1>De cinco modelos de clientes a una acción medida</h1>
+    <p class="lede">Cada modelo de segmentación contesta una pregunta distinta y casi nunca se usan a la vez. Los junté en una ficha por cliente que decide qué ofrecerle, cuándo y con qué palanca, y en una capa de medición que dice si funcionó.</p>
+    <dl class="meta">
+      <div><dt>Mi parte</dt><dd>Diseño, código, pruebas y documentación en solitario</dd></div>
+      <div><dt>Herramientas</dt><dd>Python (stdlib) · GitHub Actions · Claude Code</dd></div>
+      <div><dt>Contexto</dt><dd>Módulo 9 del Máster de FP en Marketing Digital e IA Generativa (INESDI), nov-2026</dd></div>
+    </dl>
+  </header>
+
+  <div class="stats" role="list" aria-label="Cifras clave del ejemplo">
+    <div class="stat" role="listitem"><b>5 modelos</b><span>en una sola fila por cliente</span></div>
+    <div class="stat" role="listitem"><b>233</b><span>clientes de prioridad A de 1.500 (ejemplo inventado)</span></div>
+    <div class="stat" role="listitem"><b>515</b><span>renoves mal dirigidos que la regla corregida evita</span></div>
+    <div class="stat" role="listitem"><b>−1,7 a +10,1</b><span>puntos: el caso de referencia del método no se distingue del azar</span></div>
+  </div>
+
+  <section>
+    <h2>El problema</h2>
+    <p>Un RFM dice quién ha sido bueno. El ciclo de vida, si sigue vivo y cuándo hablarle. La propensión, qué es probable que compre. El patrón de cesta, qué compra junto. Por separado, cada uno acaba en una presentación distinta y nadie decide con los cuatro a la vez.</p>
+    <p>Y aunque se decida bien, sin un grupo de control apartado antes no se sabe si la acción vendió algo o se llevó el mérito de compras que iban a ocurrir igual.</p>
+  </section>
+
+  <section>
+    <h2>El sistema</h2>
+    <table>
+      <thead><tr><th>Pregunta</th><th>Herramienta</th></tr></thead>
+      <tbody>
+        <tr><td>¿Quién ha sido bueno? ¿Sigue vivo?</td><td><a href="../segmentacion-rfm/">RFM</a> y <a href="../ciclo-vida/">ciclo de vida</a></td></tr>
+        <tr><td>¿Qué va a comprar? ¿Con qué argumento?</td><td><code>propension-cesta-afinidad</code>: matriz de propensiones, patrón de cesta 1-2-4 y prueba de afinidad</td></tr>
+        <tr class="hl"><td>¿Qué hago con cada cliente, cuándo y cómo?</td><td><code>ficha-cliente</code>: junta todo en una fila con qué, cuándo, palanca de comportamiento y prioridad</td></tr>
+        <tr><td>¿Ha funcionado de verdad?</td><td><code>medicion-incremental</code>: control antes de segmentar, venta incremental por escenarios y página de comité</td></tr>
+      </tbody>
+    </table>
+    <p>La ficha lee las salidas de las otras herramientas tal cual. El ejemplo del repositorio las ejecuta de punta a punta sobre una tienda inventada de 1.500 clientes.</p>
+  </section>
+
+  <section>
+    <h2>Cómo decide</h2>
+    <p><strong>Cuándo</strong> sale del ciclo de repetición: no se impacta en el periodo de silencio (el cliente iba a volver solo), sí en los disparadores, y la prórroga es la ventana más rentable. <strong>Qué</strong> sale de la cesta y la propensión. <strong>Cómo</strong> es una palanca de comportamiento ligada a lo que el cliente ya hace:</p>
+    <table>
+      <thead><tr><th>Situación del cliente</th><th>Palanca</th></tr></thead>
+      <tbody>
+        <tr><td>Repite el mismo patrón de compra 3 veces</td><td>Hábito: reforzar su rutina, no pedirle que cambie</td></tr>
+        <tr><td>Tiene una versión antigua del producto</td><td>Dotación y aversión a la pérdida: valorar lo que ya tiene</td></tr>
+        <tr><td>Una sola compra reciente</td><td>Progreso dotado: que la segunda compra sea fácil y se sienta como continuación</td></tr>
+        <tr><td>Valioso que se enfría</td><td>Reciprocidad antes que descuento</td></tr>
+        <tr><td>Perdiéndose</td><td>Evitar reactancia: pocos impactos y salida fácil</td></tr>
+      </tbody>
+    </table>
+    <p>Cada palanca lleva su fuente (Kahneman y Tversky, Nunes y Drèze, Wood y Neal, Cialdini, Brehm) y se documenta como <strong>hipótesis a probar con su propio grupo de control</strong>, no como diagnóstico.</p>
+  </section>
+
+  <section>
+    <h2>Hallazgos</h2>
+    <ol class="findings">
+      <li><strong>El cuadrante describe al segmento, la acción va a la persona.</strong> Mi primera versión asignaba el plan renove a todo un segmento "saturado": 684 clientes de campaña, de los que solo 169 tenían la versión antigua. Se habría dirigido a 515 personas sin el producto, y se perdían 85 que sí lo tenían en otros segmentos. Ahora el renove se asigna persona a persona y, sin ese dato, no se asigna a nadie.</li>
+      <li><strong>Dos ejes que suman 100% no hacen un cuadrante.</strong> Si "lo tiene" y "lo compra" se calculan sobre los mismos compradores, dos de los cuatro mercados no pueden salir nunca. Se calculan sobre el total del segmento.</li>
+      <li><strong>Restar columnas exagera la venta incremental.</strong> En el caso de referencia, la resta ingenua sale un 67% más alta que la venta que de verdad añadió la campaña. Se restan escenarios sobre la misma audiencia.</li>
+      <li><strong>Un resultado puede ser correcto y no significar nada.</strong> Con 50 personas de control, el intervalo de la diferencia va de −1,7 a +10,1 puntos: incluye el cero. La herramienta lo calcula y lo avisa antes de que nadie presente el número.</li>
+    </ol>
+    <div class="why"><b>Lo que me llevo</b>Los modelos no compiten entre sí: cada uno contesta una parte de la misma decisión. El trabajo está en juntarlos sin que el atajo de uno (un segmento, una media) se cuele como dato de cada persona.</div>
+  </section>
+
+  <section>
+    <h2>Repositorios</h2>
+    <p>Tres herramientas de Python sin dependencias, cada una con CI en GitHub Actions, ejemplo con datos inventados y skill de Claude Code. Las comprobaciones que evitan los errores de arriba se ejecutan solas, antes de dar ningún número.</p>
+    <div class="links">
+      <a href="https://github.com/carlosarisco55-max/ficha-cliente-skill" target="_blank" rel="noopener">ficha-cliente →</a>
+      <a href="https://github.com/carlosarisco55-max/propension-cesta-afinidad-skill" target="_blank" rel="noopener">propension-cesta-afinidad →</a>
+      <a href="https://github.com/carlosarisco55-max/medicion-incremental-skill" target="_blank" rel="noopener">medicion-incremental →</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>Límites</h2>
+    <div class="limits">
+      <ul>
+        <li>Todas las cifras de esta página salen de datos inventados o de los casos de referencia del método, no de un negocio real.</li>
+        <li>Las reglas de decisión son deliberadamente simples para que se puedan discutir en una sala. No es un modelo de next best action entrenado: es la versión legible que conviene tener antes de entrenar uno.</li>
+        <li>Las palancas de comportamiento son hipótesis con base en la investigación. Hasta probarlas con control en una base concreta, no son resultados.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 Carlos García-Arisco Vílchez</span>
+    <a href="../academicos/">← Volver a proyectos académicos</a>
+  </footer>
+
+</div>
+</body>
+</html>
